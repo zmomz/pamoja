@@ -1,0 +1,825 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pamoja — Together, Hamilton</title>
+<meta name="description" content="Pamoja Cultural Collective — building Hamilton together.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap');
+:root{
+ --night:#17231d;--ink:#26332b;--cream:#f4efe4;--warm:#e8dfcf;--sand:#cdb79a;
+ --bark:#684c37;--soil:#76533b;--moss:#4e6748;--leaf:#78905d;--sage:#aab795;
+ --line:#cfc6b6;--paper:#faf7ef;--orange:#b66e42;--white:#fffdf8;
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:"DM Sans",sans-serif;line-height:1.65}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.045;background-image:url("data:image/svg+xml,%3Csvg width='180' height='180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E")}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:500;line-height:.98;letter-spacing:-.045em}
+h1{font-size:clamp(4.5rem,11vw,10.5rem);margin:0}
+h2{font-size:clamp(3.1rem,7vw,7rem);margin:0}
+h3{font-size:1.55rem;margin:0 0 .5rem}
+p{max-width:62ch}a{text-decoration:none;color:inherit}
+button{font:inherit}
+:focus-visible{outline:2px solid var(--orange);outline-offset:3px;border-radius:4px}
+.skip{position:absolute;left:-999px}.skip:focus{left:10px;top:10px;z-index:100;background:#fff;padding:10px}
+
+/* ---------- reveal on scroll ---------- */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.22,.8,.3,1),transform .8s cubic-bezier(.22,.8,.3,1)}
+.reveal.in{opacity:1;transform:none}
+.reveal[data-d="1"]{transition-delay:.08s}.reveal[data-d="2"]{transition-delay:.16s}
+.reveal[data-d="3"]{transition-delay:.24s}.reveal[data-d="4"]{transition-delay:.32s}
+
+/* ---------- header ---------- */
+.header{position:fixed;z-index:40;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:24px 4vw;color:var(--night);transition:background .4s,padding .4s,box-shadow .4s}
+.header.scrolled{background:#f4efe4d9;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:14px 4vw;box-shadow:0 1px 0 var(--line)}
+.brand{display:flex;align-items:center;gap:12px;font-weight:700;letter-spacing:.14em;font-size:.75rem}
+.brand-mark{width:30px;height:30px;border-radius:50% 45% 50% 45%;background:var(--moss);transform:rotate(-20deg);position:relative;transition:transform .5s}
+.brand:hover .brand-mark{transform:rotate(20deg)}
+.brand-mark:after{content:"";position:absolute;width:12px;height:2px;background:var(--cream);left:9px;top:14px;transform:rotate(20deg)}
+.nav{display:flex;gap:4px;align-items:center}
+.nav a{padding:8px 12px;border-radius:30px;font-size:.8rem;position:relative;transition:background .25s}
+.nav a:hover{background:#ffffff77}
+.nav a:after{content:"";position:absolute;left:12px;right:12px;bottom:4px;height:2px;background:var(--orange);border-radius:2px;transform:scaleX(0);transform-origin:left;transition:transform .35s}
+.nav a.active:after{transform:scaleX(1)}
+.menu{display:none;border:1px solid var(--line);background:#f4efe4dd;border-radius:50%;width:42px;height:42px;cursor:pointer}
+
+/* ---------- journey rail ---------- */
+.journey-rail{position:fixed;left:22px;top:50%;transform:translateY(-50%);z-index:30;display:none;padding:20px 14px;background:#f4efe4d9;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:40px;box-shadow:0 10px 30px #3e332414}
+@media(min-width:1150px){.journey-rail{display:block}}
+.rail-track{position:relative;width:2px;height:min(52vh,430px);background:#26332b26;border-radius:2px;margin:0 auto}
+.rail-fill{position:absolute;top:0;left:-1px;width:4px;height:100%;background:linear-gradient(var(--leaf),var(--moss));border-radius:3px;transform-origin:top;transform:scaleY(0)}
+.stop{position:absolute;left:50%;transform:translate(-50%,-50%);width:11px;height:11px;border-radius:50%;background:var(--cream);border:2px solid #26332b40;transition:background .4s,border-color .4s,box-shadow .4s;padding:0}
+.stop.done{background:var(--moss);border-color:var(--moss)}
+.stop.current{box-shadow:0 0 0 6px #4e674826}
+.stop span{position:absolute;left:22px;top:50%;transform:translateY(-50%);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;font-weight:700;color:var(--ink);opacity:0;transition:opacity .3s;white-space:nowrap;pointer-events:none}
+.stop.current span,.journey-rail:hover .stop.done span,.journey-rail:hover .stop.current span{opacity:.9}
+
+/* ---------- hero ---------- */
+.hero{min-height:100svh;position:relative;overflow:hidden;background:linear-gradient(#e9e2d4 0%,#f4efe4 62%,#ddd0bb 100%);display:grid;place-items:center}
+.hero:after{content:"";position:absolute;bottom:-12%;left:-5%;width:110%;height:28%;background:var(--soil);border-radius:50% 50% 0 0/35% 35% 0 0}
+.hero-copy{position:absolute;z-index:5;left:6vw;top:25%;max-width:570px}
+.eyebrow{text-transform:uppercase;letter-spacing:.2em;font-size:.7rem;font-weight:700;color:var(--moss);margin-bottom:18px}
+.hero-copy .lead{font-size:clamp(1rem,1.6vw,1.25rem);max-width:450px;margin:28px 0 0}
+.hero-copy .em{font-family:Fraunces,serif;font-style:italic}
+.hero-tree{width:min(720px,65vw);position:absolute;right:7%;bottom:5%;z-index:3;will-change:transform}
+.hero-tree svg{width:100%;height:auto;filter:drop-shadow(0 25px 20px #3e332420)}
+.hero-tree .crown{transform-origin:center;animation:sway 8s ease-in-out infinite}
+@keyframes sway{0%,100%{transform:rotate(-1deg)}50%{transform:rotate(1.5deg)}}
+.drift-leaf{position:absolute;z-index:4;width:26px;height:17px;border-radius:80% 10% 80% 10%;background:var(--leaf);opacity:0;animation:drift 14s linear infinite}
+.drift-leaf.dl2{background:var(--sage);animation-delay:5s;animation-duration:18s}
+.drift-leaf.dl3{background:var(--moss);animation-delay:9s;animation-duration:16s;width:20px;height:13px}
+@keyframes drift{0%{transform:translate(0,0) rotate(0deg);opacity:0}8%{opacity:.75}85%{opacity:.6}100%{transform:translate(-46vw,52vh) rotate(320deg);opacity:0}}
+.hero-stamp{position:absolute;right:5vw;top:24%;z-index:6;width:105px;height:105px;border:1px solid var(--moss);border-radius:50%;display:grid;place-items:center;text-align:center;font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;transform:rotate(9deg);background:#f4efe4aa;animation:stamp-spin 36s linear infinite}
+@keyframes stamp-spin{from{transform:rotate(9deg)}to{transform:rotate(369deg)}}
+.scroll{position:absolute;z-index:8;bottom:30px;left:6vw;font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:#fff;animation:scroll-pulse 2.6s ease-in-out infinite}
+@keyframes scroll-pulse{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+
+/* ---------- intro ---------- */
+.intro{background:var(--night);color:#f4efe4;padding:15vh 8vw;display:grid;grid-template-columns:1fr 1.4fr;gap:10vw}
+.intro .big{font-family:Fraunces,serif;font-size:clamp(2.4rem,5vw,5.2rem);line-height:1.03}
+.intro p{color:#c9d0c7;font-size:1.05rem}
+.under{color:#91a88a;font-size:.75rem;letter-spacing:.14em;text-transform:uppercase}
+</style>
+<style>
+/* ---------- journey sections ---------- */
+.tree-journey{position:relative}
+.section{min-height:100vh;padding:13vh 8vw;display:grid;grid-template-columns:.8fr 1.2fr;gap:8vw;align-items:center;border-top:1px solid var(--line);position:relative;overflow:hidden}
+.section:nth-child(even){background:var(--paper)}
+.section:before{content:attr(data-number);position:absolute;right:5vw;top:7vh;font-family:Fraunces,serif;font-size:8rem;color:#b9ae9d33;transition:color 1s}
+.section.in-view:before{color:#b9ae9d55}
+.copy{position:relative;z-index:2}.copy p{font-size:1.02rem}
+.tag{font-size:.68rem;text-transform:uppercase;letter-spacing:.18em;color:var(--moss);font-weight:700;margin-bottom:18px}
+.art{min-height:460px;display:grid;place-items:center;position:relative}
+.art svg{width:100%;height:auto;max-width:520px;overflow:visible}
+.art .draw{stroke-dasharray:1400;stroke-dashoffset:1400;transition:stroke-dashoffset 2.4s ease .2s}
+.art.in .draw{stroke-dashoffset:0}
+.art .grow{transform:scale(0);transform-origin:center;transition:transform 1.1s cubic-bezier(.34,1.4,.4,1)}
+.art.in .grow{transform:scale(1)}
+.art .grow.g1{transition-delay:.15s}.art .grow.g2{transition-delay:.35s}.art .grow.g3{transition-delay:.55s}.art .grow.g4{transition-delay:.75s}
+.art .fade-in{opacity:0;transition:opacity 1s ease .9s}
+.art.in .fade-in{opacity:1}
+.word-chip{position:absolute;border:1px solid var(--line);background:var(--paper);padding:12px 18px;border-radius:40px;font-family:Fraunces,serif;font-size:1.3rem;box-shadow:0 8px 20px #29341d14;opacity:0;transform:translateY(10px);transition:opacity .7s ease,transform .7s ease}
+.art.in .word-chip{opacity:1;transform:none}
+.art.in .wc1{transition-delay:.9s}.art.in .wc2{transition-delay:1.1s}.art.in .wc3{transition-delay:1.2s}.art.in .wc4{transition-delay:1.3s}
+.canopy-sway{transform-origin:50% 80%;animation:sway 9s ease-in-out infinite}
+.sprout-grow{transform:scale(0);transform-origin:50% 100%;transition:transform 1.2s cubic-bezier(.34,1.5,.4,1) 1s}
+.art.in .sprout-grow{transform:scale(1)}
+
+/* roots */
+.roots-wrap{position:relative;width:min(420px,80vw)}
+.roots-wrap .wc1{left:-6px;top:96px}.roots-wrap .wc2{right:-6px;top:196px}
+/* trunk */
+.trunk-wrap{position:relative;width:min(360px,72vw)}
+/* canopy */
+.canopy-wrap{position:relative;width:min(480px,86vw)}
+.canopy-wrap .wc1{left:2%;top:38%}.canopy-wrap .wc2{right:0;top:52%}.canopy-wrap .wc3{left:30%;top:64%}.canopy-wrap .wc4{left:34%;top:16%}
+/* grove */
+.grove-wrap{position:relative;width:min(520px,88vw)}
+.grove-chip{position:absolute;border:1px solid var(--moss);background:var(--paper);padding:8px 12px;border-radius:30px;font-size:.75rem;box-shadow:0 6px 16px #29341d12;opacity:0;transform:translateY(8px);transition:opacity .6s ease,transform .6s ease}
+.art.in .grove-chip{opacity:1;transform:none}
+.art.in .gc1{transition-delay:.8s}.art.in .gc2{transition-delay:.95s}.art.in .gc3{transition-delay:1.1s}.art.in .gc4{transition-delay:1.25s}.art.in .gc5{transition-delay:1.4s}
+.gc1{left:-4px;top:2%}.gc2{right:-4px;top:18%}.gc3{left:33%;top:-4%}.gc4{left:22%;bottom:-2%}.gc5{right:4%;bottom:2%}
+
+/* branches grid */
+.branch-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;max-width:590px}
+.branch-card{padding:24px;border-top:2px solid var(--moss);background:#f4efe466;min-height:160px;transition:transform .35s,box-shadow .35s,background .35s}
+.branch-card:hover{transform:translateY(-5px);box-shadow:0 14px 28px #29341d14;background:#f4efe4cc}
+.branch-card span{font-size:.7rem;color:var(--soil);letter-spacing:.12em}
+
+.pill{display:inline-flex;border:1px solid var(--line);border-radius:50px;padding:8px 13px;margin:4px;font-size:.75rem;transition:border-color .3s,background .3s}
+.pill:hover{border-color:var(--moss);background:#78905d14}
+.cta{display:inline-flex;margin-top:18px;padding:13px 19px;border-radius:40px;background:var(--night);color:var(--cream);font-size:.8rem;transition:background .3s,transform .3s}
+.cta:hover{background:var(--moss);transform:translateX(3px)}
+
+/* ---------- archive ---------- */
+.archive{padding:13vh 8vw;background:var(--night);color:var(--cream)}
+.archive-head{max-width:760px;margin-bottom:45px}
+.archive .tag{color:#9bb08f}
+.archive p{color:#bfc7c0}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:25px 0}
+.filter{border:1px solid #ffffff30;background:transparent;color:var(--cream);border-radius:40px;padding:9px 14px;cursor:pointer;transition:background .3s,color .3s,border-color .3s}
+.filter:hover{border-color:#ffffff70}
+.filter.active{background:var(--cream);color:var(--night)}
+.events{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;transition:opacity .22s ease,transform .22s ease}
+.events.fading{opacity:0;transform:translateY(8px)}
+.event{border:1px solid #ffffff1c;padding:24px;background:#ffffff08;min-height:280px;display:flex;flex-direction:column;justify-content:space-between;transition:border-color .35s,transform .35s,background .35s}
+.event:hover{border-color:#ffffff45;transform:translateY(-5px);background:#ffffff0e}
+.event .date{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:#aebca8}
+.event h3{font-size:2rem}
+.event p{color:#bfc7c0}
+
+/* ---------- contact / footer ---------- */
+.contact{padding:14vh 8vw;display:grid;grid-template-columns:1fr 1fr;gap:9vw;background:#dfd5c3}
+.contact h2{max-width:600px}
+.contact form{display:grid;gap:16px}
+.contact label{font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;font-weight:700}
+.contact input,.contact textarea{display:block;width:100%;margin-top:7px;border:0;border-bottom:1px solid #988d7c;background:transparent;padding:12px 0;font:1rem "DM Sans",sans-serif;outline:none;transition:border-color .3s}
+.contact input:focus,.contact textarea:focus{border-bottom-color:var(--moss)}
+.contact textarea{min-height:90px}
+.submit{border:0;background:var(--night);color:#fff;padding:14px 20px;border-radius:40px;width:max-content;cursor:pointer;transition:background .3s,transform .3s}
+.submit:hover{background:var(--moss);transform:translateX(3px)}
+.footer{padding:45px 8vw;background:var(--night);color:#9fa9a0;font-size:.8rem;display:flex;justify-content:space-between;gap:12px}
+
+/* ---------- v4: hotspots, popovers, living art ---------- */
+.hotspot{position:absolute;z-index:6;width:20px;height:20px;border-radius:50%;border:0;background:transparent;cursor:pointer;transform:translate(-50%,-50%);padding:0}
+.hotspot i{position:absolute;inset:4px;border-radius:50%;background:var(--orange);box-shadow:0 0 0 3px #f4efe4e6;display:block}
+.hotspot i:before{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--orange);animation:pulse 2.2s ease-out infinite}
+@keyframes pulse{0%{transform:scale(.55);opacity:.95}70%{transform:scale(1.6);opacity:0}100%{opacity:0}}
+.hotspot span{position:absolute;left:26px;top:50%;transform:translateY(-50%) translateX(-5px);background:var(--night);color:var(--cream);padding:6px 12px;border-radius:20px;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;white-space:nowrap;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none}
+.hotspot:hover span,.hotspot:focus-visible span,.hero-tree.hinting .hotspot span{opacity:1;transform:translateY(-50%) translateX(0)}
+.tree-hint{position:absolute;z-index:7;left:-3%;top:24%;background:var(--night);color:var(--cream);font-size:.74rem;padding:11px 16px;border-radius:20px 20px 20px 5px;opacity:0;transform:translateY(8px);transition:opacity .6s,transform .6s;pointer-events:none;max-width:205px;line-height:1.45}
+.tree-hint.show{opacity:1;transform:none}
+.tree-hint b{color:var(--sand)}
+.birds{position:absolute;left:0;top:14%;z-index:4;width:140px;opacity:.55;animation:fly 48s linear infinite;pointer-events:none}
+.birds.b2{top:9%;width:100px;animation-duration:64s;animation-delay:14s;opacity:.4}
+@keyframes fly{0%{transform:translate(-22vw,0)}100%{transform:translate(118vw,-9vh)}}
+.rustle{transform-box:fill-box}
+.rustle-a{transform-origin:60% 90%;animation:rustleA 6.5s ease-in-out infinite}
+.rustle-b{transform-origin:50% 95%;animation:rustleB 8s ease-in-out infinite}
+.rustle-c{transform-origin:45% 90%;animation:rustleC 7.2s ease-in-out infinite}
+@keyframes rustleA{0%,100%{transform:rotate(-1.4deg)}50%{transform:rotate(1.2deg)}}
+@keyframes rustleB{0%,100%{transform:rotate(1deg)}50%{transform:rotate(-1.5deg)}}
+@keyframes rustleC{0%,100%{transform:rotate(-.8deg)}50%{transform:rotate(1.4deg)}}
+.popover{position:fixed;z-index:60;max-width:280px;background:var(--night);color:var(--cream);padding:18px 20px;border-radius:16px;box-shadow:0 18px 44px #17231d59;opacity:0;transform:translateY(6px) scale(.97);transition:opacity .25s,transform .25s;pointer-events:none}
+.popover.show{opacity:1;transform:none;pointer-events:auto}
+.popover strong{font-family:Fraunces,serif;font-weight:500;font-size:1.2rem;display:block;margin-bottom:6px;letter-spacing:-.02em}
+.popover p{margin:0;font-size:.85rem;color:#c9d0c7;line-height:1.55}
+.popover a{display:inline-block;margin-top:10px;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:#aab795;font-weight:700}
+.popover a:hover{color:var(--cream)}
+.clickable{cursor:pointer;color:inherit}
+.word-chip.clickable:hover,.grove-chip.clickable:hover{border-color:var(--moss);box-shadow:0 12px 26px #29341d2b}
+.word-chip.clickable:after,.grove-chip.clickable:after{content:"";position:absolute;top:7px;right:11px;width:7px;height:7px;border-radius:50%;background:var(--orange);animation:blip 2.4s ease-in-out infinite}
+@keyframes blip{0%,100%{transform:scale(.55);opacity:.45}50%{transform:scale(1);opacity:1}}
+.branch-card{cursor:pointer;position:relative}
+.branch-card .go{display:inline-block;margin-top:10px;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--moss)}
+.branch-card:hover .go{color:var(--orange)}
+.sun-rays{transform-origin:380px 110px;animation:spin 90s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.flow path{animation:march 5s linear infinite}
+@keyframes march{to{stroke-dashoffset:-160}}
+.art.in .tip{animation:tipPulse 3s ease-in-out infinite;animation-delay:1.6s}
+@keyframes tipPulse{0%,100%{opacity:1}50%{opacity:.35}}
+.flutter{transform-box:fill-box;transform-origin:center;animation:flutter 4.5s ease-in-out infinite}
+.flutter.f2{animation-delay:1.2s}.flutter.f3{animation-delay:2.1s}
+@keyframes flutter{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(5deg)}}
+.art.in .word-chip{animation:bob 6s ease-in-out infinite;animation-delay:2.3s}
+.art.in .wc2{animation-delay:2.9s}.art.in .wc4{animation-delay:3.5s}
+.art.in .grove-chip{animation:bob 7s ease-in-out infinite;animation-delay:2.5s}
+.art.in .gc3{animation-delay:3.1s}.art.in .gc5{animation-delay:3.7s}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.art.in .sprout-grow{animation:sproutSway 5.5s ease-in-out infinite;animation-delay:2.4s}
+@keyframes sproutSway{0%,100%{transform:rotate(-2.5deg)}50%{transform:rotate(3deg)}}
+.seed-click{cursor:pointer;transform-box:fill-box;transform-origin:center}
+.sprout-grow.seed-click{transform-origin:50% 100%}
+.seed-click:hover{animation:wiggle .5s ease-in-out}
+@keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
+
+/* ---------- mobile nav ---------- */
+.mobile-nav{position:fixed;inset:0;background:var(--night);z-index:50;color:var(--cream);padding:100px 8vw;opacity:0;visibility:hidden;transition:opacity .35s ease,visibility .35s}
+.mobile-nav.open{opacity:1;visibility:visible}
+.mobile-nav a{display:block;font:2.2rem Fraunces,serif;padding:10px 0;transform:translateY(12px);opacity:0;transition:transform .4s ease,opacity .4s ease}
+.mobile-nav.open a{transform:none;opacity:1}
+.mobile-nav.open a:nth-child(2){transition-delay:.05s}.mobile-nav.open a:nth-child(3){transition-delay:.1s}.mobile-nav.open a:nth-child(4){transition-delay:.15s}.mobile-nav.open a:nth-child(5){transition-delay:.2s}.mobile-nav.open a:nth-child(6){transition-delay:.25s}.mobile-nav.open a:nth-child(7){transition-delay:.3s}.mobile-nav.open a:nth-child(8){transition-delay:.35s}.mobile-nav.open a:nth-child(9){transition-delay:.4s}
+#close{position:absolute;top:24px;right:4vw}
+
+@media(max-width:850px){
+ .nav{display:none}.menu{display:block}
+ .hero{min-height:900px}.hero-copy{left:7vw;right:7vw;top:18%;text-align:center}.hero-copy .lead{margin-left:auto;margin-right:auto}
+ .hero-tree{width:105vw;max-width:620px;right:50%;transform:translateX(50%);bottom:4%}
+ .hero-stamp{top:12%;right:7vw;width:75px;height:75px;font-size:.52rem}
+ .hero-copy .eyebrow{padding:0 66px}
+ .scroll{left:50%;transform:translateX(-50%);white-space:nowrap}
+ .drift-leaf{display:none}
+ .tree-hint,.birds{display:none}
+ .hotspot span{font-size:.58rem;padding:5px 10px}
+ .intro,.section,.contact{grid-template-columns:1fr;gap:40px}
+ .intro{padding:100px 7vw}.section{padding:100px 7vw;min-height:auto}.section:before{font-size:5rem}
+ .art{min-height:310px}
+ .branch-grid,.events{grid-template-columns:1fr}
+ .archive{padding:100px 7vw}.contact{padding:100px 7vw}
+ .footer{display:block}.footer span{display:block;margin-top:10px}
+}
+@media(prefers-reduced-motion:reduce){
+ html{scroll-behavior:auto}
+ .hero-tree .crown,.canopy-sway,.hero-stamp,.scroll{animation:none}
+ .hotspot i:before,.word-chip.clickable:after,.grove-chip.clickable:after,
+ .rustle-a,.rustle-b,.rustle-c,.flutter,.sun-rays,.flow path,.birds,
+ .art.in .word-chip,.art.in .grove-chip,.art.in .sprout-grow,.art.in .tip,.seed-click:hover{animation:none}
+ .drift-leaf{display:none}
+ .reveal{opacity:1;transform:none;transition:none}
+ .art .draw{stroke-dashoffset:0;transition:none}
+ .art .grow,.sprout-grow{transform:scale(1);transition:none}
+ .art .fade-in,.word-chip,.grove-chip{opacity:1;transform:none;transition:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="header" id="header">
+  <a class="brand" href="#top"><span class="brand-mark"></span>PAMOJA</a>
+  <nav class="nav" aria-label="Primary">
+    <a href="#ground">Ground</a><a href="#roots">Roots</a><a href="#work">Work</a><a href="#offer">Offer</a><a href="#seeds">Seeds</a><a href="#contact">Contact</a>
+  </nav>
+  <button class="menu" id="open" aria-label="Open menu" aria-expanded="false" aria-controls="mobile">☰</button>
+</header>
+
+<aside class="journey-rail" aria-hidden="true">
+  <div class="rail-track">
+    <div class="rail-fill" id="railFill"></div>
+    <div id="railStops"></div>
+  </div>
+</aside>
+
+<div class="mobile-nav" id="mobile">
+  <button class="menu" id="close" aria-label="Close menu">×</button>
+  <a href="#ground">The Ground We Share</a><a href="#roots">Our Roots</a><a href="#who">Who We Are</a><a href="#work">Our Work</a><a href="#offer">What We Offer</a><a href="#grow">Who We Grow With</a><a href="#seeds">What's Growing</a><a href="#contact">Start a conversation</a>
+</div>
+
+<main id="main">
+<section class="hero" id="top">
+  <div class="hero-copy">
+    <div class="eyebrow">Cultural Collective · Hamilton</div>
+    <h1>Pamoja<span style="color:var(--orange)">.</span></h1>
+    <p class="lead"><span class="em">Together</span> — building a city through relationship, cultural knowledge, creativity and mutual care.</p>
+  </div>
+  <div class="hero-stamp">people<br>make<br>places</div>
+  <span class="drift-leaf" style="right:12%;top:14%"></span>
+  <span class="drift-leaf dl2" style="right:30%;top:8%"></span>
+  <span class="drift-leaf dl3" style="right:20%;top:20%"></span>
+  <svg class="birds" viewBox="0 0 160 50" aria-hidden="true"><path d="M8 26 q9-11 18 0 q9-11 18 0" fill="none" stroke="#26332b" stroke-width="3" stroke-linecap="round"/><path d="M96 14 q7-9 14 0 q7-9 14 0" fill="none" stroke="#26332b" stroke-width="2.5" stroke-linecap="round"/></svg>
+  <svg class="birds b2" viewBox="0 0 160 50" aria-hidden="true"><path d="M20 24 q8-10 16 0 q8-10 16 0" fill="none" stroke="#26332b" stroke-width="2.5" stroke-linecap="round"/></svg>
+  <div class="hero-tree" id="heroTree">
+    <div class="tree-hint" id="treeHint"><b>The tree is a map.</b><br>Click its parts to travel through Pamoja's story.</div>
+    <svg viewBox="0 0 720 760" aria-label="Hand-drawn tree representing Pamoja. Parts of the tree are clickable and lead to sections of the page." role="img">
+      <defs>
+        <linearGradient id="tg" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#4a3423"/><stop offset=".45" stop-color="#7c5a3f"/><stop offset=".75" stop-color="#8a684c"/><stop offset="1" stop-color="#523a2a"/>
+        </linearGradient>
+        <radialGradient id="cg1" cx=".35" cy=".3" r="1.1"><stop offset="0" stop-color="#9db37a"/><stop offset="1" stop-color="#6f8758"/></radialGradient>
+        <radialGradient id="cg2" cx=".35" cy=".3" r="1.1"><stop offset="0" stop-color="#acbe87"/><stop offset="1" stop-color="#7b9563"/></radialGradient>
+        <radialGradient id="cg3" cx=".4" cy=".3" r="1.1"><stop offset="0" stop-color="#8fa96d"/><stop offset="1" stop-color="#627c50"/></radialGradient>
+        <linearGradient id="sgd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7d5a40"/><stop offset="1" stop-color="#5b4130"/></linearGradient>
+      </defs>
+      <g class="crown">
+        <g class="rustle rustle-a">
+          <circle cx="248" cy="152" r="74" fill="url(#cg3)"/>
+          <circle cx="306" cy="104" r="58" fill="url(#cg2)"/>
+          <circle cx="202" cy="196" r="52" fill="url(#cg1)"/>
+          <circle cx="238" cy="222" r="16" fill="#4e6748" opacity=".28"/>
+        </g>
+        <g class="rustle rustle-b">
+          <circle cx="420" cy="94" r="82" fill="url(#cg2)"/>
+          <circle cx="356" cy="140" r="64" fill="url(#cg1)"/>
+          <circle cx="478" cy="158" r="56" fill="url(#cg3)"/>
+          <circle cx="400" cy="160" r="14" fill="#4e6748" opacity=".25"/>
+        </g>
+        <g class="rustle rustle-c">
+          <circle cx="548" cy="206" r="62" fill="url(#cg1)"/>
+          <circle cx="452" cy="232" r="62" fill="url(#cg3)"/>
+          <circle cx="332" cy="216" r="66" fill="url(#cg2)"/>
+          <circle cx="262" cy="246" r="46" fill="url(#cg3)"/>
+          <circle cx="520" cy="248" r="13" fill="#4e6748" opacity=".28"/>
+          <circle cx="360" cy="252" r="15" fill="#4e6748" opacity=".25"/>
+        </g>
+        <path d="M252 150 C320 128 402 128 482 162" fill="none" stroke="#ccd8b1" stroke-width="5" stroke-linecap="round" opacity=".55"/>
+        <path d="M238 258 C310 284 424 286 522 242" fill="none" stroke="#42563c" stroke-width="6" stroke-linecap="round" opacity=".3"/>
+      </g>
+      <g stroke-linecap="round">
+        <path d="M334 702 C330 592 334 482 348 382 C358 312 364 262 356 206 L404 206 C396 262 400 312 410 382 C424 482 426 592 420 702 Z" fill="url(#tg)"/>
+        <g fill="none">
+          <path d="M354 660 C350 560 354 470 364 380" stroke="#452f1e" stroke-width="4" opacity=".5"/>
+          <path d="M384 664 C388 552 384 462 376 362" stroke="#452f1e" stroke-width="3" opacity=".4"/>
+          <path d="M400 620 C404 540 400 470 394 400" stroke="#96724f" stroke-width="3" opacity=".45"/>
+          <path d="M362 300 C356 260 350 236 340 214" stroke="#452f1e" stroke-width="3" opacity=".35"/>
+        </g>
+        <ellipse cx="380" cy="472" rx="11" ry="19" fill="#39281a"/>
+        <ellipse cx="380" cy="472" rx="11" ry="19" fill="none" stroke="#96724f" stroke-width="3" opacity=".55"/>
+        <g fill="none" stroke="#5d4230">
+          <path d="M360 384 C298 332 248 302 192 280" stroke-width="22"/>
+          <path d="M400 376 C462 326 514 300 568 280" stroke-width="22"/>
+          <path d="M356 302 C332 252 308 226 282 202" stroke-width="15"/>
+          <path d="M402 304 C428 256 456 230 492 208" stroke-width="15"/>
+          <path d="M192 280 C168 270 148 266 126 264" stroke-width="8"/>
+          <path d="M568 280 C594 272 614 268 636 268" stroke-width="8"/>
+        </g>
+      </g>
+      <g fill="none" stroke="#6b4c36" stroke-linecap="round">
+        <path d="M348 674 C280 694 210 708 138 718" stroke-width="13"/>
+        <path d="M368 674 C436 698 508 712 588 722" stroke-width="13"/>
+        <path d="M352 678 C322 714 298 732 262 748" stroke-width="10"/>
+        <path d="M366 678 C400 716 428 734 466 750" stroke-width="10"/>
+        <path d="M344 672 C258 662 200 670 150 680" stroke-width="6"/>
+        <path d="M376 670 C452 666 512 676 562 688" stroke-width="6"/>
+        <path d="M200 702 C182 712 166 717 148 720" stroke-width="3" opacity=".7"/>
+        <path d="M520 708 C542 718 558 722 576 724" stroke-width="3" opacity=".7"/>
+      </g>
+      <path d="M80 728 Q360 672 640 728 L640 760 L80 760Z" fill="url(#sgd)"/>
+      <path d="M95 724 Q360 676 625 726" fill="none" stroke="#a27b5c" stroke-width="4"/>
+      <g stroke="#78905d" stroke-width="3" stroke-linecap="round" fill="none" opacity=".9">
+        <path d="M150 716 l-4-14 M156 717 l2-16 M162 717 l6-13"/>
+        <path d="M560 714 l-4-14 M566 715 l2-16 M572 715 l6-13"/>
+        <path d="M300 706 l-3-12 M306 707 l3-13"/>
+      </g>
+      <ellipse cx="232" cy="732" rx="9" ry="5" fill="#8a6a4e"/>
+      <ellipse cx="500" cy="738" rx="7" ry="4" fill="#937356"/>
+      <path d="M268 722 c8-6 16-6 20 0 c-8 4-16 4-20 0z" fill="#b66e42" opacity=".85" transform="rotate(-12 278 722)"/>
+    </svg>
+    <button class="hotspot" data-goto="offer" style="left:56%;top:20%" aria-label="Go to What We Offer — the canopy"><i></i><span>Canopy</span></button>
+    <button class="hotspot" data-goto="work" style="left:27%;top:39%" aria-label="Go to Our Work — the branches"><i></i><span>Branches</span></button>
+    <button class="hotspot" data-goto="who" style="left:53%;top:62%" aria-label="Go to Who We Are — the trunk"><i></i><span>Trunk</span></button>
+    <button class="hotspot" data-goto="roots" style="left:31%;top:86%" aria-label="Go to Our Roots"><i></i><span>Roots</span></button>
+    <button class="hotspot" data-goto="ground" style="left:13%;top:83%" aria-label="Go to The Ground We Share"><i></i><span>Ground</span></button>
+    <button class="hotspot" data-goto="seeds" style="left:69%;top:84%" aria-label="Go to What's Growing — seeds"><i></i><span>Seeds</span></button>
+  </div>
+  <div class="scroll">Scroll to travel through the tree ↓</div>
+</section>
+
+<section class="intro">
+  <div class="reveal"><div class="under">The idea</div><div class="big">A city grows differently when people are seen as contributors, not recipients.</div></div>
+  <div class="reveal" data-d="1"><p>Pamoja means together. This is a collective rooted in newcomer knowledge, African Muslim traditions of hospitality, ethical relationship and mutual economic empowerment.</p><p>The website follows that philosophy: from the shared ground, into the roots, through the trunk, across the branches, and toward what is still growing.</p></div>
+</section>
+
+<div class="tree-journey" id="journey">
+<section class="section" id="ground" data-number="01">
+ <div class="art reveal">
+  <div style="width:min(520px,84vw)">
+   <svg viewBox="0 0 520 320" role="img" aria-label="Sun rising over layered ground">
+    <g class="grow g1" style="transform-origin:380px 110px">
+      <circle cx="380" cy="110" r="52" fill="#b66e42" opacity=".92"/>
+      <g class="sun-rays" stroke="#b66e42" stroke-width="4" stroke-linecap="round" opacity=".65">
+        <path d="M380 34v-16"/><path d="M434 54l12-12"/><path d="M456 110h17"/><path d="M326 54l-12-12"/><path d="M304 110h-17"/><path d="M438 162l13 11"/><path d="M322 162l-13 11"/>
+      </g>
+    </g>
+    <path class="draw" d="M18 246 Q150 208 268 232 T520 224 L520 320 L18 320Z" fill="#76533b" stroke="none" style="stroke-dasharray:0;stroke-dashoffset:0;transition:none"/>
+    <path class="draw" d="M0 262 Q140 232 280 252 T520 246" fill="none" stroke="#a27b5c" stroke-width="4" stroke-linecap="round"/>
+    <path class="draw" d="M40 284 Q180 262 320 278 T505 272" fill="none" stroke="#5d432f" stroke-width="3" stroke-linecap="round" opacity=".55"/>
+    <g class="fade-in flow" stroke="#cdb79a" stroke-width="3" stroke-dasharray="2 14" stroke-linecap="round">
+      <path d="M70 208 Q260 188 450 202" fill="none"/>
+      <path d="M70 192 Q260 172 450 186" fill="none"/>
+    </g>
+   </svg>
+  </div>
+ </div>
+ <div class="copy">
+  <div class="tag reveal">01 · Soil</div>
+  <h2 class="reveal" data-d="1">The Ground We Share</h2>
+  <p class="reveal" data-d="2">Three reference points shape the ground Pamoja stands on: the Dish With One Spoon Wampum, the Two Row Wampum, and the Canadian Charter of Rights and Freedoms.</p>
+  <p class="reveal" data-d="3">These Indigenous teachings are learned from and honoured. They are not Pamoja's property, and they are not decorative motifs.</p>
+  <a class="cta reveal" data-d="4" href="#roots">Enter the roots →</a>
+ </div>
+</section>
+
+<section class="section" id="roots" data-number="02">
+ <div class="art reveal">
+  <div class="roots-wrap">
+   <svg viewBox="0 0 420 460" role="img" aria-label="Root system drawing">
+    <path class="draw" d="M204 12 C200 90 208 170 206 252" fill="none" stroke="#684c37" stroke-width="15" stroke-linecap="round"/>
+    <path class="draw" d="M206 250 C150 280 96 302 36 330" fill="none" stroke="#684c37" stroke-width="8" stroke-linecap="round"/>
+    <path class="draw" d="M206 250 C262 284 318 300 384 318" fill="none" stroke="#684c37" stroke-width="8" stroke-linecap="round"/>
+    <path class="draw" d="M206 252 C176 310 140 352 96 396" fill="none" stroke="#76533b" stroke-width="6" stroke-linecap="round"/>
+    <path class="draw" d="M206 252 C236 312 276 352 322 398" fill="none" stroke="#76533b" stroke-width="6" stroke-linecap="round"/>
+    <path class="draw" d="M120 296 C100 330 80 350 52 372" fill="none" stroke="#76533b" stroke-width="4" stroke-linecap="round" opacity=".8"/>
+    <path class="draw" d="M296 300 C316 334 340 356 368 378" fill="none" stroke="#76533b" stroke-width="4" stroke-linecap="round" opacity=".8"/>
+    <path class="draw" d="M206 254 C206 320 204 372 208 430" fill="none" stroke="#684c37" stroke-width="5" stroke-linecap="round" opacity=".85"/>
+    <g class="fade-in" fill="#78905d">
+      <circle class="grow g2 tip" cx="96" cy="396" r="7" style="transform-origin:96px 396px"/>
+      <circle class="grow g3 tip" cx="322" cy="398" r="7" style="transform-origin:322px 398px"/>
+      <circle class="grow g4 tip" cx="208" cy="430" r="6" style="transform-origin:208px 430px"/>
+    </g>
+   </svg>
+   <button type="button" class="word-chip wc1 clickable" data-pop-title="Ta'aruf" data-pop-text="Ethical, dialogical relationship — hospitality, dignity, difference without erasure, and the time it takes to know one another.">Ta'aruf</button>
+   <button type="button" class="word-chip wc2 clickable" data-pop-title="Takaful" data-pop-text="Mutual economic empowerment and collective stewardship.">Takaful</button>
+  </div>
+ </div>
+ <div class="copy">
+  <div class="tag reveal">02 · Roots</div>
+  <h2 class="reveal" data-d="1">Our Roots</h2>
+  <p class="reveal" data-d="2"><strong>Ta'aruf</strong> is ethical, dialogical relationship: hospitality, dignity, difference without erasure and the time it takes to know one another.</p>
+  <p class="reveal" data-d="2"><strong>Takaful</strong> is mutual economic empowerment and collective stewardship.</p>
+  <p class="reveal" data-d="3">These roots feed Pamoja's own practice while remaining distinct from the teachings represented by the shared ground.</p>
+  <a class="cta reveal" data-d="4" href="#who">See the trunk →</a>
+ </div>
+</section>
+<section class="section" id="who" data-number="03">
+ <div class="art reveal">
+  <div class="trunk-wrap">
+   <svg viewBox="0 0 360 470" role="img" aria-label="Tree trunk with branches and leaves">
+    <path class="draw" d="M150 460 C146 360 144 280 152 190 C158 130 160 90 152 40 L208 40 C200 90 202 130 208 190 C216 280 214 360 210 460 Z" fill="#684c37" stroke="none" style="stroke-dasharray:0;stroke-dashoffset:0"/>
+    <path class="draw" d="M172 440 C170 350 170 260 176 160" fill="none" stroke="#553d2e" stroke-width="4" stroke-linecap="round" opacity=".7"/>
+    <path class="draw" d="M192 440 C194 340 192 250 186 140" fill="none" stroke="#553d2e" stroke-width="3" stroke-linecap="round" opacity=".5"/>
+    <path class="draw" d="M204 200 C250 160 290 140 330 122" fill="none" stroke="#684c37" stroke-width="14" stroke-linecap="round"/>
+    <path class="draw" d="M156 240 C112 205 76 190 38 176" fill="none" stroke="#684c37" stroke-width="12" stroke-linecap="round"/>
+    <path class="draw" d="M196 130 C226 96 252 80 284 66" fill="none" stroke="#684c37" stroke-width="9" stroke-linecap="round"/>
+    <g class="grow g2" style="transform-origin:330px 110px">
+      <path class="flutter" d="M330 116 C352 96 366 92 352 116 C366 140 352 144 330 124 Z" fill="#78905d"/>
+      <path d="M332 118 L356 116" stroke="#4e6748" stroke-width="2"/>
+    </g>
+    <g class="grow g3" style="transform-origin:34px 170px">
+      <path class="flutter f2" d="M36 176 C12 158 0 154 12 178 C0 200 14 204 36 186 Z" fill="#aab795"/>
+      <path d="M34 180 L10 178" stroke="#4e6748" stroke-width="2"/>
+    </g>
+    <g class="grow g4" style="transform-origin:284px 58px">
+      <path class="flutter f3" d="M286 64 C306 46 320 42 308 64 C320 86 306 90 286 74 Z" fill="#91a36f"/>
+      <path d="M288 68 L310 64" stroke="#4e6748" stroke-width="2"/>
+    </g>
+   </svg>
+  </div>
+ </div>
+ <div class="copy">
+  <div class="tag reveal">03 · Trunk</div>
+  <h2 class="reveal" data-d="1">Who We Are</h2>
+  <p class="reveal" data-d="2">Pamoja grew from Sudanese traditions of hospitality and the fertile ground of the Community Permaculture Lab — from a biweekly tea gathering into a collective.</p>
+  <p class="reveal" data-d="3">Its work braids decolonial education, intergenerational dialogue, mutual economic empowerment and community connection.</p>
+  <div class="reveal" data-d="4"><div class="pill">Not a settlement agency</div><div class="pill">Newcomer knowledge</div><div class="pill">Collective practice</div></div>
+  <a class="cta reveal" data-d="4" href="#work">Follow the branches →</a>
+ </div>
+</section>
+
+<section class="section" id="work" data-number="04">
+ <div class="art reveal">
+  <div class="branch-grid">
+   <div class="branch-card reveal" data-d="1" data-filter="connection" role="button" tabindex="0" aria-label="Connection — see related stories"><span>BRANCH 01</span><h3>Connection</h3><p>Intercultural, intergenerational and cross-sector relationships.</p><span class="go">See stories →</span></div>
+   <div class="branch-card reveal" data-d="2" data-filter="cohesion" role="button" tabindex="0" aria-label="Social cohesion — see related stories"><span>BRANCH 02</span><h3>Social cohesion</h3><p>Making the city more connected through shared experience.</p><span class="go">See stories →</span></div>
+   <div class="branch-card reveal" data-d="3" data-filter="creative" role="button" tabindex="0" aria-label="Creative collaboration — see related stories"><span>BRANCH 03</span><h3>Creative collaboration</h3><p>Building with partners rather than simply delivering to them.</p><span class="go">See stories →</span></div>
+   <div class="branch-card reveal" data-d="4" data-filter="all" role="button" tabindex="0" aria-label="Coordination — explore all stories"><span>BRANCH 04</span><h3>Coordination</h3><p>Linking existing efforts and creating space for collaboration.</p><span class="go">Explore everything →</span></div>
+  </div>
+ </div>
+ <div class="copy">
+  <div class="tag reveal">04 · Branches</div>
+  <h2 class="reveal" data-d="1">Our Work</h2>
+  <p class="reveal" data-d="2">The branches overlap. An event can create connection, strengthen social cohesion, build a creative partnership and link existing efforts at the same time.</p>
+  <a class="cta reveal" data-d="3" href="#events">Explore the work →</a>
+ </div>
+</section>
+
+<section class="archive" id="events">
+ <div class="archive-head reveal"><div class="tag">Leaves & fruit</div><h2>Things we've grown.</h2><p>Stories of hosting, teaching, making, gathering and building together — not a tally of beneficiaries.</p></div>
+ <div class="filters reveal" data-d="1" role="group" aria-label="Filter stories by branch">
+  <button class="filter active" data-f="all" aria-pressed="true">All</button>
+  <button class="filter" data-f="connection" aria-pressed="false">Connection</button>
+  <button class="filter" data-f="cohesion" aria-pressed="false">Social cohesion</button>
+  <button class="filter" data-f="creative" aria-pressed="false">Creative collaboration</button>
+ </div>
+ <div class="events" id="eventsGrid">
+  <article class="event reveal" data-d="1" data-tags="connection cohesion"><div><div class="date">2023–2026 · Handed on</div><h3>Biweekly Tea Gathering</h3><p>Community hosting, conversation and shared knowledge. Now fully owned and run by Community Permaculture Lab.</p></div><span>Tea · Hamilton</span></article>
+  <article class="event reveal" data-d="2" data-tags="connection creative"><div><div class="date">2024–2025</div><h3>Two Row Citizens at Churchill Park</h3><p>With Julia Hitchcock and The Apothecary's Garden; grant support from TD Park People.</p></div><span>Place · Dialogue</span></article>
+  <article class="event reveal" data-d="3" data-tags="connection cohesion"><div><div class="date">September 2025</div><h3>Coffee Ritual & Place-Conscious Dialogue</h3><p>John Rebecca Park · City of Hamilton Downtown Placemaking Grant.</p></div><span>Coffee · Place</span></article>
+ </div>
+</section>
+
+<section class="section" id="offer" data-number="05">
+ <div class="art reveal">
+  <div class="canopy-wrap">
+   <svg viewBox="0 0 480 400" role="img" aria-label="Leafy canopy" class="canopy-sway">
+    <g class="grow g1" style="transform-origin:240px 200px">
+      <path d="M240 22 C300 20 348 60 356 116 C420 130 448 190 420 246 C440 300 396 350 336 344 C300 380 220 386 180 352 C110 362 52 322 56 262 C20 226 30 160 84 138 C92 76 160 26 240 22 Z" fill="#78905d"/>
+    </g>
+    <g class="grow g2" style="transform-origin:140px 240px"><circle cx="140" cy="240" r="86" fill="#6b8455" opacity=".92"/></g>
+    <g class="grow g3" style="transform-origin:352px 220px"><circle cx="352" cy="220" r="80" fill="#849a68" opacity=".9"/></g>
+    <g class="grow g4" style="transform-origin:240px 90px"><circle cx="240" cy="90" r="56" fill="#aab795" opacity=".95"/></g>
+    <g class="fade-in" fill="none" stroke="#4e6748" stroke-width="3" stroke-linecap="round" opacity=".55">
+      <path d="M120 210 C170 190 230 186 300 196"/>
+      <path d="M160 290 C220 268 290 262 350 272"/>
+      <path d="M210 120 C250 108 290 108 326 120"/>
+    </g>
+   </svg>
+   <button type="button" class="word-chip wc1 clickable" data-pop-title="Workshops" data-pop-text="Pamoja's knowledge, shared with institutions — with trust built first." data-pop-link="#contact" data-pop-link-text="Start a conversation →">Workshops</button>
+   <button type="button" class="word-chip wc2 clickable" data-pop-title="Consultation" data-pop-text="Engage the expertise and lived knowledge carried by Pamoja's community." data-pop-link="#contact" data-pop-link-text="Start a conversation →">Consultation</button>
+   <button type="button" class="word-chip wc3 clickable" data-pop-title="Tea ritual" data-pop-text="Hospitality as practice — tea, stories and understanding before agendas.">Tea ritual</button>
+   <button type="button" class="word-chip wc4 clickable" data-pop-title="Coffee ritual" data-pop-text="Take only what you need. Leave something for others. Keep the dish clean.">Coffee ritual</button>
+  </div>
+ </div>
+ <div class="copy">
+  <div class="tag reveal">05 · The canopy</div>
+  <h2 class="reveal" data-d="1">What We Offer</h2>
+  <p class="reveal" data-d="2">Institutions can engage Pamoja's expertise and the knowledge carried by its community through workshops, hospitality rituals and consultation.</p>
+  <p class="reveal" data-d="3"><strong>Build trust first.</strong> Coffee, tea, stories and understanding come before agendas.</p>
+  <p class="reveal" data-d="3">Take only what you need. Leave something for others. Keep the dish clean.</p>
+  <a class="cta reveal" data-d="4" href="#contact">Start a conversation →</a>
+ </div>
+</section>
+<section class="section" id="grow" data-number="06">
+ <div class="art reveal">
+  <div class="grove-wrap">
+   <svg viewBox="0 0 520 380" role="img" aria-label="Three trees connected below ground">
+    <path d="M20 336 Q260 312 500 336 L500 380 L20 380Z" fill="#76533b"/>
+    <g class="fade-in flow" fill="none" stroke="#cdb79a" stroke-width="3" stroke-dasharray="2 12" stroke-linecap="round">
+      <path d="M118 348 C190 330 330 330 402 348"/>
+      <path d="M118 358 C200 344 320 344 402 358"/>
+    </g>
+    <g>
+      <path class="draw" d="M112 336 C110 280 108 240 112 196" fill="none" stroke="#684c37" stroke-width="10" stroke-linecap="round"/>
+      <g class="grow g1" style="transform-origin:112px 168px"><path d="M112 128 C148 126 172 148 170 178 C168 208 140 222 112 218 C84 222 56 208 54 178 C52 148 76 126 112 128 Z" fill="#78905d"/></g>
+    </g>
+    <g>
+      <path class="draw" d="M258 336 C256 260 254 200 258 128" fill="none" stroke="#684c37" stroke-width="12" stroke-linecap="round"/>
+      <g class="grow g2" style="transform-origin:258px 92px"><path d="M258 36 C306 34 340 64 338 104 C336 144 300 162 258 158 C216 162 180 144 178 104 C176 64 210 34 258 36 Z" fill="#aab795"/></g>
+    </g>
+    <g>
+      <path class="draw" d="M402 336 C400 290 398 258 402 218" fill="none" stroke="#684c37" stroke-width="9" stroke-linecap="round"/>
+      <g class="grow g3" style="transform-origin:402px 190px"><path d="M402 152 C434 150 456 170 454 196 C452 222 428 234 402 230 C376 234 352 222 350 196 C348 170 370 150 402 152 Z" fill="#627d55"/></g>
+    </g>
+   </svg>
+   <button type="button" class="grove-chip gc1 clickable" data-pop-title="Community Permaculture Lab" data-pop-text="Part of the grove — partners contribute space, funding, teaching, relationships and shared work.">Community Permaculture Lab</button>
+   <button type="button" class="grove-chip gc2 clickable" data-pop-title="City of Hamilton" data-pop-text="Part of the grove — partners contribute space, funding, teaching, relationships and shared work.">City of Hamilton</button>
+   <button type="button" class="grove-chip gc3 clickable" data-pop-title="The Apothecary's Garden" data-pop-text="Part of the grove — partners contribute space, funding, teaching, relationships and shared work.">The Apothecary's Garden</button>
+   <button type="button" class="grove-chip gc4 clickable" data-pop-title="TD Park People" data-pop-text="Part of the grove — partners contribute space, funding, teaching, relationships and shared work.">TD Park People</button>
+   <button type="button" class="grove-chip gc5 clickable" data-pop-title="McMaster / CCENA" data-pop-text="Part of the grove — partners contribute space, funding, teaching, relationships and shared work.">McMaster / CCENA</button>
+  </div>
+ </div>
+ <div class="copy">
+  <div class="tag reveal">06 · The grove</div>
+  <h2 class="reveal" data-d="1">Who We Grow With</h2>
+  <p class="reveal" data-d="2">A tree doesn't grow alone. Pamoja names partners for what they actually contribute — space, funding, teaching, relationships and shared work.</p>
+  <p class="reveal" data-d="3">Settlement organizations are collaborators, not competitors. Their work makes this practice possible while Pamoja contributes something distinct.</p>
+ </div>
+</section>
+
+<section class="section" id="seeds" data-number="07">
+ <div class="art reveal">
+  <div style="width:min(460px,82vw)">
+   <svg viewBox="0 0 460 430" role="img" aria-label="Seeds and a new sprout in soil">
+    <path d="M20 350 Q230 300 440 350 L440 430 L20 430Z" fill="#76533b"/>
+    <path class="draw" d="M40 356 Q230 312 420 356" fill="none" stroke="#a27b5c" stroke-width="4" stroke-linecap="round"/>
+    <g class="grow g1 seed-click" style="transform-origin:150px 320px" data-pop-title="Space" data-pop-text="Free or low-cost space — somewhere for good work to take root.">
+      <path d="M150 330 C128 300 126 262 150 238 C174 262 172 300 150 330 Z" fill="#b66e42" transform="rotate(-16 150 284)"/>
+    </g>
+    <g class="grow g2 seed-click" style="transform-origin:320px 330px" data-pop-title="Funding" data-pop-text="Flexible, multi-year, trust-based funding.">
+      <path d="M320 336 C302 312 300 282 320 262 C340 282 338 312 320 336 Z" fill="#aab795" transform="rotate(14 320 300)"/>
+    </g>
+    <g class="sprout-grow seed-click" data-pop-title="Capacity" data-pop-text="Legal, financial and administrative capacity — and relationships that let good work grow.">
+      <path d="M232 348 C230 300 234 258 244 214" fill="none" stroke="#4e6748" stroke-width="6" stroke-linecap="round"/>
+      <path d="M244 232 C268 214 292 212 306 218 C296 240 268 248 244 232 Z" fill="#78905d"/>
+      <path d="M242 258 C220 244 198 244 186 252 C198 270 224 274 242 258 Z" fill="#91a36f"/>
+    </g>
+   </svg>
+  </div>
+ </div>
+ <div class="copy">
+  <div class="tag reveal">07 · Seeds</div>
+  <h2 class="reveal" data-d="1">What's Growing</h2>
+  <p class="reveal" data-d="2">Free or low-cost space. Flexible multi-year trust-based funding. Legal, financial and administrative capacity. Relationships that let good work take root.</p>
+  <p class="reveal" data-d="3">Sometimes investment looks like co-hosting a community meal, lending expertise, sharing unused space or helping with a crowdfunding campaign.</p>
+  <a class="cta reveal" data-d="4" href="#contact">Let's build together →</a>
+ </div>
+</section>
+
+<section class="contact" id="contact">
+ <div>
+  <div class="tag reveal">The first step</div>
+  <h2 class="reveal" data-d="1">We start with a conversation.</h2>
+  <p class="reveal" data-d="2">And we don't move fast.</p>
+  <p class="reveal" data-d="3">Tell us what you're hoping to build, who else is involved, and what you're bringing besides money.</p>
+ </div>
+ <form class="reveal" data-d="2" onsubmit="event.preventDefault();alert('Prototype v4 — nothing was submitted.');">
+  <label>Who are you?<input required placeholder="Organization, team, collective"></label>
+  <label>What are you hoping to build?<textarea required placeholder="What are you imagining?"></textarea></label>
+  <label>Who else is involved?<textarea placeholder="Partners, communities, teams"></textarea></label>
+  <label>What timeline are you working with?<input placeholder="This fall, next year..."></label>
+  <label>What are you bringing besides money?<textarea placeholder="Space, knowledge, people, relationships..."></textarea></label>
+  <button class="submit">Begin the conversation →</button>
+ </form>
+</section>
+</div>
+</main>
+<div class="popover" id="popover" role="status" hidden><strong id="popTitle"></strong><p id="popText"></p><a id="popLink" href="#contact"></a></div>
+<footer class="footer"><strong>PAMOJA</strong><span>Prototype v4 · Final copy, photography and cultural approvals to be supplied by Pamoja.</span></footer>
+
+<script>
+(function(){
+"use strict";
+var reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- mobile menu ---------- */
+var mobile=document.getElementById('mobile'),
+    openBtn=document.getElementById('open'),
+    closeBtn=document.getElementById('close');
+function setMenu(open){
+  mobile.classList.toggle('open',open);
+  openBtn.setAttribute('aria-expanded',String(open));
+  if(open){closeBtn.focus();}else{openBtn.focus();}
+}
+openBtn.onclick=function(){setMenu(true)};
+closeBtn.onclick=function(){setMenu(false)};
+document.querySelectorAll('.mobile-nav a').forEach(function(a){a.onclick=function(){mobile.classList.remove('open');openBtn.setAttribute('aria-expanded','false');}});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&mobile.classList.contains('open')){setMenu(false);}});
+
+/* ---------- reveal on scroll ---------- */
+var revealObs=new IntersectionObserver(function(entries){
+  entries.forEach(function(en){
+    if(en.isIntersecting){en.target.classList.add('in');revealObs.unobserve(en.target);}
+  });
+},{threshold:.18});
+document.querySelectorAll('.reveal').forEach(function(el){revealObs.observe(el);});
+
+/* ---------- art in-view (svg draw/grow) ---------- */
+var artObs=new IntersectionObserver(function(entries){
+  entries.forEach(function(en){
+    if(en.isIntersecting){en.target.classList.add('in');artObs.unobserve(en.target);}
+  });
+},{threshold:.3});
+document.querySelectorAll('.art').forEach(function(el){artObs.observe(el);});
+
+/* ---------- header state + hero parallax ---------- */
+var header=document.getElementById('header'),
+    heroTree=document.getElementById('heroTree'),
+    ticking=false;
+function onScrollFast(){
+  header.classList.toggle('scrolled',window.scrollY>40);
+  if(!reduceMotion&&window.scrollY<window.innerHeight){
+    var y=window.scrollY;
+    heroTree.style.transform='translateY('+(y*0.12)+'px)';
+  }
+  ticking=false;
+}
+window.addEventListener('scroll',function(){
+  if(!ticking){requestAnimationFrame(function(){onScrollFast();updateJourney();});ticking=true;}
+},{passive:true});
+
+/* ---------- journey rail + active nav ---------- */
+var stops=[
+  {id:'ground',label:'Soil'},
+  {id:'roots',label:'Roots'},
+  {id:'who',label:'Trunk'},
+  {id:'work',label:'Branches'},
+  {id:'events',label:'Fruit'},
+  {id:'offer',label:'Canopy'},
+  {id:'grow',label:'Grove'},
+  {id:'seeds',label:'Seeds'}
+];
+var railStops=document.getElementById('railStops'),
+    railFill=document.getElementById('railFill');
+stops.forEach(function(s,i){
+  var b=document.createElement('button');
+  b.className='stop';b.type='button';b.dataset.id=s.id;b.tabIndex=-1;
+  b.innerHTML='<span>'+s.label+'</span>';
+  b.onclick=function(){document.getElementById(s.id).scrollIntoView({behavior:reduceMotion?'auto':'smooth'});};
+  railStops.appendChild(b);
+});
+var stopEls=railStops.querySelectorAll('.stop');
+function absTop(el){return el.getBoundingClientRect().top+window.scrollY;}
+function updateJourney(){
+  var first=document.getElementById(stops[0].id),
+      last=document.getElementById(stops[stops.length-1].id),
+      vh=window.innerHeight,
+      top=absTop(first),
+      bottom=absTop(last)+last.offsetHeight,
+      pos=window.scrollY+vh*0.5,
+      p=Math.min(1,Math.max(0,(pos-top)/(bottom-top)));
+  railFill.style.transform='scaleY('+p+')';
+  var current=-1;
+  stops.forEach(function(s,i){
+    var el=document.getElementById(s.id),
+        elTop=absTop(el);
+    var frac=Math.min(1,Math.max(0,((elTop+el.offsetHeight*0.4)-top)/(bottom-top)));
+    stopEls[i].style.top=(frac*100)+'%';
+    if(elTop<=window.scrollY+vh*0.45){current=i;}
+  });
+  stopEls.forEach(function(b,i){
+    b.classList.toggle('done',i<current);
+    b.classList.toggle('current',i===current);
+  });
+  document.querySelectorAll('.nav a').forEach(function(a){
+    var id=a.getAttribute('href').slice(1);
+    var isActive=stops[current]&&stops[current].id===id;
+    a.classList.toggle('active',!!isActive);
+    if(isActive){a.setAttribute('aria-current','true');}else{a.removeAttribute('aria-current');}
+  });
+  document.querySelectorAll('.section').forEach(function(s){
+    var r=s.getBoundingClientRect();
+    s.classList.toggle('in-view',r.top<vh*0.6&&r.bottom>vh*0.4);
+  });
+}
+window.addEventListener('resize',updateJourney);
+updateJourney();
+
+/* ---------- hero hotspots + hint ---------- */
+var heroTreeEl=document.getElementById('heroTree'),
+    treeHint=document.getElementById('treeHint'),
+    hintHidden=false;
+function hideHint(){if(hintHidden)return;hintHidden=true;if(treeHint)treeHint.classList.remove('show');heroTreeEl.classList.remove('hinting');}
+setTimeout(function(){if(!hintHidden&&treeHint){treeHint.classList.add('show');heroTreeEl.classList.add('hinting');}},1500);
+setTimeout(hideHint,10000);
+document.querySelectorAll('.hotspot').forEach(function(h){
+  h.addEventListener('click',function(){
+    hideHint();
+    var t=document.getElementById(h.dataset.goto);
+    if(t){t.scrollIntoView({behavior:reduceMotion?'auto':'smooth'});}
+  });
+});
+
+/* ---------- popovers ---------- */
+var pop=document.getElementById('popover'),
+    popT=document.getElementById('popTitle'),
+    popX=document.getElementById('popText'),
+    popL=document.getElementById('popLink'),
+    popSrc=null;
+function openPop(x,y,el){
+  popT.textContent=el.dataset.popTitle||'';
+  popX.textContent=el.dataset.popText||'';
+  if(el.dataset.popLink){
+    popL.style.display='inline-block';
+    popL.textContent=el.dataset.popLinkText||'See more →';
+    popL.setAttribute('href',el.dataset.popLink);
+  }else{popL.style.display='none';}
+  pop.hidden=false;
+  pop.classList.add('show');
+  var w=pop.offsetWidth,h=pop.offsetHeight,
+      px=Math.min(Math.max(12,x-w/2),window.innerWidth-w-12),
+      py=y-h-14;
+  if(py<12){py=y+18;}
+  pop.style.left=px+'px';pop.style.top=py+'px';
+  popSrc=el;
+}
+function closePop(){
+  if(!pop.classList.contains('show'))return;
+  pop.classList.remove('show');popSrc=null;
+  setTimeout(function(){pop.hidden=true;},220);
+}
+document.querySelectorAll('[data-pop-title]').forEach(function(el){
+  el.addEventListener('click',function(e){
+    e.stopPropagation();
+    if(popSrc===el){closePop();return;}
+    var r=el.getBoundingClientRect();
+    openPop(r.left+r.width/2,r.top,el);
+  });
+});
+popL.addEventListener('click',function(){closePop();});
+pop.addEventListener('click',function(e){e.stopPropagation();});
+document.addEventListener('click',function(){closePop();});
+window.addEventListener('scroll',function(){closePop();},{passive:true});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closePop();}});
+
+/* ---------- branch cards → filtered stories ---------- */
+document.querySelectorAll('.branch-card').forEach(function(c){
+  function go(){
+    var f=c.dataset.filter||'all',
+        btn=document.querySelector('.filter[data-f="'+f+'"]')||document.querySelector('.filter[data-f="all"]');
+    if(btn){btn.click();}
+    document.getElementById('events').scrollIntoView({behavior:reduceMotion?'auto':'smooth'});
+  }
+  c.addEventListener('click',go);
+  c.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}});
+});
+
+/* ---------- archive filters ---------- */
+var eventsGrid=document.getElementById('eventsGrid');
+document.querySelectorAll('.filter').forEach(function(b){
+  b.onclick=function(){
+    document.querySelectorAll('.filter').forEach(function(x){x.classList.remove('active');x.setAttribute('aria-pressed','false');});
+    b.classList.add('active');b.setAttribute('aria-pressed','true');
+    var f=b.dataset.f;
+    eventsGrid.classList.add('fading');
+    setTimeout(function(){
+      document.querySelectorAll('.event').forEach(function(e){
+        e.style.display=(f==='all'||e.dataset.tags.indexOf(f)!==-1)?'flex':'none';
+      });
+      eventsGrid.classList.remove('fading');
+    },reduceMotion?0:220);
+  };
+});
+})();
+</script>
+</body>
+</html>
