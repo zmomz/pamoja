@@ -1,0 +1,1039 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pamoja — Together, Hamilton</title>
+<meta name="description" content="Pamoja Cultural Collective — building Hamilton together.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap');
+:root{
+ --night:#17231d;--ink:#26332b;--cream:#f4efe4;--warm:#e8dfcf;--sand:#cdb79a;
+ --bark:#684c37;--soil:#76533b;--moss:#4e6748;--leaf:#78905d;--sage:#aab795;
+ --line:#cfc6b6;--paper:#faf7ef;--orange:#b66e42;--white:#fffdf8;
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:"DM Sans",sans-serif;line-height:1.65}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E")}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:500;line-height:.98;letter-spacing:-.045em}
+h1{font-size:clamp(4.5rem,11vw,10.5rem);margin:0}
+h2{font-size:clamp(3.1rem,7vw,7rem);margin:0}
+h3{font-size:1.55rem;margin:0 0 .5rem}
+p{max-width:62ch}a{text-decoration:none;color:inherit}
+button{font:inherit}
+:focus-visible{outline:2px solid var(--orange);outline-offset:3px;border-radius:4px}
+.skip{position:absolute;left:-999px}.skip:focus{left:10px;top:10px;z-index:100;background:#fff;padding:10px}
+
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .9s cubic-bezier(.22,.8,.3,1),transform .9s cubic-bezier(.22,.8,.3,1)}
+.reveal.in{opacity:1;transform:none}
+.reveal[data-d="1"]{transition-delay:.1s}.reveal[data-d="2"]{transition-delay:.2s}
+.reveal[data-d="3"]{transition-delay:.32s}.reveal[data-d="4"]{transition-delay:.44s}
+
+.header{position:fixed;z-index:40;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:24px 4vw;color:var(--night);transition:background .4s,padding .4s,box-shadow .4s}
+.header.scrolled{background:#f4efe4e6;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:14px 4vw;box-shadow:0 1px 0 var(--line)}
+.brand{display:flex;align-items:center;gap:12px;font-weight:700;letter-spacing:.14em;font-size:.75rem}
+.brand-mark{width:30px;height:30px;border-radius:50% 45% 50% 45%;background:var(--moss);transform:rotate(-20deg);position:relative;transition:transform .5s}
+.brand:hover .brand-mark{transform:rotate(20deg)}
+.brand-mark:after{content:"";position:absolute;width:12px;height:2px;background:var(--cream);left:9px;top:14px;transform:rotate(20deg)}
+.nav{display:flex;gap:4px;align-items:center}
+.nav a{padding:8px 12px;border-radius:30px;font-size:.8rem;position:relative;transition:background .25s}
+.nav a:hover{background:#ffffff77}
+.nav a:after{content:"";position:absolute;left:12px;right:12px;bottom:4px;height:2px;background:var(--orange);border-radius:2px;transform:scaleX(0);transform-origin:left;transition:transform .35s}
+.nav a.active:after{transform:scaleX(1)}
+.menu{display:none;border:1px solid var(--line);background:#f4efe4dd;border-radius:50%;width:42px;height:42px;cursor:pointer}
+
+.journey-rail{position:fixed;left:22px;top:50%;transform:translateY(-50%);z-index:30;display:none;padding:20px 14px;background:#f4efe4d9;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:40px;box-shadow:0 10px 30px #3e332414}
+@media(min-width:1150px){.journey-rail{display:block}}
+.rail-track{position:relative;width:2px;height:min(52vh,430px);background:#26332b26;border-radius:2px;margin:0 auto}
+.rail-fill{position:absolute;top:0;left:-1px;width:4px;height:100%;background:linear-gradient(var(--leaf),var(--moss));border-radius:3px;transform-origin:top;transform:scaleY(0)}
+.stop{position:absolute;left:50%;transform:translate(-50%,-50%);width:11px;height:11px;border-radius:50%;background:var(--cream);border:2px solid #26332b40;transition:background .4s,border-color .4s,box-shadow .4s;padding:0}
+.stop.done{background:var(--moss);border-color:var(--moss)}
+.stop.current{box-shadow:0 0 0 6px #4e674826}
+.stop span{position:absolute;left:22px;top:50%;transform:translateY(-50%);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;font-weight:700;color:var(--ink);opacity:0;transition:opacity .3s;white-space:nowrap;pointer-events:none}
+.stop.current span,.journey-rail:hover .stop.done span,.journey-rail:hover .stop.current span{opacity:.9}
+
+.hero{min-height:100svh;position:relative;overflow:hidden;background:linear-gradient(#e9e2d4 0%,#f4efe4 55%,#ddd0bb 100%);display:grid;place-items:center}
+.hero:after{content:"";position:absolute;bottom:-14%;left:-8%;width:116%;height:32%;background:var(--soil);border-radius:50% 50% 0 0/40% 40% 0 0}
+.hero-copy{position:absolute;z-index:5;left:6vw;top:22%;max-width:570px}
+.eyebrow{text-transform:uppercase;letter-spacing:.2em;font-size:.7rem;font-weight:700;color:var(--moss);margin-bottom:18px}
+.hero-copy .lead{font-size:clamp(1rem,1.6vw,1.25rem);max-width:450px;margin:28px 0 0}
+.hero-copy .em{font-family:Fraunces,serif;font-style:italic}
+.hero-tree{width:min(700px,60vw);position:absolute;right:6%;bottom:0;z-index:3;will-change:transform}
+.hero-tree svg{width:100%;height:auto;filter:drop-shadow(0 30px 25px #3e332420)}
+.hero-tree .crown-group{transform-origin:380px 280px;animation:sway 10s ease-in-out infinite}
+@keyframes sway{0%,100%{transform:rotate(-.8deg)}50%{transform:rotate(1.2deg)}}
+.leaf-cluster{transform-origin:center;animation:leafSway 7s ease-in-out infinite}
+.leaf-cluster.lc2{animation-delay:-2s;animation-duration:8s}
+.leaf-cluster.lc3{animation-delay:-4s;animation-duration:9s}
+@keyframes leafSway{0%,100%{transform:rotate(-1.5deg) translate(0,0)}50%{transform:rotate(2deg) translate(2px,-1px)}}
+.drift-leaf{position:absolute;z-index:4;width:22px;height:14px;border-radius:80% 10% 80% 10%;background:var(--leaf);opacity:0;animation:drift 16s linear infinite}
+.drift-leaf.dl2{background:var(--sage);animation-delay:6s;animation-duration:20s}
+.drift-leaf.dl3{background:var(--moss);animation-delay:11s;animation-duration:18s;width:18px;height:12px}
+@keyframes drift{0%{transform:translate(0,0) rotate(0deg);opacity:0}10%{opacity:.8}90%{opacity:.5}100%{transform:translate(-50vw,60vh) rotate(340deg);opacity:0}}
+.hero-stamp{position:absolute;right:5vw;top:22%;z-index:6;width:110px;height:110px;border:1.5px solid var(--moss);border-radius:50%;display:grid;place-items:center;text-align:center;font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;transform:rotate(9deg);background:#f4efe4aa;animation:stamp-spin 40s linear infinite}
+@keyframes stamp-spin{from{transform:rotate(9deg)}to{transform:rotate(369deg)}}
+.scroll{position:absolute;z-index:8;bottom:30px;left:6vw;font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:#fff;animation:scroll-pulse 2.6s ease-in-out infinite}
+@keyframes scroll-pulse{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+
+.intro{background:var(--night);color:#f4efe4;padding:15vh 8vw;display:grid;grid-template-columns:1fr 1.4fr;gap:10vw}
+.intro .big{font-family:Fraunces,serif;font-size:clamp(2.4rem,5vw,5.2rem);line-height:1.03}
+.intro p{color:#c9d0c7;font-size:1.05rem}
+.under{color:#91a88a;font-size:.75rem;letter-spacing:.14em;text-transform:uppercase}
+
+.tree-journey{position:relative}
+.section{min-height:100vh;padding:13vh 8vw;display:grid;grid-template-columns:.8fr 1.2fr;gap:8vw;align-items:center;border-top:1px solid var(--line);position:relative;overflow:hidden}
+.section:nth-child(even){background:var(--paper)}
+.section:before{content:attr(data-number);position:absolute;right:5vw;top:7vh;font-family:Fraunces,serif;font-size:8rem;color:#b9ae9d33;transition:color 1s}
+.section.in-view:before{color:#b9ae9d55}
+.copy{position:relative;z-index:2}.copy p{font-size:1.02rem}
+.tag{font-size:.68rem;text-transform:uppercase;letter-spacing:.18em;color:var(--moss);font-weight:700;margin-bottom:18px}
+.art{min-height:480px;display:grid;place-items:center;position:relative}
+.art svg{width:100%;height:auto;max-width:560px;overflow:visible}
+.art .draw{stroke-dasharray:1600;stroke-dashoffset:1600;transition:stroke-dashoffset 2.6s ease .2s}
+.art.in .draw{stroke-dashoffset:0}
+.art .grow{transform:scale(0);transform-origin:center;transition:transform 1.2s cubic-bezier(.34,1.4,.4,1)}
+.art.in .grow{transform:scale(1)}
+.art .grow.g1{transition-delay:.15s}.art .grow.g2{transition-delay:.4s}.art .grow.g3{transition-delay:.65s}.art .grow.g4{transition-delay:.9s}
+.art .fade-in{opacity:0;transition:opacity 1.1s ease 1s}
+.art.in .fade-in{opacity:1}
+.word-chip{position:absolute;border:1px solid var(--line);background:var(--paper);padding:12px 18px;border-radius:40px;font-family:Fraunces,serif;font-size:1.3rem;box-shadow:0 8px 20px #29341d14;opacity:0;transform:translateY(12px);transition:opacity .7s ease,transform .7s ease;cursor:pointer}
+.art.in .word-chip{opacity:1;transform:none}
+.art.in .wc1{transition-delay:1s}.art.in .wc2{transition-delay:1.2s}.art.in .wc3{transition-delay:1.4s}.art.in .wc4{transition-delay:1.6s}
+.canopy-sway{transform-origin:50% 80%;animation:sway 10s ease-in-out infinite}
+.sprout-grow{transform:scale(0);transform-origin:50% 100%;transition:transform 1.4s cubic-bezier(.34,1.5,.4,1) 1.1s}
+.art.in .sprout-grow{transform:scale(1)}
+
+.roots-wrap{position:relative;width:min(440px,82vw)}
+.roots-wrap .wc1{left:-10px;top:90px}.roots-wrap .wc2{right:-10px;top:210px}
+.trunk-wrap{position:relative;width:min(380px,74vw)}
+.canopy-wrap{position:relative;width:min(500px,88vw)}
+.canopy-wrap .wc1{left:2%;top:36%}.canopy-wrap .wc2{right:-2%;top:50%}.canopy-wrap .wc3{left:28%;top:62%}.canopy-wrap .wc4{left:32%;top:14%}
+.grove-wrap{position:relative;width:min(540px,90vw)}
+.grove-chip{position:absolute;border:1px solid var(--moss);background:var(--paper);padding:8px 14px;border-radius:30px;font-size:.75rem;box-shadow:0 6px 16px #29341d12;opacity:0;transform:translateY(8px);transition:opacity .6s ease,transform .6s ease;cursor:pointer}
+.art.in .grove-chip{opacity:1;transform:none}
+.art.in .gc1{transition-delay:.9s}.art.in .gc2{transition-delay:1.05s}.art.in .gc3{transition-delay:1.2s}.art.in .gc4{transition-delay:1.35s}.art.in .gc5{transition-delay:1.5s}
+.gc1{left:-6px;top:0%}.gc2{right:-6px;top:16%}.gc3{left:30%;top:-6%}.gc4{left:20%;bottom:-4%}.gc5{right:2%;bottom:0%}
+
+.branch-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;max-width:590px}
+.branch-card{padding:24px;border-top:2px solid var(--moss);background:#f4efe466;min-height:160px;transition:transform .35s,box-shadow .35s,background .35s;cursor:pointer}
+.branch-card:hover{transform:translateY(-5px);box-shadow:0 14px 28px #29341d14;background:#f4efe4cc}
+.branch-card span{font-size:.7rem;color:var(--soil);letter-spacing:.12em}
+
+.pill{display:inline-flex;border:1px solid var(--line);border-radius:50px;padding:8px 13px;margin:4px;font-size:.75rem;transition:border-color .3s,background .3s}
+.pill:hover{border-color:var(--moss);background:#78905d14}
+.cta{display:inline-flex;margin-top:18px;padding:13px 19px;border-radius:40px;background:var(--night);color:var(--cream);font-size:.8rem;transition:background .3s,transform .3s}
+.cta:hover{background:var(--moss);transform:translateX(3px)}
+
+.archive{padding:13vh 8vw;background:var(--night);color:var(--cream)}
+.archive-head{max-width:760px;margin-bottom:45px}
+.archive .tag{color:#9bb08f}
+.archive p{color:#bfc7c0}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:25px 0}
+.filter{border:1px solid #ffffff30;background:transparent;color:var(--cream);border-radius:40px;padding:9px 14px;cursor:pointer;transition:background .3s,color .3s,border-color .3s}
+.filter:hover{border-color:#ffffff70}
+.filter.active{background:var(--cream);color:var(--night)}
+.events{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;transition:opacity .22s ease,transform .22s ease}
+.events.fading{opacity:0;transform:translateY(8px)}
+.event{border:1px solid #ffffff1c;padding:24px;background:#ffffff08;min-height:280px;display:flex;flex-direction:column;justify-content:space-between;transition:border-color .35s,transform .35s,background .35s}
+.event:hover{border-color:#ffffff45;transform:translateY(-5px);background:#ffffff0e}
+.event .date{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:#aebca8}
+.event h3{font-size:2rem}
+.event p{color:#bfc7c0}
+
+.contact{padding:14vh 8vw;display:grid;grid-template-columns:1fr 1fr;gap:9vw;background:#dfd5c3}
+.contact h2{max-width:600px}
+.contact form{display:grid;gap:16px}
+.contact label{font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;font-weight:700}
+.contact input,.contact textarea{display:block;width:100%;margin-top:7px;border:0;border-bottom:1px solid #988d7c;background:transparent;padding:12px 0;font:1rem "DM Sans",sans-serif;outline:none;transition:border-color .3s}
+.contact input:focus,.contact textarea:focus{border-bottom-color:var(--moss)}
+.contact textarea{min-height:90px}
+.submit{border:0;background:var(--night);color:#fff;padding:14px 20px;border-radius:40px;width:max-content;cursor:pointer;transition:background .3s,transform .3s}
+.submit:hover{background:var(--moss);transform:translateX(3px)}
+.footer{padding:45px 8vw;background:var(--night);color:#9fa9a0;font-size:.8rem;display:flex;justify-content:space-between;gap:12px}
+
+.hotspot{position:absolute;z-index:6;width:24px;height:24px;border-radius:50%;border:0;background:transparent;cursor:pointer;transform:translate(-50%,-50%);padding:0}
+.hotspot i{position:absolute;inset:5px;border-radius:50%;background:var(--orange);box-shadow:0 0 0 4px #f4efe4e6;display:block}
+.hotspot i:before{content:"";position:absolute;inset:-8px;border-radius:50%;border:2.5px solid var(--orange);animation:pulse 2.4s ease-out infinite}
+.hotspot i:after{content:"";position:absolute;inset:-16px;border-radius:50%;border:1.5px solid var(--orange);opacity:.4;animation:pulse 2.4s ease-out infinite .6s}
+@keyframes pulse{0%{transform:scale(.5);opacity:.9}70%{transform:scale(1.8);opacity:0}100%{opacity:0}}
+.hotspot span{position:absolute;left:30px;top:50%;transform:translateY(-50%) translateX(-6px);background:var(--night);color:var(--cream);padding:7px 14px;border-radius:20px;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;white-space:nowrap;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none}
+.hotspot:hover span,.hotspot:focus-visible span,.hero-tree.hinting .hotspot span{opacity:1;transform:translateY(-50%) translateX(0)}
+.tree-hint{position:absolute;z-index:7;left:3%;top:16%;background:var(--night);color:var(--cream);font-size:.76rem;padding:13px 18px;border-radius:20px 20px 20px 5px;opacity:0;transform:translateY(10px);transition:opacity .7s,transform .7s;pointer-events:none;max-width:220px;line-height:1.5;box-shadow:0 10px 30px #17231d40}
+.tree-hint.show{opacity:1;transform:none}
+.tree-hint b{color:var(--sand)}
+.birds{position:absolute;left:0;top:12%;z-index:4;width:160px;opacity:.5;animation:fly 52s linear infinite;pointer-events:none}
+.birds.b2{top:8%;width:110px;animation-duration:68s;animation-delay:16s;opacity:.35}
+@keyframes fly{0%{transform:translate(-24vw,0)}100%{transform:translate(120vw,-10vh)}}
+.rustle{transform-box:fill-box}
+.rustle-a{transform-origin:55% 85%;animation:rustleA 7s ease-in-out infinite}
+.rustle-b{transform-origin:50% 90%;animation:rustleB 8.5s ease-in-out infinite}
+.rustle-c{transform-origin:45% 85%;animation:rustleC 7.8s ease-in-out infinite}
+@keyframes rustleA{0%,100%{transform:rotate(-1.2deg)}50%{transform:rotate(1.5deg)}}
+@keyframes rustleB{0%,100%{transform:rotate(1.2deg)}50%{transform:rotate(-1.8deg)}}
+@keyframes rustleC{0%,100%{transform:rotate(-1deg)}50%{transform:rotate(1.6deg)}}
+.popover{position:fixed;z-index:60;max-width:300px;background:var(--night);color:var(--cream);padding:20px 22px;border-radius:18px;box-shadow:0 20px 50px #17231d55;opacity:0;transform:translateY(8px) scale(.96);transition:opacity .3s,transform .3s;pointer-events:none}
+.popover.show{opacity:1;transform:none;pointer-events:auto}
+.popover strong{font-family:Fraunces,serif;font-weight:500;font-size:1.25rem;display:block;margin-bottom:8px;letter-spacing:-.02em}
+.popover p{margin:0;font-size:.88rem;color:#c9d0c7;line-height:1.6}
+.popover a{display:inline-block;margin-top:12px;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:#aab795;font-weight:700}
+.popover a:hover{color:var(--cream)}
+.clickable{cursor:pointer;color:inherit}
+.word-chip.clickable:hover,.grove-chip.clickable:hover{border-color:var(--moss);box-shadow:0 14px 30px #29341d2b;transform:translateY(-2px)}
+.word-chip.clickable:after,.grove-chip.clickable:after{content:"";position:absolute;top:8px;right:12px;width:8px;height:8px;border-radius:50%;background:var(--orange);animation:blip 2.6s ease-in-out infinite}
+@keyframes blip{0%,100%{transform:scale(.5);opacity:.4}50%{transform:scale(1.1);opacity:1}}
+.branch-card{cursor:pointer;position:relative}
+.branch-card .go{display:inline-block;margin-top:10px;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--moss)}
+.branch-card:hover .go{color:var(--orange)}
+.sun-rays{transform-origin:380px 110px;animation:spin 100s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.flow path{animation:march 6s linear infinite}
+@keyframes march{to{stroke-dashoffset:-180}}
+.art.in .tip{animation:tipPulse 3.5s ease-in-out infinite;animation-delay:1.8s}
+@keyframes tipPulse{0%,100%{opacity:1}50%{opacity:.3}}
+.flutter{transform-box:fill-box;transform-origin:center;animation:flutter 5s ease-in-out infinite}
+.flutter.f2{animation-delay:1.5s}.flutter.f3{animation-delay:2.5s}
+@keyframes flutter{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(6deg)}}
+.art.in .word-chip{animation:bob 7s ease-in-out infinite;animation-delay:2.5s}
+.art.in .wc2{animation-delay:3.2s}.art.in .wc4{animation-delay:3.9s}
+.art.in .grove-chip{animation:bob 8s ease-in-out infinite;animation-delay:2.8s}
+.art.in .gc3{animation-delay:3.4s}.art.in .gc5{animation-delay:4.1s}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.art.in .sprout-grow{animation:sproutSway 6s ease-in-out infinite;animation-delay:2.8s}
+@keyframes sproutSway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(4deg)}}
+.seed-click{cursor:pointer;transform-box:fill-box;transform-origin:center}
+.sprout-grow.seed-click{transform-origin:50% 100%}
+.seed-click:hover{animation:wiggle .6s ease-in-out}
+@keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-7deg)}75%{transform:rotate(7deg)}}
+
+.realistic-leaf{transform-box:fill-box;transform-origin:bottom center;animation:leafFlutter 4s ease-in-out infinite}
+.realistic-leaf.rl2{animation-delay:1.2s;animation-duration:5s}
+.realistic-leaf.rl3{animation-delay:2.4s;animation-duration:4.5s}
+@keyframes leafFlutter{0%,100%{transform:rotate(-3deg) scale(1)}50%{transform:rotate(4deg) scale(1.02)}}
+
+.soil-particle{animation:soilFloat 8s ease-in-out infinite}
+.soil-particle.sp2{animation-delay:-3s;animation-duration:10s}
+.soil-particle.sp3{animation-delay:-6s;animation-duration:9s}
+@keyframes soilFloat{0%,100%{transform:translateY(0) translateX(0)}33%{transform:translateY(-4px) translateX(2px)}66%{transform:translateY(2px) translateX(-2px)}}
+
+.cloud-drift{animation:cloudMove 30s ease-in-out infinite alternate}
+.cloud-drift.cd2{animation-delay:-10s;animation-duration:35s}
+@keyframes cloudMove{0%{transform:translateX(0)}100%{transform:translateX(20px)}}
+
+.mobile-nav{position:fixed;inset:0;background:var(--night);z-index:50;color:var(--cream);padding:100px 8vw;opacity:0;visibility:hidden;transition:opacity .35s ease,visibility .35s}
+.mobile-nav.open{opacity:1;visibility:visible}
+.mobile-nav a{display:block;font:2.2rem Fraunces,serif;padding:10px 0;transform:translateY(12px);opacity:0;transition:transform .4s ease,opacity .4s ease}
+.mobile-nav.open a{transform:none;opacity:1}
+.mobile-nav.open a:nth-child(2){transition-delay:.05s}.mobile-nav.open a:nth-child(3){transition-delay:.1s}.mobile-nav.open a:nth-child(4){transition-delay:.15s}.mobile-nav.open a:nth-child(5){transition-delay:.2s}.mobile-nav.open a:nth-child(6){transition-delay:.25s}.mobile-nav.open a:nth-child(7){transition-delay:.3s}.mobile-nav.open a:nth-child(8){transition-delay:.35s}.mobile-nav.open a:nth-child(9){transition-delay:.4s}
+#close{position:absolute;top:24px;right:4vw}
+
+@media(max-width:850px){
+ .nav{display:none}.menu{display:block}
+ .hero{min-height:100svh;display:block}.hero-copy{left:7vw;right:7vw;top:14%;text-align:center}.hero-copy .lead{margin-left:auto;margin-right:auto}
+ .hero-tree{width:92%;max-width:480px;left:50%;transform:translateX(-50%);bottom:24px}
+ .hero-stamp{top:10%;right:7vw;width:80px;height:80px;font-size:.54rem}
+ .hero-copy .eyebrow{padding:0 66px}
+ .scroll{left:50%;transform:translateX(-50%);white-space:nowrap}
+ .drift-leaf{display:none}
+ .tree-hint,.birds{display:none}
+ .hotspot span{font-size:.6rem;padding:6px 10px}
+ .hero-tree .hotspot[data-goto="offer"]{left:56%;top:22%}
+ .hero-tree .hotspot[data-goto="work"]{left:22%;top:32%}
+ .hero-tree .hotspot[data-goto="who"]{left:54%;top:50%}
+ .hero-tree .hotspot[data-goto="roots"]{left:30%;top:82%}
+ .hero-tree .hotspot[data-goto="ground"]{left:12%;top:88%}
+ .hero-tree .hotspot[data-goto="seeds"]{left:76%;top:86%}
+ .intro,.section,.contact{grid-template-columns:1fr;gap:40px}
+ .intro{padding:100px 7vw}.section{padding:100px 7vw;min-height:auto}.section:before{font-size:5rem}
+ .art{min-height:340px}
+ .branch-grid,.events{grid-template-columns:1fr}
+ .archive{padding:100px 7vw}.contact{padding:100px 7vw}
+ .footer{display:block}.footer span{display:block;margin-top:10px}
+}
+@media(prefers-reduced-motion:reduce){
+ html{scroll-behavior:auto}
+ .hero-tree .crown-group,.canopy-sway,.hero-stamp,.scroll{animation:none}
+ .hotspot i:before,.hotspot i:after,.word-chip.clickable:after,.grove-chip.clickable:after,
+ .rustle-a,.rustle-b,.rustle-c,.flutter,.sun-rays,.flow path,.birds,
+ .art.in .word-chip,.art.in .grove-chip,.art.in .sprout-grow,.art.in .tip,.seed-click:hover,
+ .realistic-leaf,.soil-particle,.cloud-drift{animation:none}
+ .drift-leaf{display:none}
+ .reveal{opacity:1;transform:none;transition:none}
+ .art .draw{stroke-dashoffset:0;transition:none}
+ .art .grow,.sprout-grow{transform:scale(1);transition:none}
+ .art .fade-in,.word-chip,.grove-chip{opacity:1;transform:none;transition:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="header" id="header">
+  <a class="brand" href="#top"><span class="brand-mark"></span>PAMOJA</a>
+  <nav class="nav" aria-label="Primary">
+    <a href="#ground">Ground</a><a href="#roots">Roots</a><a href="#work">Work</a><a href="#offer">Offer</a><a href="#seeds">Seeds</a><a href="#contact">Contact</a>
+  </nav>
+  <button class="menu" id="open" aria-label="Open menu" aria-expanded="false" aria-controls="mobile">☰</button>
+</header>
+
+<aside class="journey-rail" aria-hidden="true">
+  <div class="rail-track">
+    <div class="rail-fill" id="railFill"></div>
+    <div id="railStops"></div>
+  </div>
+</aside>
+
+<div class="mobile-nav" id="mobile">
+  <button class="menu" id="close" aria-label="Close menu">×</button>
+  <a href="#ground">The Ground We Share</a><a href="#roots">Our Roots</a><a href="#who">Who We Are</a><a href="#work">Our Work</a><a href="#offer">What We Offer</a><a href="#grow">Who We Grow With</a><a href="#seeds">What's Growing</a><a href="#contact">Start a conversation</a>
+</div>
+
+<main id="main">
+<section class="hero" id="top">
+  <div class="hero-copy">
+    <div class="eyebrow">Cultural Collective · Hamilton</div>
+    <h1>Pamoja<span style="color:var(--orange)">.</span></h1>
+    <p class="lead"><span class="em">Together</span> — building a city through relationship, cultural knowledge, creativity and mutual care.</p>
+  </div>
+  <div class="hero-stamp">people<br>make<br>places</div>
+  <span class="drift-leaf" style="right:14%;top:12%"></span>
+  <span class="drift-leaf dl2" style="right:32%;top:6%"></span>
+  <span class="drift-leaf dl3" style="right:22%;top:18%"></span>
+  <svg class="birds" viewBox="0 0 160 50" aria-hidden="true"><path d="M8 26 q9-11 18 0 q9-11 18 0" fill="none" stroke="#26332b" stroke-width="3" stroke-linecap="round"/><path d="M96 14 q7-9 14 0 q7-9 14 0" fill="none" stroke="#26332b" stroke-width="2.5" stroke-linecap="round"/></svg>
+  <svg class="birds b2" viewBox="0 0 160 50" aria-hidden="true"><path d="M20 24 q8-10 16 0 q8-10 16 0" fill="none" stroke="#26332b" stroke-width="2.5" stroke-linecap="round"/></svg>
+
+  <div class="hero-tree" id="heroTree">
+    <div class="tree-hint" id="treeHint"><b>The tree is alive.</b><br>Click its glowing parts to travel through Pamoja's story.</div>
+    <svg viewBox="0 0 720 800" preserveAspectRatio="xMidYMax meet" aria-label="A living oak tree representing Pamoja. Its canopy, branches, trunk and roots are interactive and lead to different sections." role="img">
+      <defs>
+        <linearGradient id="tg" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#3d2b1f"/><stop offset=".3" stop-color="#6b4c37"/><stop offset=".6" stop-color="#7c5a3f"/><stop offset=".85" stop-color="#5a3f2d"/><stop offset="1" stop-color="#3d2b1f"/>
+        </linearGradient>
+        <radialGradient id="cg1" cx=".4" cy=".35" r="1"><stop offset="0" stop-color="#a3b87e"/><stop offset=".5" stop-color="#7a9460"/><stop offset="1" stop-color="#5a7248"/></radialGradient>
+        <radialGradient id="cg2" cx=".35" cy=".3" r="1"><stop offset="0" stop-color="#b5c491"/><stop offset=".5" stop-color="#8fa96d"/><stop offset="1" stop-color="#6b8455"/></radialGradient>
+        <radialGradient id="cg3" cx=".45" cy=".3" r="1"><stop offset="0" stop-color="#9db37a"/><stop offset=".5" stop-color="#78905d"/><stop offset="1" stop-color="#5a7248"/></radialGradient>
+        <linearGradient id="sgd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a684c"/><stop offset="1" stop-color="#5b4130"/></linearGradient>
+        <filter id="leafShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="1" dy="3" stdDeviation="2" flood-color="#3e3324" flood-opacity=".2"/></filter>
+        <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+
+      <!-- Ground -->
+      <path d="M60 740 Q360 680 660 740 L660 800 L60 800Z" fill="url(#sgd)"/>
+      <path d="M75 735 Q360 685 645 735" fill="none" stroke="#a27b5c" stroke-width="4"/>
+      <g stroke="#78905d" stroke-width="3" stroke-linecap="round" fill="none" opacity=".85">
+        <path d="M140 720 l-5-16 M148 722 l3-18 M156 722 l7-15"/>
+        <path d="M580 718 l-5-16 M588 720 l3-18 M596 720 l7-15"/>
+        <path d="M290 710 l-4-14 M298 712 l4-15"/>
+      </g>
+      <ellipse cx="220" cy="742" rx="10" ry="6" fill="#8a6a4e"/>
+      <ellipse cx="520" cy="748" rx="8" ry="5" fill="#937356"/>
+      <path d="M260 730 c9-7 18-7 22 0 c-9 5-18 5-22 0z" fill="#b66e42" opacity=".85" transform="rotate(-12 271 730)"/>
+
+      <!-- Roots -->
+      <g fill="none" stroke-linecap="round">
+        <path d="M340 680 C280 700 210 714 130 726" stroke="#5a3f2d" stroke-width="14"/>
+        <path d="M360 680 C430 704 500 718 580 728" stroke="#5a3f2d" stroke-width="14"/>
+        <path d="M344 684 C314 722 288 742 250 760" stroke="#5a3f2d" stroke-width="11"/>
+        <path d="M358 684 C394 724 424 744 464 762" stroke="#5a3f2d" stroke-width="11"/>
+        <path d="M336 678 C248 668 188 676 136 688" stroke="#6b4c36" stroke-width="7"/>
+        <path d="M368 676 C448 672 512 682 564 694" stroke="#6b4c36" stroke-width="7"/>
+        <path d="M190 708 C170 720 152 726 132 730" stroke="#6b4c36" stroke-width="4" opacity=".7"/>
+        <path d="M510 714 C534 724 552 728 572 730" stroke="#6b4c36" stroke-width="4" opacity=".7"/>
+        <path d="M200 710 l-8 6 M210 712 l-6 8 M220 714 l-10 4" stroke="#6b4c36" stroke-width="2" opacity=".5"/>
+        <path d="M500 712 l8 6 M490 714 l6 8 M480 716 l10 4" stroke="#6b4c36" stroke-width="2" opacity=".5"/>
+      </g>
+
+      <!-- Trunk -->
+      <g stroke-linecap="round">
+        <path d="M326 702 C322 588 326 474 340 368 C350 294 356 240 348 178 L400 178 C392 240 396 294 406 368 C420 474 422 588 416 702 Z" fill="url(#tg)"/>
+        <g fill="none" opacity=".45">
+          <path d="M346 660 C342 556 346 462 356 368" stroke="#2d1f16" stroke-width="4"/>
+          <path d="M376 664 C380 548 376 454 368 350" stroke="#2d1f16" stroke-width="3"/>
+          <path d="M394 620 C398 536 394 462 388 388" stroke="#96724f" stroke-width="3"/>
+          <path d="M354 296 C348 252 342 226 332 200" stroke="#2d1f16" stroke-width="3"/>
+          <path d="M360 480 C358 420 362 360 368 300" stroke="#4a3423" stroke-width="2" opacity=".6"/>
+          <path d="M384 520 C386 460 382 400 376 340" stroke="#4a3423" stroke-width="2" opacity=".5"/>
+        </g>
+        <ellipse cx="370" cy="472" rx="12" ry="20" fill="#2d1f16"/>
+        <ellipse cx="370" cy="472" rx="12" ry="20" fill="none" stroke="#96724f" stroke-width="3" opacity=".5"/>
+        <g fill="none" stroke="#5d4230">
+          <path d="M350 384 C286 330 234 298 176 274" stroke-width="24"/>
+          <path d="M396 376 C460 324 514 296 572 274" stroke-width="24"/>
+          <path d="M346 296 C320 244 294 216 266 190" stroke-width="16"/>
+          <path d="M396 298 C424 248 454 220 492 196" stroke-width="16"/>
+          <path d="M176 274 C150 264 128 258 104 256" stroke-width="9"/>
+          <path d="M572 274 C600 264 622 260 646 260" stroke-width="9"/>
+        </g>
+        <g fill="none" stroke="#3d2b1f" stroke-width="2" opacity=".4">
+          <path d="M180 276 C160 268 140 264 120 262" stroke-width="4"/>
+          <path d="M568 276 C588 268 608 264 628 262" stroke-width="4"/>
+        </g>
+      </g>
+
+      <!-- Canopy -->
+      <g class="crown-group">
+        <g class="rustle rustle-a">
+          <path d="M170 160 C190 110 240 90 290 110 C330 130 340 180 320 220 C300 260 250 270 210 250 C170 230 150 190 170 160Z" fill="url(#cg3)" filter="url(#leafShadow)"/>
+          <path d="M220 180 C240 150 280 140 310 160 C340 180 350 220 330 250 C310 280 270 290 240 270 C210 250 200 210 220 180Z" fill="url(#cg1)" opacity=".85"/>
+          <path d="M260 200 C275 180 305 175 325 195 C345 215 350 245 335 265 C320 285 290 290 270 275 C250 260 245 230 260 200Z" fill="#4e6748" opacity=".3"/>
+        </g>
+        <g class="rustle rustle-b">
+          <path d="M340 80 C370 30 430 20 480 50 C520 80 530 140 500 190 C470 240 410 250 360 220 C320 190 310 130 340 80Z" fill="url(#cg2)" filter="url(#leafShadow)"/>
+          <path d="M380 100 C405 65 450 60 490 85 C520 110 530 160 505 195 C480 230 435 240 400 215 C365 190 355 140 380 100Z" fill="url(#cg1)" opacity=".9"/>
+          <path d="M420 130 C440 110 470 108 490 128 C510 148 515 178 500 198 C485 218 455 220 435 205 C415 190 410 160 420 130Z" fill="#4e6748" opacity=".25"/>
+        </g>
+        <g class="rustle rustle-c">
+          <path d="M480 180 C510 140 560 135 600 165 C640 195 650 250 620 295 C590 340 530 350 480 320 C440 295 430 240 460 195 C465 188 472 183 480 180Z" fill="url(#cg3)" filter="url(#leafShadow)"/>
+          <path d="M360 200 C390 165 440 160 480 190 C520 220 530 275 500 315 C470 355 410 360 370 330 C330 300 320 245 350 205 C353 202 356 200 360 200Z" fill="url(#cg2)" opacity=".92"/>
+          <path d="M280 220 C310 190 360 188 390 218 C420 248 425 295 400 325 C375 355 330 360 295 335 C260 310 255 265 280 230 C283 226 286 223 280 220Z" fill="url(#cg1)" opacity=".88"/>
+          <path d="M230 250 C255 225 295 223 320 248 C345 273 348 310 328 335 C308 360 270 365 245 345 C220 325 215 288 235 260 C238 256 241 253 230 250Z" fill="url(#cg3)" opacity=".85"/>
+          <path d="M520 260 C540 240 570 238 590 258 C610 278 612 308 596 328 C580 348 550 350 530 332 C510 314 508 284 524 264 C527 261 530 259 520 260Z" fill="#4e6748" opacity=".3"/>
+          <path d="M340 270 C360 250 390 248 410 268 C430 288 432 318 416 338 C400 358 370 360 350 342 C330 324 328 294 344 274 C347 271 350 269 340 270Z" fill="#4e6748" opacity=".25"/>
+        </g>
+        <g fill="#91a36f" opacity=".7">
+          <path class="realistic-leaf" d="M280 140 C285 135 295 135 300 142 C295 150 285 150 280 145Z"/>
+          <path class="realistic-leaf rl2" d="M450 100 C455 94 466 95 470 102 C465 110 455 109 450 104Z"/>
+          <path class="realistic-leaf rl3" d="M550 200 C555 194 566 195 570 202 C565 210 555 209 550 204Z"/>
+          <path class="realistic-leaf" d="M320 280 C325 274 336 275 340 282 C335 290 325 289 320 284Z"/>
+          <path class="realistic-leaf rl2" d="M480 280 C485 274 496 275 500 282 C495 290 485 289 480 284Z"/>
+        </g>
+        <path d="M240 150 C320 125 410 128 490 165" fill="none" stroke="#ccd8b1" stroke-width="5" stroke-linecap="round" opacity=".5"/>
+        <path d="M220 270 C300 298 420 300 520 252" fill="none" stroke="#42563c" stroke-width="6" stroke-linecap="round" opacity=".25"/>
+      </g>
+    </svg>
+
+    <button class="hotspot" data-goto="offer" style="left:54%;top:24%" aria-label="Go to What We Offer — the canopy"><i></i><span>Canopy</span></button>
+    <button class="hotspot" data-goto="work" style="left:25%;top:34%" aria-label="Go to Our Work — the branches"><i></i><span>Branches</span></button>
+    <button class="hotspot" data-goto="who" style="left:52%;top:52%" aria-label="Go to Who We Are — the trunk"><i></i><span>Trunk</span></button>
+    <button class="hotspot" data-goto="roots" style="left:31%;top:87%" aria-label="Go to Our Roots"><i></i><span>Roots</span></button>
+    <button class="hotspot" data-goto="ground" style="left:14%;top:91%" aria-label="Go to The Ground We Share"><i></i><span>Ground</span></button>
+    <button class="hotspot" data-goto="seeds" style="left:74%;top:89%" aria-label="Go to What's Growing — seeds"><i></i><span>Seeds</span></button>
+  </div>
+  <div class="scroll">Scroll to travel through the tree ↓</div>
+</section>
+
+<section class="intro">
+  <div class="reveal"><div class="under">The idea</div><div class="big">A city grows differently when people are seen as contributors, not recipients.</div></div>
+  <div class="reveal" data-d="1"><p>Pamoja means together. This is a collective rooted in newcomer knowledge, African Muslim traditions of hospitality, ethical relationship and mutual economic empowerment.</p><p>The website follows that philosophy: from the shared ground, into the roots, through the trunk, across the branches, and toward what is still growing.</p></div>
+</section>
+<div class="tree-journey" id="journey">
+<section class="section" id="ground" data-number="01">
+ <div class="art reveal">
+  <div style="width:min(540px,86vw)">
+   <svg viewBox="0 0 540 360" role="img" aria-label="Morning sun rising over layered hills and flowing water">
+    <defs>
+      <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#e8dfcf"/><stop offset=".6" stop-color="#f4efe4"/><stop offset="1" stop-color="#ddd0bb"/>
+      </linearGradient>
+      <radialGradient id="sunGrad" cx=".5" cy=".5" r=".5">
+        <stop offset="0" stop-color="#e8a87c"/><stop offset=".4" stop-color="#d4895a"/><stop offset="1" stop-color="#b66e42" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <rect width="540" height="360" fill="url(#skyGrad)"/>
+
+    <g class="cloud-drift" fill="#fffdf8" opacity=".6">
+      <ellipse cx="120" cy="80" rx="35" ry="14"/>
+      <ellipse cx="145" cy="72" rx="28" ry="16"/>
+      <ellipse cx="95" cy="76" rx="22" ry="12"/>
+    </g>
+    <g class="cloud-drift cd2" fill="#fffdf8" opacity=".45">
+      <ellipse cx="420" cy="60" rx="40" ry="16"/>
+      <ellipse cx="450" cy="52" rx="32" ry="18"/>
+      <ellipse cx="390" cy="56" rx="26" ry="14"/>
+    </g>
+
+    <g class="grow g1" style="transform-origin:400px 120px">
+      <circle cx="400" cy="120" r="70" fill="url(#sunGrad)" opacity=".4"/>
+      <circle cx="400" cy="120" r="48" fill="#d4895a" opacity=".85"/>
+      <circle cx="400" cy="120" r="32" fill="#e8a87c" opacity=".9"/>
+      <g class="sun-rays" stroke="#d4895a" stroke-width="4" stroke-linecap="round" opacity=".55">
+        <path d="M400 28v-20"/><path d="M460 52l14-14"/><path d="M484 120h20"/><path d="M316 52l-14-14"/><path d="M292 120h-20"/><path d="M466 178l15 13"/><path d="M334 178l-15 13"/>
+        <path d="M434 34l10-8"/><path d="M366 34l-10-8"/><path d="M506 90l12-4"/><path d="M294 90l-12-4"/>
+      </g>
+    </g>
+
+    <path class="draw" d="M0 220 Q80 190 160 205 T320 195 T540 210 L540 360 L0 360Z" fill="#a89078" opacity=".5" style="stroke-dasharray:0;stroke-dashoffset:0;transition:none"/>
+    <path class="draw" d="M0 245 Q100 215 200 230 T400 220 T540 235" fill="none" stroke="#988878" stroke-width="3" stroke-linecap="round" opacity=".6"/>
+
+    <path class="draw" d="M20 265 Q140 235 260 255 T520 245 L520 360 L20 360Z" fill="#8a7058" opacity=".7" style="stroke-dasharray:0;stroke-dashoffset:0;transition:none"/>
+    <path class="draw" d="M0 280 Q120 258 240 272 T500 262" fill="none" stroke="#7a6050" stroke-width="3" stroke-linecap="round" opacity=".5"/>
+
+    <path class="draw" d="M0 300 Q150 278 300 292 T540 284 L540 360 L0 360Z" fill="#76533b" style="stroke-dasharray:0;stroke-dashoffset:0;transition:none"/>
+    <path class="draw" d="M10 310 Q160 290 310 304 T530 296" fill="none" stroke="#a27b5c" stroke-width="4" stroke-linecap="round"/>
+    <path class="draw" d="M40 332 Q180 314 330 328 T510 322" fill="none" stroke="#5d432f" stroke-width="3" stroke-linecap="round" opacity=".55"/>
+
+    <g class="fade-in flow" stroke="#cdb79a" stroke-width="3" stroke-dasharray="3 16" stroke-linecap="round">
+      <path d="M80 228 Q280 208 480 222" fill="none"/>
+      <path d="M80 210 Q280 190 480 204" fill="none"/>
+      <path d="M60 248 Q260 228 460 242" fill="none" opacity=".6"/>
+    </g>
+
+    <g class="fade-in" stroke="#78905d" stroke-width="2.5" stroke-linecap="round" fill="none" opacity=".8">
+      <path d="M100 298 l-3-12 M106 299 l2-14 M112 299 l5-11"/>
+      <path d="M450 292 l-4-12 M456 293 l3-14 M462 293 l6-11"/>
+      <path d="M280 288 l-3-10 M286 289 l3-11"/>
+    </g>
+   </svg>
+  </div>
+ </div>
+ <div class="copy">
+  <div class="tag reveal">01 · Soil</div>
+  <h2 class="reveal" data-d="1">The Ground We Share</h2>
+  <p class="reveal" data-d="2">Three reference points shape the ground Pamoja stands on: the Dish With One Spoon Wampum, the Two Row Wampum, and the Canadian Charter of Rights and Freedoms.</p>
+  <p class="reveal" data-d="3">These Indigenous teachings are learned from and honoured. They are not Pamoja's property, and they are not decorative motifs.</p>
+  <a class="cta reveal" data-d="4" href="#roots">Enter the roots →</a>
+ </div>
+</section>
+
+<section class="section" id="roots" data-number="02">
+ <div class="art reveal">
+  <div class="roots-wrap">
+   <svg viewBox="0 0 440 480" role="img" aria-label="Deep root system spreading through soil layers">
+    <defs>
+      <radialGradient id="rootGlow" cx=".5" cy=".9" r=".8">
+        <stop offset="0" stop-color="#8a684c" stop-opacity=".3"/>
+        <stop offset="1" stop-color="#76533b" stop-opacity="0"/>
+      </radialGradient>
+      <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    </defs>
+
+    <rect x="0" y="200" width="440" height="280" fill="url(#rootGlow)"/>
+
+    <path d="M0 200 Q220 190 440 200" fill="none" stroke="#a89078" stroke-width="2" opacity=".4"/>
+    <path d="M0 280 Q220 270 440 280" fill="none" stroke="#a89078" stroke-width="2" opacity=".3"/>
+    <path d="M0 360 Q220 350 440 360" fill="none" stroke="#a89078" stroke-width="2" opacity=".2"/>
+
+    <path class="draw" d="M214 12 C210 90 218 170 216 252 C216 300 214 340 218 380 C220 410 224 430 228 450" fill="none" stroke="#684c37" stroke-width="16" stroke-linecap="round"/>
+
+    <path class="draw" d="M216 250 C155 282 98 306 36 336" fill="none" stroke="#684c37" stroke-width="9" stroke-linecap="round"/>
+    <path class="draw" d="M216 250 C274 286 332 304 398 324" fill="none" stroke="#684c37" stroke-width="9" stroke-linecap="round"/>
+    <path class="draw" d="M216 252 C184 314 146 358 100 404" fill="none" stroke="#76533b" stroke-width="7" stroke-linecap="round"/>
+    <path class="draw" d="M216 252 C248 316 290 358 338 406" fill="none" stroke="#76533b" stroke-width="7" stroke-linecap="round"/>
+
+    <path class="draw" d="M120 300 C98 336 76 358 46 382" fill="none" stroke="#76533b" stroke-width="5" stroke-linecap="round" opacity=".85"/>
+    <path class="draw" d="M300 304 C322 340 348 364 378 388" fill="none" stroke="#76533b" stroke-width="5" stroke-linecap="round" opacity=".85"/>
+    <path class="draw" d="M216 320 C214 370 212 410 216 440" fill="none" stroke="#684c37" stroke-width="6" stroke-linecap="round" opacity=".8"/>
+
+    <g fill="none" stroke="#8a684c" stroke-width="1.5" opacity=".5">
+      <path d="M80 340 l-6 8 M90 348 l-4 10 M100 354 l-8 6"/>
+      <path d="M360 344 l6 8 M350 352 l4 10 M340 358 l8 6"/>
+      <path d="M180 380 l-5 8 M190 388 l-3 10 M200 394 l-7 6"/>
+      <path d="M260 384 l5 8 M250 392 l3 10 M240 398 l7 6"/>
+    </g>
+
+    <g class="fade-in">
+      <circle class="grow g2 tip" cx="100" cy="404" r="8" fill="#78905d" filter="url(#softGlow)" style="transform-origin:100px 404px"/>
+      <circle class="grow g3 tip" cx="338" cy="406" r="8" fill="#78905d" filter="url(#softGlow)" style="transform-origin:338px 406px"/>
+      <circle class="grow g4 tip" cx="228" cy="450" r="7" fill="#78905d" filter="url(#softGlow)" style="transform-origin:228px 450px"/>
+      <circle class="grow g1 tip" cx="46" cy="382" r="6" fill="#91a36f" style="transform-origin:46px 382px"/>
+      <circle class="grow g1 tip" cx="378" cy="388" r="6" fill="#91a36f" style="transform-origin:378px 388px"/>
+    </g>
+
+    <g class="soil-particle" fill="#a89078" opacity=".4">
+      <circle cx="80" cy="280" r="3"/><circle cx="350" cy="310" r="2.5"/><circle cx="200" cy="340" r="2"/>
+    </g>
+    <g class="soil-particle sp2" fill="#a89078" opacity=".3">
+      <circle cx="300" cy="260" r="2"/><circle cx="120" cy="320" r="3"/><circle cx="380" cy="360" r="2.5"/>
+    </g>
+    <g class="soil-particle sp3" fill="#a89078" opacity=".35">
+      <circle cx="180" cy="290" r="2.5"/><circle cx="400" cy="280" r="2"/><circle cx="60" cy="360" r="3"/>
+    </g>
+   </svg>
+   <button type="button" class="word-chip wc1 clickable" data-pop-title="Ta'aruf" data-pop-text="Ethical, dialogical relationship — hospitality, dignity, difference without erasure, and the time it takes to know one another.">Ta'aruf</button>
+   <button type="button" class="word-chip wc2 clickable" data-pop-title="Takaful" data-pop-text="Mutual economic empowerment and collective stewardship.">Takaful</button>
+  </div>
+ </div>
+ <div class="copy">
+  <div class="tag reveal">02 · Roots</div>
+  <h2 class="reveal" data-d="1">Our Roots</h2>
+  <p class="reveal" data-d="2"><strong>Ta'aruf</strong> is ethical, dialogical relationship: hospitality, dignity, difference without erasure and the time it takes to know one another.</p>
+  <p class="reveal" data-d="2"><strong>Takaful</strong> is mutual economic empowerment and collective stewardship.</p>
+  <p class="reveal" data-d="3">These roots feed Pamoja's own practice while remaining distinct from the teachings represented by the shared ground.</p>
+  <a class="cta reveal" data-d="4" href="#who">See the trunk →</a>
+ </div>
+</section>
+
+<section class="section" id="who" data-number="03">
+ <div class="art reveal">
+  <div class="trunk-wrap">
+   <svg viewBox="0 0 380 490" role="img" aria-label="Mature tree trunk with detailed bark and branching leaves">
+    <defs>
+      <linearGradient id="trunkGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#4a3423"/><stop offset=".4" stop-color="#6b4c37"/><stop offset=".7" stop-color="#7c5a3f"/><stop offset="1" stop-color="#5a3f2d"/>
+      </linearGradient>
+      <radialGradient id="leafGrad1" cx=".3" cy=".3" r=".8"><stop offset="0" stop-color="#a3b87e"/><stop offset="1" stop-color="#6b8455"/></radialGradient>
+      <radialGradient id="leafGrad2" cx=".3" cy=".3" r=".8"><stop offset="0" stop-color="#b5c491"/><stop offset="1" stop-color="#849a68"/></radialGradient>
+    </defs>
+
+    <path class="draw" d="M158 470 C154 370 152 290 160 200 C166 140 168 100 160 48 L218 48 C210 100 212 140 218 200 C226 290 224 370 220 470 Z" fill="url(#trunkGrad)" style="stroke-dasharray:0;stroke-dashoffset:0"/>
+
+    <g fill="none" opacity=".5">
+      <path d="M180 450 C178 360 178 270 184 170" stroke="#3d2b1f" stroke-width="4" stroke-linecap="round"/>
+      <path d="M200 450 C202 350 200 260 194 150" stroke="#3d2b1f" stroke-width="3" stroke-linecap="round"/>
+      <path d="M168 380 C166 320 170 260 176 200" stroke="#5a3f2d" stroke-width="2" stroke-linecap="round" opacity=".6"/>
+      <path d="M208 400 C210 340 206 280 200 220" stroke="#5a3f2d" stroke-width="2" stroke-linecap="round" opacity=".5"/>
+    </g>
+
+    <path class="draw" d="M208 210 C256 168 298 148 340 128" fill="none" stroke="#684c37" stroke-width="16" stroke-linecap="round"/>
+    <path class="draw" d="M168 250 C122 214 84 198 44 182" fill="none" stroke="#684c37" stroke-width="14" stroke-linecap="round"/>
+    <path class="draw" d="M200 140 C232 104 260 86 294 70" fill="none" stroke="#684c37" stroke-width="11" stroke-linecap="round"/>
+
+    <g class="grow g2" style="transform-origin:340px 118px">
+      <path class="flutter" d="M342 124 C366 102 382 98 366 124 C382 150 366 154 342 132 Z" fill="url(#leafGrad1)"/>
+      <path d="M344 126 L370 124" stroke="#4e6748" stroke-width="2"/>
+      <path class="flutter f2" d="M356 108 C378 88 392 86 378 108 C392 130 378 134 356 114 Z" fill="url(#leafGrad2)" opacity=".85"/>
+    </g>
+    <g class="grow g3" style="transform-origin:38px 174px">
+      <path class="flutter f2" d="M40 180 C14 160 0 156 14 180 C0 204 16 208 40 188 Z" fill="url(#leafGrad2)"/>
+      <path d="M38 184 L12 182" stroke="#4e6748" stroke-width="2"/>
+      <path class="flutter" d="M26 168 C4 150 -8 148 4 168 C-8 188 6 192 26 174 Z" fill="url(#leafGrad1)" opacity=".8"/>
+    </g>
+    <g class="grow g4" style="transform-origin:294px 62px">
+      <path class="flutter f3" d="M296 68 C318 48 334 44 320 68 C334 92 318 96 296 76 Z" fill="url(#leafGrad1)"/>
+      <path d="M298 72 L322 68" stroke="#4e6748" stroke-width="2"/>
+      <path class="flutter" d="M310 52 C330 34 344 32 332 52 C344 72 330 76 310 58 Z" fill="url(#leafGrad2)" opacity=".85"/>
+    </g>
+
+    <g fill="#91a36f" opacity=".6">
+      <path class="realistic-leaf" d="M320 90 C325 85 335 86 338 92 C333 98 325 97 320 92Z"/>
+      <path class="realistic-leaf rl2" d="M60 160 C65 155 75 156 78 162 C73 168 65 167 60 162Z"/>
+      <path class="realistic-leaf" d="M280 50 C285 46 294 47 296 52 C292 58 285 57 280 52Z"/>
+    </g>
+   </svg>
+  </div>
+ </div>
+ <div class="copy">
+  <div class="tag reveal">03 · Trunk</div>
+  <h2 class="reveal" data-d="1">Who We Are</h2>
+  <p class="reveal" data-d="2">Pamoja grew from Sudanese traditions of hospitality and the fertile ground of the Community Permaculture Lab — from a biweekly tea gathering into a collective.</p>
+  <p class="reveal" data-d="3">Its work braids decolonial education, intergenerational dialogue, mutual economic empowerment and community connection.</p>
+  <div class="reveal" data-d="4"><div class="pill">Not a settlement agency</div><div class="pill">Newcomer knowledge</div><div class="pill">Collective practice</div></div>
+  <a class="cta reveal" data-d="4" href="#work">Follow the branches →</a>
+ </div>
+</section>
+
+<section class="section" id="work" data-number="04">
+ <div class="art reveal">
+  <div class="branch-grid">
+   <div class="branch-card reveal" data-d="1" data-filter="connection" role="button" tabindex="0" aria-label="Connection — see related stories"><span>BRANCH 01</span><h3>Connection</h3><p>Intercultural, intergenerational and cross-sector relationships.</p><span class="go">See stories →</span></div>
+   <div class="branch-card reveal" data-d="2" data-filter="cohesion" role="button" tabindex="0" aria-label="Social cohesion — see related stories"><span>BRANCH 02</span><h3>Social cohesion</h3><p>Making the city more connected through shared experience.</p><span class="go">See stories →</span></div>
+   <div class="branch-card reveal" data-d="3" data-filter="creative" role="button" tabindex="0" aria-label="Creative collaboration — see related stories"><span>BRANCH 03</span><h3>Creative collaboration</h3><p>Building with partners rather than simply delivering to them.</p><span class="go">See stories →</span></div>
+   <div class="branch-card reveal" data-d="4" data-filter="all" role="button" tabindex="0" aria-label="Coordination — explore all stories"><span>BRANCH 04</span><h3>Coordination</h3><p>Linking existing efforts and creating space for collaboration.</p><span class="go">Explore everything →</span></div>
+  </div>
+ </div>
+ <div class="copy">
+  <div class="tag reveal">04 · Branches</div>
+  <h2 class="reveal" data-d="1">Our Work</h2>
+  <p class="reveal" data-d="2">The branches overlap. An event can create connection, strengthen social cohesion, build a creative partnership and link existing efforts at the same time.</p>
+  <a class="cta reveal" data-d="3" href="#events">Explore the work →</a>
+ </div>
+</section>
+
+<section class="archive" id="events">
+ <div class="archive-head reveal"><div class="tag">Leaves & fruit</div><h2>Things we've grown.</h2><p>Stories of hosting, teaching, making, gathering and building together — not a tally of beneficiaries.</p></div>
+ <div class="filters reveal" data-d="1" role="group" aria-label="Filter stories by branch">
+  <button class="filter active" data-f="all" aria-pressed="true">All</button>
+  <button class="filter" data-f="connection" aria-pressed="false">Connection</button>
+  <button class="filter" data-f="cohesion" aria-pressed="false">Social cohesion</button>
+  <button class="filter" data-f="creative" aria-pressed="false">Creative collaboration</button>
+ </div>
+ <div class="events" id="eventsGrid">
+  <article class="event reveal" data-d="1" data-tags="connection cohesion"><div><div class="date">2023–2026 · Handed on</div><h3>Biweekly Tea Gathering</h3><p>Community hosting, conversation and shared knowledge. Now fully owned and run by Community Permaculture Lab.</p></div><span>Tea · Hamilton</span></article>
+  <article class="event reveal" data-d="2" data-tags="connection creative"><div><div class="date">2024–2025</div><h3>Two Row Citizens at Churchill Park</h3><p>With Julia Hitchcock and The Apothecary's Garden; grant support from TD Park People.</p></div><span>Place · Dialogue</span></article>
+  <article class="event reveal" data-d="3" data-tags="connection cohesion"><div><div class="date">September 2025</div><h3>Coffee Ritual & Place-Conscious Dialogue</h3><p>John Rebecca Park · City of Hamilton Downtown Placemaking Grant.</p></div><span>Coffee · Place</span></article>
+ </div>
+</section>
+<section class="section" id="offer" data-number="05">
+ <div class="art reveal">
+  <div class="canopy-wrap">
+   <svg viewBox="0 0 500 420" role="img" aria-label="Lush leafy canopy with light filtering through" class="canopy-sway">
+    <defs>
+      <radialGradient id="canopyGrad1" cx=".4" cy=".35" r=".9"><stop offset="0" stop-color="#a3b87e"/><stop offset=".6" stop-color="#78905d"/><stop offset="1" stop-color="#5a7248"/></radialGradient>
+      <radialGradient id="canopyGrad2" cx=".35" cy=".3" r=".9"><stop offset="0" stop-color="#b5c491"/><stop offset=".6" stop-color="#8fa96d"/><stop offset="1" stop-color="#6b8455"/></radialGradient>
+      <radialGradient id="canopyGrad3" cx=".45" cy=".3" r=".9"><stop offset="0" stop-color="#9db37a"/><stop offset=".6" stop-color="#7a9460"/><stop offset="1" stop-color="#5a7248"/></radialGradient>
+      <filter id="canopyShadow" x="-15%" y="-15%" width="130%" height="130%"><feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="#3e3324" flood-opacity=".15"/></filter>
+    </defs>
+
+    <g class="grow g1" style="transform-origin:250px 210px">
+      <path d="M250 18 C315 16 370 58 380 120 C450 138 482 204 450 268 C474 328 424 384 356 376 C315 416 225 422 180 384 C100 396 35 352 40 284 C0 244 12 170 72 144 C82 76 160 22 250 18Z" fill="url(#canopyGrad1)" filter="url(#canopyShadow)"/>
+    </g>
+    <g class="grow g2" style="transform-origin:145px 255px">
+      <path d="M145 155 C185 150 225 175 235 220 C245 265 220 310 175 320 C130 330 85 305 75 260 C65 215 90 170 135 160 C138 158 142 156 145 155Z" fill="url(#canopyGrad2)" filter="url(#canopyShadow)" opacity=".92"/>
+    </g>
+    <g class="grow g3" style="transform-origin:368px 235px">
+      <path d="M368 145 C408 140 448 165 458 210 C468 255 443 300 398 310 C353 320 308 295 298 250 C288 205 313 160 358 150 C361 148 365 146 368 145Z" fill="url(#canopyGrad3)" filter="url(#canopyShadow)" opacity=".9"/>
+    </g>
+    <g class="grow g4" style="transform-origin:250px 95px">
+      <path d="M250 35 C285 33 315 55 320 90 C325 125 300 155 265 160 C230 165 200 140 195 105 C190 70 215 40 250 35Z" fill="url(#canopyGrad2)" filter="url(#canopyShadow)" opacity=".95"/>
+    </g>
+
+    <g class="fade-in" fill="none" stroke="#4e6748" stroke-width="3" stroke-linecap="round" opacity=".5">
+      <path d="M120 220 C175 198 240 194 315 206"/>
+      <path d="M165 305 C230 280 305 274 370 284"/>
+      <path d="M220 125 C265 110 305 110 345 125"/>
+    </g>
+
+    <g fill="#91a36f" opacity=".65">
+      <path class="realistic-leaf" d="M180 180 C185 175 195 176 198 182 C193 188 185 187 180 182Z"/>
+      <path class="realistic-leaf rl2" d="M320 170 C325 165 335 166 338 172 C333 178 325 177 320 172Z"/>
+      <path class="realistic-leaf rl3" d="M280 280 C285 276 294 277 296 282 C292 287 285 286 280 282Z"/>
+      <path class="realistic-leaf" d="M140 260 C145 256 154 257 156 262 C152 267 145 266 140 262Z"/>
+      <path class="realistic-leaf rl2" d="M400 240 C405 236 414 237 416 242 C412 247 405 246 400 242Z"/>
+    </g>
+   </svg>
+   <button type="button" class="word-chip wc1 clickable" data-pop-title="Workshops" data-pop-text="Pamoja's knowledge, shared with institutions — with trust built first." data-pop-link="#contact" data-pop-link-text="Start a conversation →">Workshops</button>
+   <button type="button" class="word-chip wc2 clickable" data-pop-title="Consultation" data-pop-text="Engage the expertise and lived knowledge carried by Pamoja's community." data-pop-link="#contact" data-pop-link-text="Start a conversation →">Consultation</button>
+   <button type="button" class="word-chip wc3 clickable" data-pop-title="Tea ritual" data-pop-text="Hospitality as practice — tea, stories and understanding before agendas.">Tea ritual</button>
+   <button type="button" class="word-chip wc4 clickable" data-pop-title="Coffee ritual" data-pop-text="Take only what you need. Leave something for others. Keep the dish clean.">Coffee ritual</button>
+  </div>
+ </div>
+ <div class="copy">
+  <div class="tag reveal">05 · The canopy</div>
+  <h2 class="reveal" data-d="1">What We Offer</h2>
+  <p class="reveal" data-d="2">Institutions can engage Pamoja's expertise and the knowledge carried by its community through workshops, hospitality rituals and consultation.</p>
+  <p class="reveal" data-d="3"><strong>Build trust first.</strong> Coffee, tea, stories and understanding come before agendas.</p>
+  <p class="reveal" data-d="3">Take only what you need. Leave something for others. Keep the dish clean.</p>
+  <a class="cta reveal" data-d="4" href="#contact">Start a conversation →</a>
+ </div>
+</section>
+
+<section class="section" id="grow" data-number="06">
+ <div class="art reveal">
+  <div class="grove-wrap">
+   <svg viewBox="0 0 540 400" role="img" aria-label="Three trees connected by roots below ground">
+    <defs>
+      <linearGradient id="groveSoil" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a684c"/><stop offset="1" stop-color="#5b4130"/></linearGradient>
+      <radialGradient id="groveLeaf1" cx=".4" cy=".3" r=".9"><stop offset="0" stop-color="#a3b87e"/><stop offset="1" stop-color="#6b8455"/></radialGradient>
+      <radialGradient id="groveLeaf2" cx=".35" cy=".3" r=".9"><stop offset="0" stop-color="#b5c491"/><stop offset="1" stop-color="#849a68"/></radialGradient>
+      <radialGradient id="groveLeaf3" cx=".45" cy=".3" r=".9"><stop offset="0" stop-color="#9db37a"/><stop offset="1" stop-color="#627d55"/></radialGradient>
+    </defs>
+
+    <path d="M20 356 Q270 332 520 356 L520 400 L20 400Z" fill="url(#groveSoil)"/>
+
+    <g class="fade-in flow" fill="none" stroke="#cdb79a" stroke-width="3" stroke-dasharray="2 12" stroke-linecap="round">
+      <path d="M120 368 C200 350 340 350 420 368"/>
+      <path d="M120 378 C210 364 330 364 420 378"/>
+      <path d="M140 388 C220 376 320 376 400 388"/>
+    </g>
+
+    <g>
+      <path class="draw" d="M112 356 C110 300 108 260 112 216" fill="none" stroke="#684c37" stroke-width="11" stroke-linecap="round"/>
+      <g class="grow g1" style="transform-origin:112px 188px">
+        <path d="M112 148 C152 146 180 170 178 204 C176 238 148 256 112 252 C76 256 48 238 46 204 C44 170 72 146 112 148Z" fill="url(#groveLeaf1)" filter="url(#canopyShadow)"/>
+        <path d="M112 158 C142 156 164 176 162 204 C160 232 138 248 112 244 C86 248 64 232 62 204 C60 176 82 156 112 158Z" fill="url(#groveLeaf3)" opacity=".7"/>
+      </g>
+      <g fill="#91a36f" opacity=".5">
+        <path class="realistic-leaf" d="M90 180 C95 176 104 177 106 182 C102 187 95 186 90 182Z"/>
+        <path class="realistic-leaf rl2" d="M130 170 C135 166 144 167 146 172 C142 177 135 176 130 172Z"/>
+      </g>
+    </g>
+    <g>
+      <path class="draw" d="M268 356 C266 280 264 220 268 148" fill="none" stroke="#684c37" stroke-width="13" stroke-linecap="round"/>
+      <g class="grow g2" style="transform-origin:268px 112px">
+        <path d="M268 48 C320 46 358 78 356 122 C354 166 318 186 268 182 C218 186 182 166 180 122 C178 78 216 46 268 48Z" fill="url(#groveLeaf2)" filter="url(#canopyShadow)"/>
+        <path d="M268 60 C310 58 342 84 340 122 C338 160 310 178 268 174 C226 178 198 160 196 122 C194 84 226 58 268 60Z" fill="url(#groveLeaf1)" opacity=".75"/>
+      </g>
+      <g fill="#91a36f" opacity=".5">
+        <path class="realistic-leaf" d="M240 90 C245 86 254 87 256 92 C252 97 245 96 240 92Z"/>
+        <path class="realistic-leaf rl2" d="M290 80 C295 76 304 77 306 82 C302 87 295 86 290 82Z"/>
+        <path class="realistic-leaf rl3" d="M268 100 C273 96 282 97 284 102 C280 107 273 106 268 102Z"/>
+      </g>
+    </g>
+    <g>
+      <path class="draw" d="M418 356 C416 310 414 278 418 238" fill="none" stroke="#684c37" stroke-width="10" stroke-linecap="round"/>
+      <g class="grow g3" style="transform-origin:418px 210px">
+        <path d="M418 170 C452 168 476 190 474 220 C472 250 448 266 418 262 C388 266 364 250 362 220 C360 190 384 168 418 170Z" fill="url(#groveLeaf3)" filter="url(#canopyShadow)"/>
+        <path d="M418 180 C444 178 464 196 462 220 C460 244 440 258 418 254 C396 258 376 244 374 220 C372 196 392 178 418 180Z" fill="url(#groveLeaf2)" opacity=".8"/>
+      </g>
+      <g fill="#91a36f" opacity=".5">
+        <path class="realistic-leaf" d="M400 200 C405 196 414 197 416 202 C412 207 405 206 400 202Z"/>
+        <path class="realistic-leaf rl2" d="M440 190 C445 186 454 187 456 192 C452 197 445 196 440 192Z"/>
+      </g>
+    </g>
+
+    <g fill="none" stroke="#5d432f" stroke-width="2" opacity=".4">
+      <path d="M112 340 C180 332 240 336 268 340" stroke-dasharray="4 8"/>
+      <path d="M268 340 C320 336 380 332 418 340" stroke-dasharray="4 8"/>
+    </g>
+   </svg>
+   <button type="button" class="grove-chip gc1 clickable" data-pop-title="Community Permaculture Lab" data-pop-text="Part of the grove — partners contribute space, funding, teaching, relationships and shared work.">Community Permaculture Lab</button>
+   <button type="button" class="grove-chip gc2 clickable" data-pop-title="City of Hamilton" data-pop-text="Part of the grove — partners contribute space, funding, teaching, relationships and shared work.">City of Hamilton</button>
+   <button type="button" class="grove-chip gc3 clickable" data-pop-title="The Apothecary's Garden" data-pop-text="Part of the grove — partners contribute space, funding, teaching, relationships and shared work.">The Apothecary's Garden</button>
+   <button type="button" class="grove-chip gc4 clickable" data-pop-title="TD Park People" data-pop-text="Part of the grove — partners contribute space, funding, teaching, relationships and shared work.">TD Park People</button>
+   <button type="button" class="grove-chip gc5 clickable" data-pop-title="McMaster / CCENA" data-pop-text="Part of the grove — partners contribute space, funding, teaching, relationships and shared work.">McMaster / CCENA</button>
+  </div>
+ </div>
+ <div class="copy">
+  <div class="tag reveal">06 · The grove</div>
+  <h2 class="reveal" data-d="1">Who We Grow With</h2>
+  <p class="reveal" data-d="2">A tree doesn't grow alone. Pamoja names partners for what they actually contribute — space, funding, teaching, relationships and shared work.</p>
+  <p class="reveal" data-d="3">Settlement organizations are collaborators, not competitors. Their work makes this practice possible while Pamoja contributes something distinct.</p>
+ </div>
+</section>
+
+<section class="section" id="seeds" data-number="07">
+ <div class="art reveal">
+  <div style="width:min(480px,84vw)">
+   <svg viewBox="0 0 480 450" role="img" aria-label="Seeds and a new sprout emerging from rich soil">
+    <defs>
+      <radialGradient id="seedGlow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#e8a87c" stop-opacity=".3"/><stop offset="1" stop-color="#b66e42" stop-opacity="0"/></radialGradient>
+      <linearGradient id="sproutGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#91a36f"/><stop offset="1" stop-color="#4e6748"/></linearGradient>
+    </defs>
+
+    <path d="M20 370 Q240 320 460 370 L460 450 L20 450Z" fill="#76533b"/>
+    <path class="draw" d="M35 376 Q240 332 445 376" fill="none" stroke="#a27b5c" stroke-width="4" stroke-linecap="round"/>
+    <path d="M60 390 Q240 355 420 390" fill="none" stroke="#5d432f" stroke-width="2" stroke-linecap="round" opacity=".4"/>
+
+    <g class="soil-particle" fill="#a89078" opacity=".35">
+      <circle cx="100" cy="400" r="3"/><circle cx="350" cy="410" r="2.5"/><circle cx="220" cy="420" r="2"/>
+    </g>
+    <g class="soil-particle sp2" fill="#a89078" opacity=".3">
+      <circle cx="280" cy="395" r="2"/><circle cx="150" cy="415" r="3"/><circle cx="380" cy="405" r="2.5"/>
+    </g>
+
+    <g class="grow g1 seed-click" style="transform-origin:155px 340px" data-pop-title="Space" data-pop-text="Free or low-cost space — somewhere for good work to take root.">
+      <ellipse cx="155" cy="340" rx="14" ry="20" fill="#b66e42" transform="rotate(-18 155 340)"/>
+      <ellipse cx="155" cy="340" rx="10" ry="16" fill="#d4895a" transform="rotate(-18 155 340)" opacity=".6"/>
+      <circle cx="155" cy="340" r="30" fill="url(#seedGlow)" opacity=".5"/>
+    </g>
+    <g class="grow g2 seed-click" style="transform-origin:330px 350px" data-pop-title="Funding" data-pop-text="Flexible, multi-year, trust-based funding.">
+      <ellipse cx="330" cy="350" rx="12" ry="18" fill="#aab795" transform="rotate(16 330 350)"/>
+      <ellipse cx="330" cy="350" rx="8" ry="14" fill="#c4d4a8" transform="rotate(16 330 350)" opacity=".5"/>
+      <circle cx="330" cy="350" r="25" fill="url(#seedGlow)" opacity=".3"/>
+    </g>
+
+    <g class="sprout-grow seed-click" data-pop-title="Capacity" data-pop-text="Legal, financial and administrative capacity — and relationships that let good work grow.">
+      <path d="M240 368 C238 318 242 274 254 228" fill="none" stroke="#4e6748" stroke-width="7" stroke-linecap="round"/>
+      <path d="M254 248 C280 228 306 226 322 232 C310 256 280 264 254 248 Z" fill="url(#sproutGrad)"/>
+      <path d="M252 276 C228 260 204 260 190 268 C204 288 232 292 252 276 Z" fill="#91a36f"/>
+      <path d="M254 248 C280 228 306 226 322 232" fill="none" stroke="#3d5a30" stroke-width="1.5" opacity=".5"/>
+      <path d="M252 276 C228 260 204 260 190 268" fill="none" stroke="#3d5a30" stroke-width="1.5" opacity=".5"/>
+
+      <g fill="#91a36f" opacity=".7">
+        <path class="realistic-leaf" d="M290 235 C295 231 304 232 306 237 C302 242 295 241 290 237Z"/>
+        <path class="realistic-leaf rl2" d="M220 268 C225 264 234 265 236 270 C232 275 225 274 220 270Z"/>
+      </g>
+    </g>
+
+    <g fill="none" stroke="#78905d" stroke-width="2.5" stroke-linecap="round" opacity=".7">
+      <path d="M120 380 l-4-10 M126 382 l3-12"/>
+      <path d="M380 378 l-4-10 M386 380 l3-12"/>
+    </g>
+   </svg>
+  </div>
+ </div>
+ <div class="copy">
+  <div class="tag reveal">07 · Seeds</div>
+  <h2 class="reveal" data-d="1">What's Growing</h2>
+  <p class="reveal" data-d="2">Free or low-cost space. Flexible multi-year trust-based funding. Legal, financial and administrative capacity. Relationships that let good work take root.</p>
+  <p class="reveal" data-d="3">Sometimes investment looks like co-hosting a community meal, lending expertise, sharing unused space or helping with a crowdfunding campaign.</p>
+  <a class="cta reveal" data-d="4" href="#contact">Let's build together →</a>
+ </div>
+</section>
+
+<section class="contact" id="contact">
+ <div>
+  <div class="tag reveal">The first step</div>
+  <h2 class="reveal" data-d="1">We start with a conversation.</h2>
+  <p class="reveal" data-d="2">And we don't move fast.</p>
+  <p class="reveal" data-d="3">Tell us what you're hoping to build, who else is involved, and what you're bringing besides money.</p>
+ </div>
+ <form class="reveal" data-d="2" onsubmit="event.preventDefault();alert('Prototype v5 — nothing was submitted.');">
+  <label>Who are you?<input required placeholder="Organization, team, collective"></label>
+  <label>What are you hoping to build?<textarea required placeholder="What are you imagining?"></textarea></label>
+  <label>Who else is involved?<textarea placeholder="Partners, communities, teams"></textarea></label>
+  <label>What timeline are you working with?<input placeholder="This fall, next year..."></label>
+  <label>What are you bringing besides money?<textarea placeholder="Space, knowledge, people, relationships..."></textarea></label>
+  <button class="submit">Begin the conversation →</button>
+ </form>
+</section>
+</div>
+</main>
+<div class="popover" id="popover" role="status" hidden><strong id="popTitle"></strong><p id="popText"></p><a id="popLink" href="#contact"></a></div>
+<footer class="footer"><strong>PAMOJA</strong><span>Prototype v5 · Realistic illustrations, enhanced motion and interactions.</span></footer>
+<script>
+(function(){
+"use strict";
+var reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+var mobile=document.getElementById('mobile'),
+    openBtn=document.getElementById('open'),
+    closeBtn=document.getElementById('close');
+function setMenu(open){
+  mobile.classList.toggle('open',open);
+  openBtn.setAttribute('aria-expanded',String(open));
+  if(open){closeBtn.focus();}else{openBtn.focus();}
+}
+openBtn.onclick=function(){setMenu(true)};
+closeBtn.onclick=function(){setMenu(false)};
+document.querySelectorAll('.mobile-nav a').forEach(function(a){a.onclick=function(){mobile.classList.remove('open');openBtn.setAttribute('aria-expanded','false');}});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&mobile.classList.contains('open')){setMenu(false);}});
+
+var revealObs=new IntersectionObserver(function(entries){
+  entries.forEach(function(en){
+    if(en.isIntersecting){en.target.classList.add('in');revealObs.unobserve(en.target);}
+  });
+},{threshold:.18});
+document.querySelectorAll('.reveal').forEach(function(el){revealObs.observe(el);});
+
+var artObs=new IntersectionObserver(function(entries){
+  entries.forEach(function(en){
+    if(en.isIntersecting){en.target.classList.add('in');artObs.unobserve(en.target);}
+  });
+},{threshold:.3});
+document.querySelectorAll('.art').forEach(function(el){artObs.observe(el);});
+
+var header=document.getElementById('header'),
+    heroTree=document.getElementById('heroTree'),
+    ticking=false;
+function onScrollFast(){
+  header.classList.toggle('scrolled',window.scrollY>40);
+  if(!reduceMotion&&window.scrollY<window.innerHeight){
+    var y=window.scrollY;
+    var tx=window.innerWidth<=850?'translateX(-50%) ':'';heroTree.style.transform=tx+'translateY('+(y*0.12)+'px)';
+  }
+  ticking=false;
+}
+window.addEventListener('scroll',function(){
+  if(!ticking){requestAnimationFrame(function(){onScrollFast();updateJourney();});ticking=true;}
+},{passive:true});
+
+var stops=[
+  {id:'ground',label:'Soil'},
+  {id:'roots',label:'Roots'},
+  {id:'who',label:'Trunk'},
+  {id:'work',label:'Branches'},
+  {id:'events',label:'Fruit'},
+  {id:'offer',label:'Canopy'},
+  {id:'grow',label:'Grove'},
+  {id:'seeds',label:'Seeds'}
+];
+var railStops=document.getElementById('railStops'),
+    railFill=document.getElementById('railFill');
+stops.forEach(function(s,i){
+  var b=document.createElement('button');
+  b.className='stop';b.type='button';b.dataset.id=s.id;b.tabIndex=-1;
+  b.innerHTML='<span>'+s.label+'</span>';
+  b.onclick=function(){document.getElementById(s.id).scrollIntoView({behavior:reduceMotion?'auto':'smooth'});};
+  railStops.appendChild(b);
+});
+var stopEls=railStops.querySelectorAll('.stop');
+function absTop(el){return el.getBoundingClientRect().top+window.scrollY;}
+function updateJourney(){
+  var first=document.getElementById(stops[0].id),
+      last=document.getElementById(stops[stops.length-1].id),
+      vh=window.innerHeight,
+      top=absTop(first),
+      bottom=absTop(last)+last.offsetHeight,
+      pos=window.scrollY+vh*0.5,
+      p=Math.min(1,Math.max(0,(pos-top)/(bottom-top)));
+  railFill.style.transform='scaleY('+p+')';
+  var current=-1;
+  stops.forEach(function(s,i){
+    var el=document.getElementById(s.id),
+        elTop=absTop(el);
+    var frac=Math.min(1,Math.max(0,((elTop+el.offsetHeight*0.4)-top)/(bottom-top)));
+    stopEls[i].style.top=(frac*100)+'%';
+    if(elTop<=window.scrollY+vh*0.45){current=i;}
+  });
+  stopEls.forEach(function(b,i){
+    b.classList.toggle('done',i<current);
+    b.classList.toggle('current',i===current);
+  });
+  document.querySelectorAll('.nav a').forEach(function(a){
+    var id=a.getAttribute('href').slice(1);
+    var isActive=stops[current]&&stops[current].id===id;
+    a.classList.toggle('active',!!isActive);
+    if(isActive){a.setAttribute('aria-current','true');}else{a.removeAttribute('aria-current');}
+  });
+  document.querySelectorAll('.section').forEach(function(s){
+    var r=s.getBoundingClientRect();
+    s.classList.toggle('in-view',r.top<vh*0.6&&r.bottom>vh*0.4);
+  });
+}
+window.addEventListener('resize',updateJourney);
+updateJourney();
+
+var heroTreeEl=document.getElementById('heroTree'),
+    treeHint=document.getElementById('treeHint'),
+    hintHidden=false;
+function hideHint(){if(hintHidden)return;hintHidden=true;if(treeHint)treeHint.classList.remove('show');heroTreeEl.classList.remove('hinting');}
+setTimeout(function(){if(!hintHidden&&treeHint){treeHint.classList.add('show');heroTreeEl.classList.add('hinting');}},1500);
+setTimeout(hideHint,10000);
+document.querySelectorAll('.hotspot').forEach(function(h){
+  h.addEventListener('click',function(){
+    hideHint();
+    var t=document.getElementById(h.dataset.goto);
+    if(t){t.scrollIntoView({behavior:reduceMotion?'auto':'smooth'});}
+  });
+});
+
+var pop=document.getElementById('popover'),
+    popT=document.getElementById('popTitle'),
+    popX=document.getElementById('popText'),
+    popL=document.getElementById('popLink'),
+    popSrc=null;
+function openPop(x,y,el){
+  popT.textContent=el.dataset.popTitle||'';
+  popX.textContent=el.dataset.popText||'';
+  if(el.dataset.popLink){
+    popL.style.display='inline-block';
+    popL.textContent=el.dataset.popLinkText||'See more →';
+    popL.setAttribute('href',el.dataset.popLink);
+  }else{popL.style.display='none';}
+  pop.hidden=false;
+  pop.classList.add('show');
+  var w=pop.offsetWidth,h=pop.offsetHeight,
+      px=Math.min(Math.max(12,x-w/2),window.innerWidth-w-12),
+      py=y-h-14;
+  if(py<12){py=y+18;}
+  pop.style.left=px+'px';pop.style.top=py+'px';
+  popSrc=el;
+}
+function closePop(){
+  if(!pop.classList.contains('show'))return;
+  pop.classList.remove('show');popSrc=null;
+  setTimeout(function(){pop.hidden=true;},220);
+}
+document.querySelectorAll('[data-pop-title]').forEach(function(el){
+  el.addEventListener('click',function(e){
+    e.stopPropagation();
+    if(popSrc===el){closePop();return;}
+    var r=el.getBoundingClientRect();
+    openPop(r.left+r.width/2,r.top,el);
+  });
+});
+popL.addEventListener('click',function(){closePop();});
+pop.addEventListener('click',function(e){e.stopPropagation();});
+document.addEventListener('click',function(){closePop();});
+window.addEventListener('scroll',function(){closePop();},{passive:true});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closePop();}});
+
+document.querySelectorAll('.branch-card').forEach(function(c){
+  function go(){
+    var f=c.dataset.filter||'all',
+        btn=document.querySelector('.filter[data-f="'+f+'"]')||document.querySelector('.filter[data-f="all"]');
+    if(btn){btn.click();}
+    document.getElementById('events').scrollIntoView({behavior:reduceMotion?'auto':'smooth'});
+  }
+  c.addEventListener('click',go);
+  c.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}});
+});
+
+var eventsGrid=document.getElementById('eventsGrid');
+document.querySelectorAll('.filter').forEach(function(b){
+  b.onclick=function(){
+    document.querySelectorAll('.filter').forEach(function(x){x.classList.remove('active');x.setAttribute('aria-pressed','false');});
+    b.classList.add('active');b.setAttribute('aria-pressed','true');
+    var f=b.dataset.f;
+    eventsGrid.classList.add('fading');
+    setTimeout(function(){
+      document.querySelectorAll('.event').forEach(function(e){
+        e.style.display=(f==='all'||e.dataset.tags.indexOf(f)!==-1)?'flex':'none';
+      });
+      eventsGrid.classList.remove('fading');
+    },reduceMotion?0:220);
+  };
+});
+})();
+</script>
+</body>
+</html>

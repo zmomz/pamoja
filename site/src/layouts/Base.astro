@@ -1,0 +1,104 @@
+---
+import '@fontsource/bricolage-grotesque/600.css';
+import '@fontsource/bricolage-grotesque/700.css';
+import '@fontsource/source-serif-4/400.css';
+import '@fontsource/source-serif-4/600.css';
+import '@fontsource/karla/400.css';
+import '@fontsource/karla/700.css';
+import '../styles/global.css';
+
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import TreeIndicator from '../components/TreeIndicator.astro';
+import type { SectionId } from '../lib/sections';
+import { getSiteSettings, sanityConfigured } from '../lib/data';
+import { renderPortableText, blockPlainText } from '../lib/portableText';
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  currentSection?: SectionId;
+  /** Privacy-respecting analytics; also read from PUBLIC_PLAUSIBLE_DOMAIN. No GA. */
+  plausibleDomain?: string;
+  /** Forwarded to TreeIndicator: link to homepage anchors instead of routes. */
+  useAnchors?: boolean;
+}
+
+const settings = await getSiteSettings();
+
+const {
+  title,
+  description,
+  ogImage,
+  currentSection,
+  plausibleDomain = import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN ??
+    (sanityConfigured ? settings.plausibleDomain : undefined),
+  useAnchors = false,
+} = Astro.props;
+
+// Land acknowledgment (brief §9.5). Editorial placeholder blocks render as
+// nothing — the footer appears once Abdo supplies the real wording.
+const ackBlocks = (settings.landAcknowledgment ?? []).filter(
+  (b) => !blockPlainText(b).trim().startsWith('[')
+);
+const landAcknowledgmentHtml = ackBlocks.length
+  ? renderPortableText(ackBlocks)
+  : undefined;
+
+const pageTitle =
+  title === 'Home'
+    ? 'Pamoja Cultural Collective — Pamoja means together'
+    : `${title} — Pamoja Cultural Collective`;
+
+const site = Astro.site ?? new URL('https://pamoja-collective.netlify.app');
+const canonicalUrl = new URL(Astro.url.pathname, site);
+const ogImageUrl = new URL(ogImage ?? settings.ogDefaultImage?.url ?? '/og-default.png', site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <meta name="theme-color" content="#2e2419" />
+
+    {plausibleDomain && (
+      <script is:inline defer data-domain={plausibleDomain} src="https://plausible.io/js/script.js"></script>
+    )}
+
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <SiteHeader currentSection={currentSection} />
+    <main id="main">
+      <slot />
+    </main>
+    <SiteFooter landAcknowledgmentHtml={landAcknowledgmentHtml} contactEmail={settings.contactEmail} />
+    <TreeIndicator currentSection={currentSection} useAnchors={useAnchors} />
+  </body>
+</html>
+
+<style>
+  main {
+    /* Clears the fixed header; the real homepage hero can opt out per-page. */
+    padding-top: 4.5rem;
+  }
+</style>

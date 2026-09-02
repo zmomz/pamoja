@@ -1,0 +1,207 @@
+Pamoja Cultural Collective — Website Build Brief
+Website build instructions · August 2026
+Prepared for	Maaz
+From	Abdulellah Habbani (Abdo), Pamoja Cultural Collective
+Date	August 2026
+Source of record for all copy	Pamoja Cultural Collective (for Organizations) — attached separately
+0. How to read this brief
+This document tells you three things: what the site has to do, what it should feel like, and what has to be true regardless (accessibility, cultural protocol, maintainability).
+Where something is a firm requirement, it says Must. Where you have room to make it your own, it says Your call. Where a decision is still open on our end, it’s collected in Section 12 — please raise those before you start building rather than guessing.
+The attached organizational document is the content source of record. Copy on the site should be drawn from it or adapted from it. Do not write new mission or values language yourself; flag gaps and we’ll supply the words.
+1. What the site is for
+Pamoja is a grassroots collective led by newcomer Canadians of African Muslim origin, building community on ethical common ground in Hamilton. Right now our story lives in a Word document that gets emailed one recipient at a time. The site replaces that.
+1.1 The distinction that has to land immediately
+Pamoja is not an immigrant settlement organization. This is the single most important thing for a visitor to understand, and the easiest thing for a website to get wrong.
+Hamilton has many settlement organizations. They do essential work, our work would not be possible without them, and we collaborate with them respectfully. But they are not what we are.
+The difference is the direction of the relationship:
+•	A settlement organization works for newcomers — delivering services to people understood as needing them.
+•	Pamoja works with newcomers to build this city — treating the knowledge, wisdom, and traditions newcomers carry as something Hamilton needs.
+A visitor should feel this within the first screen, and should never at any point on the site be able to mistake us for a service provider with newcomers as our clients.
+This is a copy problem more than a design problem, so here are the rules. Every sentence on this site has to pass them:
+Never write	Write instead
+serving newcomers · helping newcomers · supporting newcomers	building with · working alongside · hosting · convening
+beneficiaries · clients · participants receiving	contributors · knowledge holders · hosts · collaborators
+newcomers in need of X	newcomers who bring X
+programs for the newcomer community	programs by and with
+giving newcomers a voice · amplifying their voices	cut entirely — it presumes we granted it
+The reversal test. Take any sentence about newcomers on the site. If it still makes sense with newcomers as the object of someone’s help, rewrite it until they’re the subject of an active verb. “Newcomer families were welcomed to a coffee ritual” fails. “Newcomer families hosted a coffee ritual in a downtown park” passes.
+Same rule applies to page titles, button labels, alt text, and meta descriptions. Someone arriving from a search result forms their impression from a meta description before the page even loads.
+Five audiences, in priority order:
+Audience	What they need to do on the site
+Institutional partners (universities, City of Hamilton, non-profits, funders)	Understand who we are and how we work, see credible evidence of past work, and find out how to approach us properly
+Organizations wanting to hire us	Understand our services, what engaging us actually involves, and how to start a conversation
+Community members (newcomer families, neighbours, artists)	Find upcoming gatherings, and recognize themselves as people with something to contribute — not as people being served
+Settlement organizations	Understand where we’re distinct from them, and where we’re a natural collaborator rather than a competitor for the same funding
+Funders and grant assessors	Verify scale, partnerships, and track record quickly
+The single job of the homepage: make a visitor understand, in under a minute and without reading much, that Pamoja is a rooted practice with a coherent ethic — not a generic multicultural events group, and not a settlement agency.
+Explicit non-goals for this build: no e-commerce, no member logins, no ticketing system, no blog with a posting cadence we can’t sustain.
+2. The core metaphor: a tree standing in common ground
+The whole site is organized around one image — Pamoja as a full tree. This isn’t decoration; it’s the information architecture. Every section of the site is a part of the tree, and the part explains the content.
+Part of tree	What it represents	Site section
+Soil	Common ground — what we all stand on together: the Dish With One Spoon Wampum, the Two Row Wampum, and the Canadian Charter of Rights and Freedoms	The Ground We Share
+Roots	Our own ethics — Ta’aruf (ethical, dialogical relationship) and Takaful (mutual economic empowerment). What draws nourishment from that shared ground	Our Roots
+Trunk	The collective itself — our name, mission, why we exist, how we make decisions. The load-bearing part	Who We Are
+Branches	The four things our work does — connection, social cohesion, creative collaboration, coordination	Our Work
+Leaves & fruit	Individual programs and events — the actual gatherings, hanging off the branches they served	Event archive
+The grove around the tree	Partners, allies, and funders — a tree doesn’t grow alone	Who We Grow With
+What the tree offers	Services — workshops, hospitality rituals, consultation	What We Offer
+Seeds	What’s next — upcoming work, and the invitation to partner with us	Seeds / Our Ask
+Three things to hold onto as you build:
+The tree gives as well as takes. A tree draws from the soil and returns to it — it holds the ground together, shades it, feeds it. That’s the argument in Section 1.1 made visually: what newcomers carry doesn’t get delivered to them, it flows up through the roots and back out into the city. If the illustration and the motion only ever move downward and inward, the metaphor is quietly saying the opposite of what we mean. Build the exchange into it.
+The soil is shared; the roots are ours. The organizational document is precise about this and the design must be too. The treaties are Indigenous teachings we learn from and honour — we do not claim them. Ta’aruf and Takaful are our own traditions. Visually, that means the soil layer is the ground everyone stands on, drawn as something neutral and held in common. The roots are distinctly Pamoja’s. Don’t blur them into one another.
+The Charter sits in the soil alongside the covenants, not above them. Same visual weight, same treatment. This is deliberate.
+3. How the metaphor becomes navigation
+We asked for something “Prezi style.” Here’s what we mean and what we don’t.
+What we want: a site where you move through an image rather than clicking through a menu of pages. A sense of descending into the ground and climbing back up. Continuity — you should always know where you are on the tree.
+What we don’t want: a genuine zoom-and-pan canvas. Those are slow, they break on phones, they’re hard for screen readers, search engines index them poorly, and they’re painful to update. A site built on ethics of dignity and access that a blind visitor can’t use, or that a newcomer on an old phone can’t load, would contradict itself.
+The approach: Must.
+1.	The homepage is one scroll-driven journey. A single inline SVG tree anchors it. As the visitor scrolls, the viewport moves along the tree and each section’s content comes into view beside or over the relevant part. Order: whole tree → soil → roots → trunk → branches → canopy/offerings → seeds.
+2.	A small persistent tree indicator stays visible (corner on desktop, collapsible on mobile) showing which part you’re currently in. Tapping any part of it jumps to that section. This is the navigation — you can build a conventional text menu behind a button as a fallback, but the tree is primary.
+3.	Every section has a real URL (/ground, /roots, /who-we-are, /our-work, /what-we-offer, /who-we-grow-with, /seeds). Landing on any of these directly must work and must make sense on its own.
+4.	Full detail lives on conventional pages underneath. The homepage journey gives the shape of things in a few sentences per section; the linked page gives the depth. Don’t try to fit the whole organizational document into the scroll.
+5.	Progressive enhancement is non-negotiable. With JavaScript disabled or prefers-reduced-motion set, the site must degrade to clean, scrolling, fully readable pages — static tree illustration, no parallax, all content present. Not a broken version. A quieter version.
+Mobile: Must. Don’t shrink a wide desktop tree into a phone screen. On narrow viewports the tree reflows to a tall vertical column — soil at the bottom of the sequence you scroll into, canopy at the top — with content stacked in a single column beside it. Design mobile first; a good share of our community will only ever see this on a phone.
+4. Sitemap
+/                        Home — the scroll journey through the whole tree
+├── /ground              The Ground We Share (treaties + Charter)
+├── /roots               Our Roots (Ta'aruf, Takaful)
+├── /who-we-are          Who We Are (name, mission, why we exist, how we decide)
+├── /our-work            Our Work — four functions + filterable event archive
+│   └── /our-work/[event]    Individual program/event pages
+├── /what-we-offer       Services overview + engagement protocol
+│   └── /what-we-offer/[service]   Individual service pages
+├── /who-we-grow-with    Partners, allies, funders
+├── /seeds               What's growing + Our Ask + how to support
+└── /contact             Start a conversation
+Keep it at this size. If a section feels thin, it merges upward rather than getting its own page.
+5. Page specifications
+5.1 Home — the tree
+The opening viewport shows the whole tree, standing in its ground, with the name Pamoja and one line: “Pamoja means together.” Nothing else competing. The tree is the hero — resist adding a stats band or a rotating image carousel above it.
+The positioning from Section 1.1 must land in the first screen or the one immediately after it. Lead with the affirmative version — newcomers building this city, bringing knowledge Hamilton needs — and place the explicit contrast just below it, in a short passage of two or three sentences that names settlement organizations, credits their essential work, and states plainly that we are something else. Abdo will supply the exact wording; hold the space and give it real typographic weight. Do not open the site with what we are not.
+Below that, the scroll journey with one short passage per tree part (roughly 40–80 words each, drawn from the organizational document), each linking to its full page. End with a clear invitation into either What We Offer or Seeds.
+5.2 The Ground We Share (/ground)
+Three elements in the soil, treated with equal weight: Dish With One Spoon Wampum, Two Row Wampum, Canadian Charter of Rights and Freedoms.
+For each: what it is, in plain language; what we’ve learned from it; and — for the covenants — an explicit statement that these are Indigenous teachings we honour rather than own. The organizational document has this language; use it.
+Include the Dish With One Spoon’s three principles as we hold them (take only what you need; leave some for others; keep the dish clean) and the Two Row’s side-by-side ethic. Credit Daniel Coleman, Professor Emeritus at McMaster, as the friend and ally who introduced us to the Two Row teaching.
+Protocol constraint — read Section 9 before designing this page.
+5.3 Our Roots (/roots)
+Two roots, drawn as reaching down into the soil:
+•	Ta’aruf — hospitality that builds ethical and dialogical relationship, protects dignity, and upholds difference without erasure. Pairs with our understanding of the Two Row. Epistemic sovereignty.
+•	Takaful — mutual economic empowerment and collective stewardship. Pairs with our understanding of the Dish With One Spoon. Economic solidarity.
+Show the correspondence visually — each root should visibly draw from the covenant it resonates with — but do not present them as the same thing. They meet in the ground; they are not merged.
+Also on this page: how we work internally (consensus-based, self-determined) and in partnership (mutual consultation and dialogue).
+5.4 Who We Are (/who-we-are)
+The trunk. Our name and what Pamoja means. Our mission, including the honest parts — that belonging isn’t about comfort or sameness, that we don’t claim to be everything to everyone. Why we exist, including the critique of how newcomers are welcomed for their labour and exploited in menial jobs. The four braids: decolonial education, intergenerational dialogue, mutual economic empowerment, community connection.
+Also here: the origin story — rooted in Sudanese traditions of hospitality, given fertile ground by the Community Permaculture Lab, grown from a biweekly tea gathering into a collective.
+And a dedicated block: what we are, and what we’re not. The full version of Section 1.1 lives here — the homepage carries the short form, this page carries the reasoning. It should say clearly that Hamilton’s settlement organizations do essential work we depend on and collaborate with, and that Pamoja’s work runs in a different direction: surfacing the wisdom and knowledge newcomers bring, and building the city together rather than delivering services to a client group. Abdo supplies the wording.
+This connects directly to the why we exist argument above it — the critique of people welcomed for their labour and exploited in menial jobs is the same argument. Design the page so a reader feels the two as one continuous thought rather than two boxes.
+Don’t soften this page’s language. The clarity is the point.
+5.5 Our Work (/our-work)
+The four branches. Every past program is shown through how it served:
+1.	Connection — intercultural, intergenerational, and cross-sector
+2.	Social cohesion
+3.	Creative collaborations and partnerships
+4.	Coordinating and linking existing efforts
+Build this as a filter, not four separate lists. Must. Selecting a branch shows the events that served it. Most events belong to more than one branch — an event appears wherever it genuinely applies. That overlap is the argument the page is making: our work isn’t siloed. If your filter design hides that, redesign it.
+Default view: all events, most recent first. Selecting a branch filters and updates the URL (/our-work?serves=connection) so it can be shared.
+This page is where the settlement-agency reading creeps back in. Event write-ups drift into service-delivery grammar without anyone intending it — attendance counts, who was reached, who benefited. Write every entry with the community as the actor: who hosted, who taught, what knowledge was shared, what the city got out of it. Where numbers appear, they describe the size of a gathering, not a caseload.
+Event inventory to build against. Scope for roughly 10–15 entries at launch, growing a few per year. Abdo will supply final copy, dates, and images for each; this list is the starting shape:
+Program	Notes
+Pamoja Biweekly Tea Gathering (2023–2026)	~45 gatherings, co-hosted with Community Permaculture Lab in their front yard; now fully owned and run by CPL — the page must say so plainly
+Two Row Citizens at Churchill Park (2024, 2025)	With Julia Hitchcock, steward of The Apothecary’s Garden; grant support from TD Park People
+Coffee Ritual & Place-Conscious Dialogue (Sept 2025)	John Rebecca Park; City of Hamilton Downtown Placemaking Grant
+Two Row Citizens series (2026–Feb 2027)	Expanding to three events; City of Hamilton grant
+Kandakas’ Feminism exhibition (Oct 2026)	Art, storytelling, music, coffee ceremony; CCENA-supported — Abdo to confirm inclusion and framing
+Somewhere on this page, a quiet factual line carries real weight with funders: roughly 50 community gatherings and public programs delivered since 2023, a network of seven-plus partners, and support from five municipal, corporate, and arts funders. Present it plainly — no animated counters.
+5.6 What We Offer (/what-we-offer)
+This is the page that converts institutional interest into work, and it’s the one that most needs to feel unlike a standard services page.
+It’s also the sharpest test of Section 1.1, because the roles invert here. On this page the client is the institution — a university, a municipal department, a non-profit. The expertise being paid for is newcomer knowledge. Newcomers are not the recipients of these services; they are the practitioners delivering them. A services page that reads as workshops for newcomers says exactly the wrong thing. Every service description should make obvious who is teaching and who is learning.
+Opens with the engagement protocol, before any service is listed. How we work together, drawn from the organizational document:
+•	Build trust first — Ta’aruf takes time. Coffee or tea, stories, and understanding before agendas.
+•	Respect our process. Acknowledge imbalances, be patient with collective decision-making, share leadership and credit publicly.
+•	Financial covenant — Dish With One Spoon in practice. Take only what you need. Leave something for others (fair honorariums, staff pay, operations). Keep the dish clean — no extraction; commit to long-term mutual thriving.
+Three services, each on its own page using the identical template in Section 6.2:
+1.	Workshops — cooking, ethical engagement, community-building, creative collaboration, and others
+2.	Hospitality rituals — coffee ritual, tea ritual
+3.	Consultation — curating dialogical intercultural events and programming for social cohesion
+The inquiry form must not be a booking form. No date picker, no service dropdown, no “get a quote.” It asks relationship-first questions: who you are, what you’re hoping to build, who else is involved, what timeline you’re working with, and what you’re bringing besides money. A short note above it sets expectations: we start with a conversation, and we don’t move fast.
+5.7 Who We Grow With (/who-we-grow-with)
+Partners, allies, and funders — named with what they actually contributed, not a wall of logos. Community Permaculture Lab, The Apothecary’s Garden, TD Park People, City of Hamilton, McMaster (CCENA), and others Abdo will supply. Where someone gave space, funding, or teaching, say which.
+Include a short passage on the settlement sector. Having drawn a clear line in Section 1.1, this is where we show the line isn’t a wall: naming the settlement organizations we work alongside, saying plainly that their work makes ours possible, and describing what respectful collaboration between the two looks like. Distinct, not competing. Abdo will supply the names and wording.
+5.8 Seeds (/seeds)
+What’s growing, plus the ask. From the organizational document: space (free or low-cost venues), flexible multi-year trust-based funding, and institutional capacity (legal, financial, administrative). Plus the concrete examples of what a successful partnership looks like — co-hosting a community meal, lending a legal or financial team’s time toward incorporation, sharing unused space, helping with a crowdfunding campaign.
+Frame this as an investment in a shared community, not a donation request.
+5.9 Contact (/contact)
+Email, social, and the same relationship-first framing. No physical address unless Abdo confirms one.
+6. Two templates to build properly
+Build these as repeatable content types with a CMS behind them. We need to add entries ourselves without calling you.
+6.1 Event / program template
+Fields: title · date or date range · location · status (past / upcoming / handed on) · which branches it served (multi-select, drives the filter) · 2–3 paragraph description · partners and funders credited · image gallery with per-image alt text and a consent flag · optional pull quote.
+The “handed on” status matters — the Tea Gathering is now CPL’s, and the site should be able to say that gracefully rather than either claiming it or deleting it.
+6.2 Service template
+Every service page uses the same sections in the same order. Consistency is what makes the protocol legible.
+1.	What it is — a paragraph
+2.	What actually happens — the shape of the session, honestly described
+3.	What to expect — including the discomfort. Our mission says belonging means embracing discomfort as a path to understanding; that shouldn’t disappear from the sales page
+4.	What we need from you — space, time, budget, staff participation, willingness to be a guest in someone else’s practice
+5.	Cultural protocols — how to engage respectfully with this specific offering. For the coffee and tea rituals this is substantive: these are ancestral practices, not catering. Abdo will supply the protocol language for each; leave generous, well-designed room for it
+6.	What this is not — a short, direct list. This section prevents the wrong inquiries
+7.	Time and lead time — how long a session runs, how far ahead to ask
+8.	Start a conversation — link to the inquiry form
+7. Design direction
+Your call, within these bounds.
+The tree is the one bold element. Spend the design budget there and keep everything around it disciplined and quiet. One memorable thing, executed well, beats five competing ones.
+Palette. Draw from the actual world of this work — soil, root, bark, leaf, and the specific colours of the practice: coffee, tea, the earth of a Hamilton park in July. Please avoid the current template default of cream background plus high-contrast serif plus terracotta accent; it appears on every third non-profit site and reads as a stock choice. Ground your palette in something specific and tell us where it came from.
+Typography. Choose a display face with real character used sparingly, and a body face that’s comfortable for long reading — the Who We Are and Ground pages carry substantial text. Both must have a full Latin range with proper diacritics for Ta’aruf and Kiswahili terms. If we go bilingual later (Section 12), Arabic script support matters, so check that now.
+Imagery. Real photographs from real gatherings, only. No stock photography of diverse people around a table. If we don’t have a usable photo for a section, use the illustration or leave the space; don’t fill it with a purchased image.
+Photo selection carries the positioning as much as the copy does. Avoid any image with service-delivery composition — someone behind a desk assisting someone in front of it, a queue, a person handing something to a grateful recipient, an audience seated in rows facing a presenter. Choose images where people are hosting, cooking, teaching, pouring, building, or talking as equals across a circle. When two photos are equally good, pick the one where a community member is the one doing something.
+Motion. One orchestrated moment — the descent into the ground and the growth back up — rather than effects scattered across every section. Anything that fires on every scroll gets tiring by the third visit. All of it respects prefers-reduced-motion.
+The tree illustration itself: inline SVG, hand-drawn character rather than a generic vector tree, with named groups per part so sections are clickable and keyboard-focusable. If you’d rather commission or draw it than build it from a library, say so and we’ll budget for it — this asset carries the whole site.
+8. What we’ll supply vs. what you produce
+We supply	You produce
+All copy (drawn from the organizational document)	Site design and build
+Event details, dates, partner credits	The tree illustration (or a plan to commission it)
+Photographs, with consent status per image	CMS setup and a short guide for us to use it
+Cultural protocol text for each service	Hosting, deployment, domain configuration
+Logo files and any existing brand assets	Accessibility testing and results
+Final approval on all treaty-related content	Two rounds of revision per milestone
+9. Cultural protocols for the build itself
+These are firm. Please raise anything here you’re unsure about rather than making a call.
+1.	No Haudenosaunee visual motifs. Do not render the Two Row Wampum belt, the Dish With One Spoon, or any wampum imagery, pattern, or purple-and-white beadwork as a decorative element, background, divider, or icon. Represent the covenants through words and through abstract forms of your own that carry the idea — two parallel paths, one shared vessel. We honour these teachings; we do not have permission to reproduce their imagery.
+2.	No Arabic calligraphy as ornament. Arabic script appears on the site only where it carries actual meaning, set in a proper Arabic typeface — never as a decorative flourish or background texture.
+3.	Photo consent. Every photograph of an identifiable person needs consent on file before it goes up. Some community members — particularly newcomer women and families — will decline, and that’s fine. Build the consent flag into the CMS image field so we can’t publish by accident, and never show children’s faces without explicit parental consent.
+4.	Credit is shared publicly. Where a partner co-created something, the site names them. This is a stated commitment in how we work, not a courtesy.
+5.	Land acknowledgment in the footer, sitewide. Abdo will supply the wording.
+6.	The copy register in Section 1.1 is a protocol, not a style preference. It applies to every word you write or place — headings, buttons, alt text, form labels, error messages, meta descriptions, and any placeholder copy that might survive into launch. If a sentence positions newcomers as recipients of help, it doesn’t ship.
+7.	Accessibility is a values requirement here, not a compliance checkbox. WCAG 2.1 AA minimum: keyboard navigable throughout, visible focus states, 4.5:1 text contrast, alt text on every image, semantic headings, no information conveyed by colour alone.
+10. Technical requirements
+Stack: your call, provided it meets these:
+•	Static or statically-generated. Astro, Eleventy, or Next.js static export all work. No heavy client framework for what is mostly a content site.
+•	A CMS we can actually use. Sanity, Payload, or Decap — something where Abdo can add an event, upload photos, and publish without touching code. Non-negotiable; the site dies otherwise.
+•	Performance budget: Largest Contentful Paint under 2.5s on a mid-range Android over 4G. The tree SVG is the risk here — optimize and lazy-load accordingly.
+•	Responsive from 320px up.
+•	SEO: unique title and meta description per page, Open Graph images, sitemap, Organization and Event structured data (the Event schema matters for community discoverability).
+•	Privacy-respecting analytics — Plausible or Fathom, not Google Analytics. No third-party trackers, no cookie banner needed.
+•	Forms route to email without a third-party service that harvests submissions.
+•	Hosting: Netlify, Vercel, or Cloudflare Pages. Set up under a Pamoja-owned account, not yours — please make account ownership explicit in the handoff.
+•	Handoff includes: repository access, deployment documentation, and a short written or recorded guide to updating content.
+Build for a phase-2 addition. We intend to add a directory of newcomer women-led businesses in Hamilton, particularly businesses founded by women from countries affected by war and displacement. That’s not in this build, but it’s a listing-and-search feature that will need its own content type and search. Choose a CMS and structure that can accommodate it without a rebuild, and note in your handoff how you’d approach it.
+11. Milestones
+Stage	Deliverable
+1	Sitemap confirmed, content inventory checked against what we’ve supplied, technical stack proposed
+2	Design direction: palette, type, and tree concept — presented for approval before any build
+3	Homepage scroll journey built and reviewed on a phone
+4	Interior pages, event filter, and service template
+5	CMS populated with real content, accessibility pass, performance pass, and a full copy pass against the Section 1.1 reversal test — including alt text and meta descriptions
+6	Launch, handoff, and training session
+Please don’t start Stage 3 before Stage 2 is signed off. The tree is the site; if it’s wrong we’d rather find out on paper.
+12. Open decisions — please raise these before starting
+1.	Timeline and budget. What’s realistic on your side, and how do the milestones map to payments?
+2.	Domain. Do we have one? Who registers and owns it?
+3.	Bilingual? Arabic alongside English — worth it, and what does it add to scope? Our audience includes people who would read Arabic more comfortably, but a half-maintained translation is worse than none.
+4.	Do we publish rates for services, or keep it conversation-first? Abdo to decide; it changes the service template.
+5.	Donations. Are we accepting them at launch, and through what mechanism given our incorporation status?
+6.	The tree illustration — drawing it yourself, commissioning it, or building it in code? This affects both budget and schedule.
+7.	Who maintains the site after launch, and is there a small retainer for updates and security patches?
+8.	Kandakas’ Feminism — does it go on the site before it happens, and under Pamoja’s name or its own?
+Questions on anything here go to Abdo directly. Where this brief and the organizational document disagree, the organizational document wins on content and this brief wins on structure.

@@ -1,0 +1,168 @@
+---
+// The inquiry form (brief §5.6): relationship-first, not a booking form.
+// Netlify Forms — submissions route to email, no third-party harvesting.
+// Shared by /what-we-offer and /contact.
+---
+
+<div class="inquiry">
+  <p class="inquiry-note">
+    <strong>We start with a conversation, and we don't move fast.</strong>
+    This is not a booking form. Tell us who you are and what you're imagining,
+    and we'll find a time to sit down together — coffee or tea first, agendas
+    after.
+  </p>
+
+  <form
+    name="inquiry"
+    method="POST"
+    action="/thank-you"
+    data-netlify="true"
+    netlify-honeypot="bot-field"
+    class="inquiry-form"
+  >
+    <input type="hidden" name="form-name" value="inquiry" />
+    <p class="visually-hidden" aria-hidden="true">
+      <label>
+        Leave this field empty if you are a person
+        <input name="bot-field" tabindex="-1" autocomplete="off" />
+      </label>
+    </p>
+
+    <div class="field">
+      <label for="inquiry-name">Your name</label>
+      <input id="inquiry-name" name="name" type="text" required autocomplete="name" />
+    </div>
+
+    <div class="field">
+      <label for="inquiry-organization">Your organization</label>
+      <input
+        id="inquiry-organization"
+        name="organization"
+        type="text"
+        autocomplete="organization"
+        aria-describedby="inquiry-organization-hint"
+      />
+      <p class="hint" id="inquiry-organization-hint">
+        A university, a municipal department, a non-profit, a team — or just yourself.
+      </p>
+    </div>
+
+    <div class="field">
+      <label for="inquiry-email">Email</label>
+      <input id="inquiry-email" name="email" type="email" required autocomplete="email" />
+    </div>
+
+    <div class="field">
+      <label for="inquiry-build">What are you hoping to build?</label>
+      <textarea id="inquiry-build" name="hoping-to-build" rows="4" required></textarea>
+    </div>
+
+    <div class="field">
+      <label for="inquiry-involved">Who else is involved?</label>
+      <textarea
+        id="inquiry-involved"
+        name="who-else-is-involved"
+        rows="3"
+        aria-describedby="inquiry-involved-hint"
+      ></textarea>
+      <p class="hint" id="inquiry-involved-hint">
+        Partners, communities, teams — anyone already in the room.
+      </p>
+    </div>
+
+    <div class="field">
+      <label for="inquiry-timeline">What timeline are you working with?</label>
+      <input
+        id="inquiry-timeline"
+        name="timeline"
+        type="text"
+        aria-describedby="inquiry-timeline-hint"
+      />
+      <p class="hint" id="inquiry-timeline-hint">
+        "This fall," "next year," "no fixed date" — all honest answers.
+      </p>
+    </div>
+
+    <div class="field">
+      <label for="inquiry-bringing">What are you bringing besides money?</label>
+      <textarea
+        id="inquiry-bringing"
+        name="bringing-besides-money"
+        rows="3"
+        aria-describedby="inquiry-bringing-hint"
+      ></textarea>
+      <p class="hint" id="inquiry-bringing-hint">
+        Space, knowledge, people, relationships, time — the Dish With One Spoon
+        is shared by everything placed in it, not only budgets.
+      </p>
+    </div>
+
+    <button class="submit" type="submit">Begin the conversation</button>
+  </form>
+</div>
+
+<style>
+  .inquiry-note {
+    max-width: var(--max-prose);
+    font-size: 1.05rem;
+  }
+  .inquiry-form {
+    display: grid;
+    gap: 1.4rem;
+    max-width: 640px;
+    margin-top: 1.5rem;
+  }
+  .field {
+    display: grid;
+    gap: 0.35rem;
+  }
+  label {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--soil-deep);
+  }
+  .hint {
+    margin: 0;
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    max-width: 52ch;
+  }
+  input,
+  textarea {
+    font: inherit;
+    font-family: var(--font-ui);
+    color: var(--ink);
+    background: var(--white);
+    border: 1.5px solid var(--line);
+    border-radius: 8px;
+    padding: 0.7rem 0.85rem;
+    width: 100%;
+  }
+  input:focus,
+  textarea:focus {
+    border-color: var(--clay);
+  }
+  .submit {
+    justify-self: start;
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--paper);
+    background: var(--soil-deep);
+    border: none;
+    border-radius: 999px;
+    padding: 0.9rem 1.8rem;
+    cursor: pointer;
+    transition: background 0.25s ease;
+  }
+  .submit:hover {
+    background: var(--leaf-deep);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .submit {
+      transition: none;
+    }
+  }
+</style>

@@ -1,0 +1,167 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getServices, type Service } from '../../lib/data';
+import { renderPortableText, blockPlainText } from '../../lib/portableText';
+
+export async function getStaticPaths() {
+  const services = await getServices();
+  return services.map((service) => ({
+    params: { slug: service.slug },
+    props: { service },
+  }));
+}
+
+interface Props {
+  service: Service;
+}
+
+const { service } = Astro.props;
+
+// The §6.2 template: the same eight sections, in the same order, on every
+// service page. Consistency is what makes the protocol legible.
+
+// Editorial placeholder blocks ("[Protocol wording to be supplied by Abdo…]")
+// never render — same rule as the footer land acknowledgment and the
+// homepage positioning statement. The section shows Abdo's wording once
+// supplied; until then the interim protocol paragraph carries it.
+const protocolsHtml = renderPortableText(
+  service.culturalProtocols.filter(
+    (b) => !blockPlainText(b).trim().startsWith('[')
+  )
+);
+---
+
+<Base
+  title={service.title}
+  description={`${service.title} with Pamoja Cultural Collective — ${service.summary}`}
+  currentSection="what-we-offer"
+>
+  <article class="wrap service-page">
+    <p class="tag">
+      <a href="/what-we-offer">What We Offer</a> · {service.title}
+    </p>
+    <h1>{service.title}.</h1>
+    <p class="lede">{service.summary}</p>
+
+    <section aria-labelledby="s-what-it-is">
+      <h2 id="s-what-it-is"><span class="num">1.</span> What it is</h2>
+      <p>{service.whatItIs}</p>
+    </section>
+
+    <section aria-labelledby="s-what-happens">
+      <h2 id="s-what-happens"><span class="num">2.</span> What actually happens</h2>
+      <div set:html={renderPortableText(service.whatHappens)} />
+    </section>
+
+    <section aria-labelledby="s-what-to-expect">
+      <h2 id="s-what-to-expect"><span class="num">3.</span> What to expect</h2>
+      <div set:html={renderPortableText(service.whatToExpect)} />
+    </section>
+
+    <section aria-labelledby="s-what-we-need">
+      <h2 id="s-what-we-need"><span class="num">4.</span> What we need from you</h2>
+      <ul>
+        {service.whatWeNeedFromYou.map((item) => <li>{item}</li>)}
+      </ul>
+    </section>
+
+    <section class="protocol-panel" aria-labelledby="s-protocols">
+      <h2 id="s-protocols"><span class="num">5.</span> Cultural protocols</h2>
+      <div set:html={protocolsHtml} />
+    </section>
+
+    <section aria-labelledby="s-not">
+      <h2 id="s-not"><span class="num">6.</span> What this is not</h2>
+      <ul class="not-list">
+        {service.whatThisIsNot.map((item) => <li>{item}</li>)}
+      </ul>
+    </section>
+
+    <section aria-labelledby="s-time">
+      <h2 id="s-time"><span class="num">7.</span> Time and lead time</h2>
+      <p>{service.timeAndLeadTime}</p>
+    </section>
+
+    <section class="cta-block" aria-labelledby="s-start">
+      <h2 id="s-start"><span class="num">8.</span> Start a conversation</h2>
+      <p>
+        If this sounds like the work your organization needs to learn from,
+        begin the way every Pamoja engagement begins: a conversation.
+      </p>
+      <p class="cta-links">
+        <a class="cta" href="/what-we-offer#inquiry">Write to us through the inquiry form</a>
+        <span aria-hidden="true">·</span>
+        <a href="/contact">or visit Contact</a>
+      </p>
+    </section>
+  </article>
+</Base>
+
+<style>
+  .service-page {
+    padding-block: 3rem var(--space-section);
+    max-width: 800px;
+  }
+  h1 {
+    font-size: clamp(2.6rem, 6.5vw, 4.75rem);
+    margin: 0 0 1rem;
+  }
+  .lede {
+    font-size: 1.2rem;
+    max-width: var(--max-prose);
+  }
+
+  section {
+    margin-top: 3rem;
+  }
+  h2 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+  }
+  .num {
+    color: var(--soil);
+    font-family: var(--font-ui);
+    font-weight: 700;
+  }
+  ul {
+    padding-left: 1.25rem;
+    max-width: var(--max-prose);
+  }
+  li {
+    margin-bottom: 0.5rem;
+  }
+
+  .protocol-panel {
+    border: 2px solid var(--tea);
+    border-radius: 14px;
+    background: var(--paper-warm);
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+  }
+  .protocol-panel p:last-child {
+    margin-bottom: 0;
+  }
+
+  .not-list li::marker {
+    color: var(--coffee-cherry);
+  }
+
+  .cta-block {
+    background: var(--soil-deep);
+    color: var(--paper);
+    border-radius: 14px;
+    padding: clamp(1.75rem, 4vw, 2.5rem);
+  }
+  .cta-block h2 {
+    color: var(--paper);
+  }
+  .cta-block a {
+    color: var(--leaf-light);
+  }
+  .cta-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: baseline;
+    font-family: var(--font-ui);
+    font-weight: 700;
+  }
+</style>

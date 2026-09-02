@@ -1,0 +1,189 @@
+---
+import Base from '../layouts/Base.astro';
+import InquiryForm from '../components/InquiryForm.astro';
+import { getServices } from '../lib/data';
+
+const services = await getServices();
+---
+
+<Base
+  title="What We Offer"
+  description="Workshops, hospitality rituals, and consultation — taught by newcomer knowledge holders, for institutions ready to be the learners. How to engage Pamoja Cultural Collective properly."
+  currentSection="what-we-offer"
+>
+  <section class="page-head wrap">
+    <p class="tag">Canopy · What We Offer</p>
+    <h1>What we offer.</h1>
+    <p class="lede">
+      On this page the usual roles invert. The expertise here is newcomer
+      knowledge — carried, practised, and taught by the community's own
+      knowledge holders. The learners are institutions: universities,
+      municipal departments, non-profits. If your organization is ready to be
+      taught rather than to consult, read on.
+    </p>
+  </section>
+
+  <section class="wrap protocol" aria-labelledby="protocol-heading">
+    <p class="tag">Before any service — how we work together</p>
+    <h2 id="protocol-heading">The engagement protocol.</h2>
+    <ol class="protocol-list">
+      <li>
+        <h3>Build trust first</h3>
+        <p>
+          Ta'aruf takes time. Every engagement begins with coffee or tea,
+          stories, and understanding — before agendas. If you are looking for
+          a transaction, we are not the right partner. If you are looking for
+          a relationship, you have come to the right tree.
+        </p>
+      </li>
+      <li>
+        <h3>Respect the process</h3>
+        <p>
+          We acknowledge imbalances openly rather than pretend them away. We
+          ask for patience with collective, consensus-based decision-making —
+          it is slower than a chain of command and sturdier than one. And we
+          share leadership and credit publicly, because that is how we work,
+          not as a courtesy.
+        </p>
+      </li>
+      <li>
+        <h3>A financial covenant</h3>
+        <p>
+          The Dish With One Spoon, in practice. Take only what you need.
+          Leave something for others — fair honorariums for knowledge holders,
+          staff pay, the operations that keep the work standing. Keep the dish
+          clean: no extraction, and a commitment to long-term mutual thriving.
+        </p>
+      </li>
+    </ol>
+  </section>
+
+  <section class="wrap services" aria-labelledby="services-heading">
+    <h2 id="services-heading">Three offerings.</h2>
+    <p>
+      Each of these is taught by newcomer knowledge holders and learned by the
+      institutions who engage them. The community practises; your
+      organization is the guest.
+    </p>
+    <div class="service-grid">
+      {services.map((service) => (
+        <article class="service-card">
+          <h3>
+            <a href={`/what-we-offer/${service.slug}`}>{service.title}</a>
+          </h3>
+          <p class="who">
+            Taught by newcomer knowledge holders · Learned by your team
+          </p>
+          <p>{service.summary}</p>
+          <a class="service-link" href={`/what-we-offer/${service.slug}`}>
+            What engaging this actually involves
+          </a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="wrap inquiry-section" id="inquiry" aria-labelledby="inquiry-heading">
+    <h2 id="inquiry-heading">Start a conversation.</h2>
+    <InquiryForm />
+  </section>
+</Base>
+
+<style>
+  .page-head {
+    padding-block: 3rem 2rem;
+  }
+  .page-head h1 {
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    margin: 0 0 1.25rem;
+  }
+  .lede {
+    font-size: 1.2rem;
+    max-width: var(--max-prose);
+  }
+
+  .protocol {
+    padding-block: 2rem 3rem;
+  }
+  .protocol-list {
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+    counter-reset: step;
+  }
+  .protocol-list li {
+    counter-increment: step;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--tea);
+    border-radius: 14px;
+    padding: 1.75rem 1.5rem;
+  }
+  .protocol-list li::before {
+    content: counter(step, decimal-leading-zero);
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--soil);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  .protocol-list h3 {
+    margin: 0 0 0.6rem;
+  }
+  .protocol-list p {
+    margin: 0;
+    font-size: 0.98rem;
+  }
+
+  .services {
+    padding-block: 2rem 3rem;
+  }
+  .service-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+    margin-top: 2rem;
+  }
+  .service-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 1.75rem 1.5rem;
+  }
+  .service-card h3 {
+    margin: 0 0 0.4rem;
+    font-size: 1.5rem;
+  }
+  .service-card h3 a {
+    color: var(--soil-deep);
+  }
+  .who {
+    font-family: var(--font-ui);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--leaf-deep);
+    margin: 0 0 0.9rem;
+  }
+  .service-card p {
+    font-size: 0.98rem;
+  }
+  .service-link {
+    margin-top: auto;
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.92rem;
+  }
+
+  .inquiry-section {
+    padding-block: 2rem var(--space-section);
+  }
+</style>

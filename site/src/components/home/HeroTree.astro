@@ -1,0 +1,285 @@
+---
+// The whole Pamoja tree standing in its ground — the site's central asset.
+// Every named part group is wrapped in a keyboard-focusable link to its
+// journey anchor. Pure SVG + CSS; the scroll-linked descent is driven by the
+// --hero-p custom property (set by the homepage script, no-preference only).
+---
+
+<div class="hero-tree" id="hero-tree">
+  <svg
+    viewBox="0 0 720 800"
+    preserveAspectRatio="xMidYMax meet"
+    role="group"
+    aria-labelledby="hero-tree-title hero-tree-desc"
+  >
+    <title id="hero-tree-title">The Pamoja tree</title>
+    <desc id="hero-tree-desc">
+      A hand-drawn tree standing in ground held in common. Its soil, roots, trunk,
+      branches, canopy and seeds each lead to a part of the Pamoja story. Small
+      seeds and leaf motes drift up and out from the canopy — the tree gives back
+      to the ground that holds it.
+    </desc>
+
+    <defs>
+      <radialGradient id="ht-sky" cx="0.5" cy="0.42" r="0.75">
+        <stop offset="0" style="stop-color: var(--paper-warm)" stop-opacity="0.9" />
+        <stop offset="0.6" style="stop-color: var(--paper-warm)" stop-opacity="0.35" />
+        <stop offset="1" style="stop-color: var(--paper-warm)" stop-opacity="0" />
+      </radialGradient>
+      <linearGradient id="ht-soil" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" style="stop-color: var(--clay)" />
+        <stop offset="0.45" style="stop-color: var(--soil)" />
+        <stop offset="1" style="stop-color: var(--soil-deep)" />
+      </linearGradient>
+      <linearGradient id="ht-bark" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" style="stop-color: var(--coffee)" />
+        <stop offset="0.45" style="stop-color: var(--bark)" />
+        <stop offset="0.75" style="stop-color: var(--clay)" />
+        <stop offset="1" style="stop-color: var(--coffee)" />
+      </linearGradient>
+      <radialGradient id="ht-leaf-a" cx="0.4" cy="0.35" r="1">
+        <stop offset="0" style="stop-color: var(--leaf-light)" />
+        <stop offset="0.55" style="stop-color: var(--leaf)" />
+        <stop offset="1" style="stop-color: var(--leaf-deep)" />
+      </radialGradient>
+      <radialGradient id="ht-leaf-b" cx="0.42" cy="0.32" r="1">
+        <stop offset="0" style="stop-color: var(--leaf-light)" />
+        <stop offset="0.55" style="stop-color: var(--moss)" />
+        <stop offset="1" style="stop-color: var(--leaf-deep)" />
+      </radialGradient>
+      <radialGradient id="ht-leaf-c" cx="0.45" cy="0.3" r="1">
+        <stop offset="0" style="stop-color: var(--moss)" />
+        <stop offset="0.6" style="stop-color: var(--leaf)" />
+        <stop offset="1" style="stop-color: var(--leaf-deep)" />
+      </radialGradient>
+    </defs>
+
+    {/* Sky warmth behind the crown */}
+    <circle cx="360" cy="210" r="310" fill="url(#ht-sky)" />
+
+    {/* Lower layer: the shared ground and Pamoja's own roots */}
+    <g class="layer-ground">
+      <a href="#ground" class="tree-link" aria-label="Soil — The Ground We Share">
+        <g id="tree-soil">
+          <path
+            d="M30 656 Q200 630 360 636 Q520 642 690 656 L690 800 L30 800 Z"
+            fill="url(#ht-soil)"
+          />
+          <path d="M30 656 Q200 630 360 636 Q520 642 690 656" fill="none" class="st-clay" stroke-width="5" stroke-linecap="round" opacity="0.85" />
+          {/* Strata — quiet, horizontal, held in common */}
+          <path d="M62 706 Q360 684 658 708" fill="none" class="st-clay" stroke-width="3" stroke-linecap="round" opacity="0.35" />
+          <path d="M92 758 Q360 742 628 760" fill="none" class="st-clay" stroke-width="3" stroke-linecap="round" opacity="0.25" />
+          {/*
+            Three marks in the soil at equal weight (brief §2): two parallel
+            paths, one shared vessel, one ring — abstract forms of our own for
+            the Two Row, the Dish With One Spoon, and the Charter. Never
+            wampum imagery (§9.1).
+          */}
+          <g fill="none" class="st-paperwarm" stroke-width="4" stroke-linecap="round" opacity="0.8">
+            <path d="M96 744 Q150 732 204 744" />
+            <path d="M96 764 Q150 752 204 764" />
+            <path d="M312 744 L408 744" />
+            <path d="M318 744 Q360 776 402 744" />
+            <circle cx="570" cy="754" r="17" />
+          </g>
+          {/* Grass and stones along the horizon */}
+          <g fill="none" class="st-leaf" stroke-width="3" stroke-linecap="round" opacity="0.8">
+            <path d="M118 646 l-5 -16 M127 648 l2 -19 M136 648 l7 -15" />
+            <path d="M584 648 l-5 -16 M593 650 l2 -19 M602 650 l7 -15" />
+            <path d="M268 640 l-4 -14 M276 642 l4 -15" />
+            <path d="M470 642 l-3 -12 M477 643 l4 -13" />
+          </g>
+          <ellipse cx="216" cy="666" rx="10" ry="6" class="f-clay" opacity="0.9" />
+          <ellipse cx="516" cy="670" rx="8" ry="5" class="f-clay" opacity="0.7" />
+        </g>
+      </a>
+
+      <a href="#roots" class="tree-link" aria-label="Roots — Our Roots">
+        <g id="tree-roots" fill="none" stroke-linecap="round">
+          {/* Distinctly Pamoja's: warm coffee tones reaching down into the shared soil */}
+          <path d="M358 648 C352 692 363 732 356 780" class="st-coffee" stroke-width="13" />
+          <path d="M352 652 C300 668 240 676 168 686" class="st-coffee" stroke-width="12" />
+          <path d="M368 652 C420 670 482 678 554 688" class="st-coffee" stroke-width="12" />
+          <path d="M354 656 C330 692 306 716 272 738" class="st-coffee" stroke-width="9" />
+          <path d="M366 656 C392 694 418 718 452 740" class="st-coffee" stroke-width="9" />
+          <path d="M352 650 C296 656 236 660 178 664" class="st-bark" stroke-width="6" opacity="0.85" />
+          <path d="M368 650 C424 658 484 662 542 666" class="st-bark" stroke-width="6" opacity="0.85" />
+          <path d="M186 684 l-10 8 M202 682 l-7 10 M518 686 l10 8 M502 684 l7 10" class="st-bark" stroke-width="2.5" opacity="0.55" />
+          <path d="M352 652 C302 666 246 674 184 684" class="st-tea" stroke-width="2.5" opacity="0.5" />
+        </g>
+      </a>
+    </g>
+
+    {/* Rising layer: trunk, branches, canopy, seeds */}
+    <g class="layer-rise">
+      <a href="#who-we-are" class="tree-link" aria-label="Trunk — Who We Are">
+        <g id="tree-trunk">
+          <path
+            d="M328 664 C322 580 320 500 330 420 C338 356 344 320 338 268 L392 262 C388 316 396 358 404 424 C414 504 410 584 404 664 Z"
+            fill="url(#ht-bark)"
+          />
+          <g fill="none" stroke-linecap="round">
+            <path d="M346 640 C342 560 342 480 350 400" class="st-coffee" stroke-width="3.5" opacity="0.5" />
+            <path d="M380 644 C384 560 382 470 374 380" class="st-coffee" stroke-width="3" opacity="0.45" />
+            <path d="M360 336 C356 306 352 288 344 272" class="st-coffee" stroke-width="2.5" opacity="0.5" />
+            <path d="M392 520 C396 470 392 430 386 396" class="st-tea" stroke-width="2.5" opacity="0.4" />
+          </g>
+          <ellipse cx="368" cy="470" rx="11" ry="18" class="f-coffee" />
+          <ellipse cx="368" cy="470" rx="11" ry="18" fill="none" class="st-tea" stroke-width="3" opacity="0.45" />
+        </g>
+      </a>
+
+      <a href="#our-work" class="tree-link" aria-label="Branches — Our Work">
+        <g id="tree-branches" fill="none" class="st-bark" stroke-linecap="round">
+          <path d="M336 430 C280 396 224 378 156 366" stroke-width="17" />
+          <path d="M398 420 C452 388 512 372 578 364" stroke-width="17" />
+          <path d="M340 330 C308 282 276 258 232 240" stroke-width="12" />
+          <path d="M394 322 C428 278 462 254 508 238" stroke-width="12" />
+          <path d="M366 266 C364 232 362 206 358 178" stroke-width="10" />
+          <path d="M156 366 C136 362 118 360 100 360" stroke-width="7" />
+          <path d="M578 364 C598 360 616 359 634 360" stroke-width="7" />
+          <path d="M232 240 C214 230 198 224 180 220" stroke-width="6" />
+          <path d="M508 238 C526 228 542 222 560 219" stroke-width="6" />
+        </g>
+      </a>
+
+      <a href="#what-we-offer" class="tree-link" aria-label="Canopy — What We Offer">
+        <g id="tree-canopy" class="canopy-sway">
+          <path
+            d="M238 210 C216 172 244 128 292 122 C302 84 356 62 398 80 C438 54 498 74 512 116 C556 118 584 160 570 200 C592 232 566 270 526 274 C502 306 448 310 420 288 C384 312 326 304 306 276 C262 284 232 252 238 210 Z"
+            fill="url(#ht-leaf-b)"
+          />
+          <path
+            d="M112 330 C92 300 108 258 148 248 C156 214 204 196 240 210 C268 186 316 192 332 222 C366 226 384 262 370 292 C388 320 366 354 330 356 C306 384 254 386 232 364 C196 380 148 372 134 344 C118 342 108 336 112 330 Z"
+            fill="url(#ht-leaf-a)"
+          />
+          <path
+            d="M610 328 C630 296 612 254 572 246 C564 210 514 192 478 208 C450 184 402 192 388 224 C354 230 338 266 354 296 C336 324 360 356 396 356 C422 382 474 382 494 360 C532 376 578 366 590 338 C604 336 614 332 610 328 Z"
+            fill="url(#ht-leaf-c)"
+          />
+          {/* Inner shade and light */}
+          <path d="M300 200 C330 176 380 172 412 194 C444 216 450 256 428 280 C406 304 360 308 330 288 C300 268 288 232 300 200 Z" class="f-leafdeep" opacity="0.35" />
+          <path d="M170 290 C192 264 234 258 260 278 C286 298 288 334 266 352 C244 370 204 368 182 346 C162 326 158 306 170 290 Z" class="f-leafdeep" opacity="0.3" />
+          <path d="M470 284 C494 260 536 256 560 278 C584 300 584 334 560 350 C536 366 498 362 478 340 C460 320 458 300 470 284 Z" class="f-leafdeep" opacity="0.3" />
+          <g fill="none" class="st-leaflight" stroke-width="5" stroke-linecap="round" opacity="0.5">
+            <path d="M268 150 C330 118 420 116 486 150" />
+            <path d="M150 262 C196 238 258 234 308 250" />
+            <path d="M430 246 C480 226 540 228 584 252" />
+          </g>
+          {/* A few individual leaves catching light */}
+          <g class="f-leaflight" opacity="0.75">
+            <path d="M256 118 C261 112 271 113 275 120 C270 128 260 127 256 122 Z" />
+            <path d="M474 96 C479 90 489 91 493 98 C488 106 478 105 474 100 Z" />
+            <path d="M586 216 C591 210 601 211 605 218 C600 226 590 225 586 220 Z" />
+            <path d="M128 302 C133 296 143 297 147 304 C142 312 132 311 128 306 Z" />
+            <path d="M356 330 C361 324 371 325 375 332 C370 340 360 339 356 334 Z" />
+          </g>
+        </g>
+      </a>
+
+      <a href="#seeds" class="tree-link" aria-label="Seeds — What's Growing">
+        <g id="tree-seeds">
+          {/* Seeds resting at the foot of the tree */}
+          <ellipse cx="300" cy="670" rx="7" ry="11" transform="rotate(-18 300 670)" class="f-cherry" />
+          <ellipse cx="430" cy="672" rx="6" ry="10" transform="rotate(15 430 672)" class="f-tea" />
+          {/*
+            The exchange made visible (brief §2): motes drift UP and OUT from
+            the canopy into the sky — the tree gives back. Positioned by the
+            wrapper transform; the rise animation lives on the child shape.
+          */}
+          <g transform="translate(250 130)"><path class="mote m1 f-leaflight" d="M0 -6 C4.5 -2.5 4.5 2.5 0 6 C-4.5 2.5 -4.5 -2.5 0 -6 Z" /></g>
+          <g transform="translate(332 88)"><path class="mote m2 f-tea" d="M0 -5 C4 -2 4 2 0 5 C-4 2 -4 -2 0 -5 Z" /></g>
+          <g transform="translate(430 66)"><path class="mote m3 f-leaflight" d="M0 -6 C4.5 -2.5 4.5 2.5 0 6 C-4.5 2.5 -4.5 -2.5 0 -6 Z" /></g>
+          <g transform="translate(506 108)"><ellipse class="mote m4 f-cherry" rx="4.5" ry="7" transform="rotate(20)" /></g>
+          <g transform="translate(150 210)"><path class="mote m5 f-moss" d="M0 -5 C4 -2 4 2 0 5 C-4 2 -4 -2 0 -5 Z" /></g>
+          <g transform="translate(580 190)"><path class="mote m6 f-leaflight" d="M0 -5.5 C4.2 -2.2 4.2 2.2 0 5.5 C-4.2 2.2 -4.2 -2.2 0 -5.5 Z" /></g>
+        </g>
+      </a>
+    </g>
+  </svg>
+</div>
+
+<style>
+  .hero-tree {
+    width: min(600px, 94vw);
+    margin-inline: auto;
+  }
+  .hero-tree svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 26px 22px color-mix(in srgb, var(--soil-deep) 16%, transparent));
+  }
+
+  /* Token fills/strokes (var() is unreliable in presentation attributes). */
+  .f-clay { fill: var(--clay); }
+  .f-coffee { fill: var(--coffee); }
+  .f-tea { fill: var(--tea); }
+  .f-cherry { fill: var(--coffee-cherry); }
+  .f-leafdeep { fill: var(--leaf-deep); }
+  .f-leaflight { fill: var(--leaf-light); }
+  .f-moss { fill: var(--moss); }
+  .st-clay { stroke: var(--clay); }
+  .st-coffee { stroke: var(--coffee); }
+  .st-bark { stroke: var(--bark); }
+  .st-tea { stroke: var(--tea); }
+  .st-paperwarm { stroke: var(--paper-warm); }
+  .st-leaf { stroke: var(--leaf); }
+  .st-leaflight { stroke: var(--leaf-light); }
+
+  .tree-link > g {
+    transition: filter 0.3s ease;
+  }
+  .tree-link:hover > g,
+  .tree-link:focus-visible > g {
+    filter: brightness(1.1);
+  }
+  .tree-link:focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 4px;
+  }
+
+  /* Motes are part of the static drawing; the rise only plays when motion is welcome. */
+  .mote {
+    opacity: 0.55;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* The one orchestrated moment (brief §7): scrolling out of the hero
+       descends toward the ground — the soil sinks away, the crown lifts,
+       the whole tree looms gently closer. Driven by --hero-p (0 → 1). */
+    .hero-tree svg {
+      transform: translateY(calc(var(--hero-p, 0) * 30px)) scale(calc(1 + var(--hero-p, 0) * 0.05));
+      transform-origin: 50% 100%;
+    }
+    .layer-ground {
+      transform: translateY(calc(var(--hero-p, 0) * 36px));
+    }
+    .layer-rise {
+      transform: translateY(calc(var(--hero-p, 0) * -26px));
+    }
+    .canopy-sway {
+      transform-origin: 50% 90%;
+      animation: ht-sway 12s ease-in-out infinite;
+    }
+    .mote {
+      animation: mote-rise 10s ease-in-out infinite;
+    }
+    .m1 { --dx: -26px; animation-delay: -1s; }
+    .m2 { --dx: 12px; animation-delay: -3.5s; animation-duration: 11s; }
+    .m3 { --dx: 30px; animation-delay: -6s; }
+    .m4 { --dx: 42px; animation-delay: -2.2s; animation-duration: 12s; }
+    .m5 { --dx: -40px; animation-delay: -8s; animation-duration: 12s; }
+    .m6 { --dx: 36px; animation-delay: -5s; animation-duration: 9s; }
+  }
+
+  @keyframes ht-sway {
+    0%, 100% { transform: rotate(-0.7deg); }
+    50% { transform: rotate(0.9deg); }
+  }
+  @keyframes mote-rise {
+    0% { transform: translate(0, 12px) rotate(0deg); opacity: 0; }
+    18% { opacity: 0.85; }
+    100% { transform: translate(var(--dx, 20px), -72px) rotate(42deg); opacity: 0; }
+  }
+</style>

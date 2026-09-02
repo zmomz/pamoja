@@ -1,0 +1,299 @@
+---
+import Base from '../../layouts/Base.astro';
+import {
+  getEvents,
+  type Event,
+} from '../../lib/data';
+import { renderPortableText } from '../../lib/portableText';
+
+export async function getStaticPaths() {
+  const events = await getEvents();
+  return events.map((event) => ({
+    params: { slug: event.slug },
+    props: { event },
+  }));
+}
+
+interface Props {
+  event: Event;
+}
+
+const { event } = Astro.props;
+
+const statusLabel =
+  event.status === 'handed-on'
+    ? 'Handed on'
+    : event.status === 'upcoming'
+      ? 'Upcoming'
+      : 'Past';
+
+const eventStatusSchema =
+  event.status === 'upcoming'
+    ? 'https://schema.org/EventScheduled'
+    : 'https://schema.org/EventCompleted';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Event',
+  name: event.title,
+  startDate: event.startDate,
+  ...(event.endDate ? { endDate: event.endDate } : {}),
+  location: {
+    '@type': 'Place',
+    name: event.location ?? 'Hamilton',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Hamilton',
+      addressRegion: 'ON',
+      addressCountry: 'CA',
+    },
+  },
+  organizer: {
+    '@type': 'Organization',
+    name: 'Pamoja Cultural Collective',
+  },
+  eventStatus: eventStatusSchema,
+};
+
+const galleryWithConsent = event.gallery.filter(
+  (image) => image.consentConfirmed && image.url
+);
+---
+
+<Base
+  title={event.title}
+  description={`${event.title} — ${event.dateOrRange}, ${event.location ?? 'Hamilton'}. A Pamoja Cultural Collective gathering, hosted and led by community knowledge holders.`}
+  currentSection="our-work"
+>
+  <script
+    slot="head"
+    type="application/ld+json"
+    set:html={JSON.stringify(jsonLd)}
+  />
+
+  <article class="wrap event-page">
+    <p class="tag">
+      <a href="/our-work">Our Work</a> · Gathering
+    </p>
+
+    <header class="event-head">
+      <h1>{event.title}</h1>
+      <dl class="event-facts">
+        <div>
+          <dt>When</dt>
+          <dd>{event.dateOrRange}</dd>
+        </div>
+        {event.location && (
+          <div>
+            <dt>Where</dt>
+            <dd>{event.location}</dd>
+          </div>
+        )}
+        <div>
+          <dt>Status</dt>
+          <dd>
+            <span class:list={['badge', `badge-${event.status}`]}>{statusLabel}</span>
+            {event.status === 'handed-on' && event.handedOnTo && (
+              <span class="handed-on-note">
+                {' '}Now stewarded by {event.handedOnTo.name}.
+              </span>
+            )}
+          </dd>
+        </div>
+        <div>
+          <dt>Branches served</dt>
+          <dd>
+            <ul class="branch-tags">
+              {event.branchesServed.map((branch) => (
+                <li>
+                  <a href={`/our-work?serves=${branch.slug}`}>{branch.title}</a>
+                </li>
+              ))}
+            </ul>
+          </dd>
+        </div>
+      </dl>
+    </header>
+
+    <div class="body" set:html={renderPortableText(event.body)} />
+
+    {event.partnersCredited.length > 0 && (
+      <section class="credits" aria-labelledby="credits-heading">
+        <h2 id="credits-heading">Partners and funders, credited.</h2>
+        <ul>
+          {event.partnersCredited.map((partner) => (
+            <li>
+              <strong>{partner.name}</strong> — {partner.contribution}
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {galleryWithConsent.length > 0 && (
+      <section class="gallery" aria-labelledby="gallery-heading">
+        <h2 id="gallery-heading">From the gathering.</h2>
+        <ul class="gallery-grid">
+          {galleryWithConsent.map((image) => (
+            <li>
+              <img src={image.url} alt={image.alt} loading="lazy" />
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {event.pullQuote && (
+      <blockquote class="pull-quote">
+        <p>{event.pullQuote}</p>
+      </blockquote>
+    )}
+
+    <p class="back-link">
+      <a href="/our-work">← All gatherings</a>
+    </p>
+  </article>
+</Base>
+
+<style>
+  .event-page {
+    padding-block: 3rem var(--space-section);
+  }
+  .event-head h1 {
+    font-size: clamp(2.4rem, 6vw, 4.5rem);
+    margin: 0 0 2rem;
+  }
+
+  .event-facts {
+    display: grid;
+    gap: 1.25rem;
+    margin: 0 0 2.5rem;
+    padding: 1.5rem;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+  }
+  .event-facts > div {
+    display: grid;
+    gap: 0.3rem;
+  }
+  .event-facts dt {
+    font-family: var(--font-ui);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--soil);
+  }
+  .event-facts dd {
+    margin: 0;
+  }
+
+  .badge {
+    display: inline-block;
+    font-family: var(--font-ui);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    border-radius: 999px;
+    padding: 0.25rem 0.75rem;
+    vertical-align: middle;
+  }
+  .badge-upcoming {
+    background: var(--leaf-deep);
+    color: var(--paper);
+  }
+  .badge-past {
+    background: var(--paper-warm);
+    color: var(--soil);
+    border: 1px solid var(--line);
+  }
+  .badge-handed-on {
+    background: var(--soil-deep);
+    color: var(--paper);
+  }
+  .handed-on-note {
+    font-size: 0.95rem;
+  }
+
+  .branch-tags {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0;
+  }
+  .branch-tags a {
+    display: inline-block;
+    font-family: var(--font-ui);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--leaf-deep);
+    border: 1px solid var(--leaf-light);
+    border-radius: 999px;
+    padding: 0.25rem 0.75rem;
+  }
+  .branch-tags a:hover {
+    background: var(--paper-warm);
+  }
+
+  .body {
+    max-width: var(--max-prose);
+  }
+
+  .credits {
+    margin-top: 3rem;
+  }
+  .credits h2 {
+    font-size: 1.6rem;
+  }
+  .credits ul {
+    padding-left: 1.25rem;
+    max-width: var(--max-prose);
+  }
+  .credits li {
+    margin-bottom: 0.75rem;
+  }
+
+  .gallery {
+    margin-top: 3rem;
+  }
+  .gallery h2 {
+    font-size: 1.6rem;
+  }
+  .gallery-grid {
+    list-style: none;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+    margin: 0;
+    padding: 0;
+  }
+  .gallery-grid img {
+    border-radius: 10px;
+    width: 100%;
+  }
+
+  .pull-quote {
+    margin: 3rem 0 0;
+    padding: 2rem;
+    background: var(--paper-warm);
+    border-left: 4px solid var(--tea);
+    border-radius: 0 14px 14px 0;
+    max-width: var(--max-prose);
+  }
+  .pull-quote p {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--soil-deep);
+  }
+
+  .back-link {
+    margin-top: 3rem;
+    font-family: var(--font-ui);
+    font-weight: 700;
+  }
+</style>

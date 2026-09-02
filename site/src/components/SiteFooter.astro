@@ -1,0 +1,129 @@
+---
+import { SECTIONS, CONTACT } from '../lib/sections';
+
+interface Props {
+  /** Pre-rendered HTML from the CMS; omitted while wording is placeholder. */
+  landAcknowledgmentHtml?: string;
+  contactEmail?: string;
+}
+
+const { landAcknowledgmentHtml, contactEmail = 'hello@pamoja.example' } = Astro.props;
+---
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="footer-wordmark" href="/">PAMOJA</a>
+      <p class="footer-tagline">Pamoja means together.</p>
+      <p class="footer-contact">
+        <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
+      </p>
+    </div>
+
+    <nav class="footer-nav" aria-label="Footer">
+      <ul>
+        {SECTIONS.map((s) => (
+          <li><a href={s.path}>{s.label}</a></li>
+        ))}
+        <li><a href={CONTACT.path}>{CONTACT.label}</a></li>
+      </ul>
+    </nav>
+
+    {landAcknowledgmentHtml && (
+      <div class="land-ack">
+        <h2 class="land-ack-heading">Land acknowledgment</h2>
+        <div set:html={landAcknowledgmentHtml} />
+      </div>
+    )}
+  </div>
+
+  <p class="footer-line">Built on ethical common ground in Hamilton.</p>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--soil-deep);
+    color: var(--paper);
+    padding: clamp(3rem, 8vh, 5rem) 4vw 2rem;
+    font-family: var(--font-ui);
+  }
+  .footer-grid {
+    display: grid;
+    gap: 2.5rem;
+    max-width: 1120px;
+    margin-inline: auto;
+  }
+  @media (min-width: 760px) {
+    .footer-grid {
+      grid-template-columns: 1.2fr 1fr 1.4fr;
+    }
+  }
+
+  .footer-wordmark {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 2rem;
+    letter-spacing: 0.08em;
+    color: var(--paper);
+    text-decoration: none;
+  }
+  .footer-tagline {
+    margin: 0.5rem 0 1.25rem;
+    color: var(--leaf-light);
+    font-size: 0.95rem;
+  }
+  .footer-contact {
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  .site-footer a {
+    color: var(--leaf-light);
+    text-underline-offset: 0.2em;
+  }
+  .site-footer a:hover {
+    color: var(--paper);
+  }
+
+  .footer-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.45rem;
+  }
+  .footer-nav a {
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+  .footer-nav a:hover {
+    text-decoration: underline;
+  }
+
+  .land-ack-heading {
+    font-family: var(--font-ui);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--leaf-light);
+    margin: 0 0 0.6rem;
+  }
+  .land-ack p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: color-mix(in srgb, var(--paper) 82%, transparent);
+    max-width: 46ch;
+  }
+
+  .footer-line {
+    max-width: 1120px;
+    margin: 3rem auto 0;
+    padding-top: 1.25rem;
+    border-top: 1px solid color-mix(in srgb, var(--paper) 18%, transparent);
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    color: color-mix(in srgb, var(--paper) 65%, transparent);
+  }
+</style>

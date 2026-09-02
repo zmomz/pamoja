@@ -1,0 +1,157 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="Seeds — What's Growing"
+  description="What Pamoja is growing next, and what the tree needs: space, flexible multi-year trust-based funding, and institutional capacity — an investment in a shared community, not a donation request."
+  currentSection="seeds"
+>
+  <section class="page-head wrap">
+    <p class="tag">Seeds · What's Growing</p>
+    <h1>What's growing.</h1>
+    <p class="lede">
+      Every gathering Pamoja has grown came from seed: a yard offered, a
+      grant trusted, a partner's time lent. This page names what the next
+      season needs — and what an investment in a shared community actually
+      looks like.
+    </p>
+  </section>
+
+  <section class="wrap ask" aria-labelledby="ask-heading">
+    <h2 id="ask-heading">The ask.</h2>
+    <p>
+      This is not a donation request. It is an invitation to invest in a
+      community you belong to — to put something into the shared dish that
+      the whole city eats from.
+    </p>
+    <div class="ask-grid">
+      <article class="ask-card">
+        <h3>Space</h3>
+        <p>
+          Free or low-cost venues where gatherings can root — a room, a yard,
+          a hall that sits empty on weekday evenings. Space is the difference
+          between a plan and a gathering.
+        </p>
+      </article>
+      <article class="ask-card">
+        <h3>Flexible, multi-year, trust-based funding</h3>
+        <p>
+          Funding that trusts the people doing the work: multi-year, lightly
+          restricted, sized to the work rather than to a funder's calendar.
+          The Dish With One Spoon, practised at the level of budgets.
+        </p>
+      </article>
+      <article class="ask-card">
+        <h3>Institutional capacity</h3>
+        <p>
+          Legal, financial, and administrative strength lent from
+          organizations that have it — for example, a legal or financial
+          team's time toward incorporation. Expertise shared is capacity
+          built.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <section class="wrap examples" aria-labelledby="examples-heading">
+    <h2 id="examples-heading">What a successful partnership looks like.</h2>
+    <ul class="example-list">
+      <li>
+        <strong>Co-hosting a community meal</strong> — your organization's
+        people cooking and eating alongside the community's, as guests and
+        co-hosts, not sponsors at a distance.
+      </li>
+      <li>
+        <strong>Lending a professional team's time toward incorporation</strong> —
+        a legal or financial team's hours, given as capacity the collective
+        keeps.
+      </li>
+      <li>
+        <strong>Sharing unused space</strong> — a venue that stands empty
+        becoming common ground for a season or longer.
+      </li>
+      <li>
+        <strong>Helping with a crowdfunding campaign</strong> — reach,
+        matching, and credibility lent to a campaign the community runs.
+      </li>
+    </ul>
+  </section>
+
+  <section class="wrap cta-block" aria-labelledby="cta-heading">
+    <h2 id="cta-heading">Plant something with us.</h2>
+    <p>
+      If you have space, funding, capacity, or something we haven't thought to
+      ask for — the first step is the same as always: a conversation.
+    </p>
+    <p>
+      <a class="cta-link" href="/contact">Start a conversation →</a>
+    </p>
+  </section>
+</Base>
+
+<style>
+  .page-head {
+    padding-block: 3rem 2rem;
+  }
+  .page-head h1 {
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    margin: 0 0 1.25rem;
+  }
+  .lede {
+    font-size: 1.2rem;
+    max-width: var(--max-prose);
+  }
+
+  .ask {
+    padding-block: 2rem;
+  }
+  .ask-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+    margin-top: 2rem;
+  }
+  .ask-card {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-top: 4px solid var(--leaf);
+    border-radius: 14px;
+    padding: 1.75rem 1.5rem;
+  }
+  .ask-card h3 {
+    margin: 0 0 0.6rem;
+    font-size: 1.3rem;
+  }
+  .ask-card p {
+    margin: 0;
+    font-size: 0.98rem;
+  }
+
+  .examples {
+    padding-block: 2rem;
+  }
+  .example-list {
+    list-style: none;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+    max-width: var(--max-prose);
+  }
+  .example-list li {
+    padding: 1rem 1.25rem;
+    background: var(--paper-warm);
+    border-radius: 10px;
+    border-left: 4px solid var(--tea);
+  }
+
+  .cta-block {
+    padding-block: 2rem var(--space-section);
+  }
+  .cta-link {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 1.05rem;
+  }
+</style>

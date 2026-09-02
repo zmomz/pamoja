@@ -1,0 +1,165 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="Our Roots"
+  description="Ta'aruf and Takaful — the two roots Pamoja draws from the shared ground: ethical, dialogical relationship and mutual economic empowerment, our own traditions reaching into the covenants we honour."
+  currentSection="roots"
+>
+  <section class="page-head wrap">
+    <p class="tag">Roots · Our Roots</p>
+    <h1>Our roots.</h1>
+    <p class="lede">
+      The soil is shared; the roots are ours. Ta'aruf and Takaful are
+      traditions from our own cultures — the ethics newcomer Canadians of
+      African Muslim origin carry and practise. They reach down into the
+      common ground and draw nourishment from the covenants they resonate
+      with, without ever claiming to be those covenants.
+    </p>
+  </section>
+
+  <section class="wrap roots-grid" aria-label="The two roots">
+    <article class="root-card">
+      <p class="tag">Epistemic sovereignty</p>
+      <h2>Ta'aruf</h2>
+      <p class="root-essence">
+        Hospitality that builds ethical, dialogical relationship — that
+        protects dignity and upholds difference without erasure.
+      </p>
+      <p>
+        Ta'aruf is the practice of coming to know one another properly: over
+        coffee or tea, through stories, at a pace trust requires. It treats
+        every person as a knowledge holder, not a case. It is why Pamoja
+        starts every engagement with conversation and why we do not move
+        fast.
+      </p>
+      <p>
+        As epistemic sovereignty, Ta'aruf means our ways of knowing are ours:
+        carried, practised, and taught on our own terms, and shared — when we
+        choose to share them — as hosts, not as specimens.
+      </p>
+      <p class="draws-from">
+        Draws from the ground it resonates with:
+        <a href="/ground">the Two Row Wampum</a> — two paths travelled side by
+        side, difference without erasure. Ta'aruf and the Two Row meet in the
+        ground; they are not the same thing, and Pamoja claims only its own
+        root.
+      </p>
+    </article>
+
+    <article class="root-card">
+      <p class="tag">Economic solidarity</p>
+      <h2>Takaful</h2>
+      <p class="root-essence">
+        Mutual economic empowerment and collective stewardship — prosperity
+        held in common, not extracted from it.
+      </p>
+      <p>
+        Takaful is the practice of carrying one another economically: fair
+        honorariums for knowledge holders, transparent money, and decisions
+        about resources made by the collective rather than over it. It is why
+        Pamoja asks partners what they are bringing besides money — and why we
+        answer the same question ourselves.
+      </p>
+      <p>
+        As economic solidarity, Takaful refuses the scarcity story told about
+        newcomer communities. What we build, we build to be shared and to
+        last.
+      </p>
+      <p class="draws-from">
+        Draws from the ground it resonates with:
+        <a href="/ground">the Dish With One Spoon Wampum</a> — take only what
+        you need, leave some for others, keep the dish clean. Takaful and the
+        Dish meet in the ground; they are not the same thing, and Pamoja
+        claims only its own root.
+      </p>
+    </article>
+  </section>
+
+  <section class="wrap how-we-work">
+    <h2>How we work.</h2>
+    <div class="how-grid">
+      <div>
+        <h3>Internally: consensus-based, self-determined</h3>
+        <p>
+          Pamoja decides by consensus. No one's work is directed from above,
+          and no one's knowledge is spoken for by someone else. This is slower
+          than a chain of command and sturdier than one — decisions made
+          together hold together. The collective is self-determined: our
+          agenda is set by the community that carries the work, not by a
+          funder's cycle or an institution's calendar.
+        </p>
+      </div>
+      <div>
+        <h3>In partnership: mutual consultation and dialogue</h3>
+        <p>
+          With partners, we practise mutual consultation — real dialogue
+          before decisions, shared leadership during the work, and credit
+          shared publicly after it. Partners do not commission a community
+          from us; they enter a relationship with one. That is the shape of
+          every engagement on <a href="/what-we-offer">What We Offer</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .page-head {
+    padding-block: 3rem 2rem;
+  }
+  .page-head h1 {
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    margin: 0 0 1.25rem;
+  }
+  .lede {
+    font-size: 1.2rem;
+    max-width: var(--max-prose);
+  }
+
+  .roots-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+    padding-block: 2rem 3rem;
+    align-items: stretch;
+  }
+  .root-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-top: 4px solid var(--leaf-deep);
+    border-radius: 14px;
+    padding: 2rem 1.75rem;
+  }
+  .root-card h2 {
+    font-size: 2.1rem;
+    margin: 0 0 0.75rem;
+  }
+  .root-essence {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--soil-deep);
+  }
+  .root-card p {
+    margin: 0 0 1rem;
+  }
+  .draws-from {
+    margin-top: auto;
+    padding: 1rem 0 0;
+    border-top: 1px dashed var(--line);
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+
+  .how-we-work {
+    padding-block: 1rem var(--space-section);
+  }
+  .how-grid {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+  }
+</style>

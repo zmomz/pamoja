@@ -1,0 +1,229 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="Who We Are"
+  description="Pamoja means together. A grassroots collective led by newcomer Canadians of African Muslim origin, building community on ethical common ground in Hamilton — not a settlement agency, and not everything to everyone."
+  currentSection="who-we-are"
+>
+  <section class="page-head wrap">
+    <p class="tag">Trunk · Who We Are</p>
+    <h1>Pamoja means together.</h1>
+    <p class="lede">
+      Pamoja Cultural Collective is a grassroots collective led by newcomer
+      Canadians of African Muslim origin, building community on ethical common
+      ground in Hamilton. The name is Kiswahili, and it is the whole argument
+      in one word: together — not merged, not assimilated, together.
+    </p>
+  </section>
+
+  <section class="wrap flow">
+    <h2>Our mission, including the honest parts.</h2>
+    <p>
+      Pamoja exists so that the knowledge, wisdom, and traditions newcomers
+      carry become part of how Hamilton understands and builds itself. We
+      convene, we host, we teach, we braid people and efforts together — and
+      the city is changed by what its newcomers bring to it.
+    </p>
+    <p>
+      Two honest things belong here. First: belonging is not comfort, and it
+      is not sameness. Belonging means embracing discomfort as a path to
+      understanding — ours included. Second: we do not claim to be everything
+      to everyone. We are one collective with a specific practice and specific
+      roots, working in a city full of other good work.
+    </p>
+
+    <h2>Why we exist.</h2>
+    <p>
+      Canada welcomes newcomers for their labour — and too often exploits that
+      labour in menial jobs while the knowledge those same people carry goes
+      unused. A physician drives a cab. A teacher stacks shelves. A community
+      that governed itself for generations is asked to wait quietly for
+      services. The welcome and the waste are the same story, and it is told
+      every day in this city.
+    </p>
+    <p>
+      Pamoja is our answer to it. We do not wait to be served, and we refuse
+      to be only labour. We host. We teach. We build. What we carry — the
+      coffee ritual, the tea gathering, the ethics of Ta'aruf and Takaful —
+      is something Hamilton needs, and we bring it as its holders, not its
+      applicants.
+    </p>
+
+    <!-- WORDING NOTICE: the block below carries the full reasoning of brief
+         §1.1. Final wording to be supplied/approved by Abdo. -->
+    <section class="what-we-are" aria-labelledby="what-we-are-heading">
+      <h2 id="what-we-are-heading">What we are, and what we're not.</h2>
+      <p>
+        Hamilton has many settlement organizations. They do essential work —
+        work ours would not be possible without — and we collaborate with them
+        respectfully. But they are not what we are.
+      </p>
+      <p>
+        The difference is the direction of the relationship. A settlement
+        organization works <em>for</em> newcomers — delivering services to
+        people understood as needing them. Pamoja works <em>with</em>
+        newcomers to build this city — treating the knowledge, wisdom, and
+        traditions newcomers carry as something Hamilton needs.
+      </p>
+      <p>
+        Same city, same people, different direction. Our work surfaces what
+        newcomers bring and builds the city together with them; it does not
+        deliver services to a client group. The critique above and this
+        distinction are one thought: people welcomed for their labour and
+        exploited in menial jobs are the same people whose wisdom this city
+        has not yet learned to receive.
+      </p>
+    </section>
+  </section>
+
+  <section class="wrap braids">
+    <h2>The four braids.</h2>
+    <p>
+      Everything Pamoja does braids four strands together. No event carries
+      only one.
+    </p>
+    <ol class="braid-list">
+      <li>
+        <h3>Decolonial education</h3>
+        <p>
+          Knowledge shared on its own terms — community knowledge holders
+          teaching what they carry, unmediated and uncorrected by the frames
+          that usually receive it.
+        </p>
+      </li>
+      <li>
+        <h3>Intergenerational dialogue</h3>
+        <p>
+          Elders, parents, and young people in the same conversation, so that
+          what is carried across an ocean is not lost between generations.
+        </p>
+      </li>
+      <li>
+        <h3>Mutual economic empowerment</h3>
+        <p>
+          Takaful in practice — honourariums, shared resources, and collective
+          stewardship that treat prosperity as something held in common.
+        </p>
+      </li>
+      <li>
+        <h3>Community connection</h3>
+        <p>
+          The plain fact of people meeting as equals — hosting, eating,
+          talking, making — until a city of strangers becomes a network of
+          collaborators.
+        </p>
+      </li>
+    </ol>
+  </section>
+
+  <section class="wrap origin">
+    <h2>Where we grew from.</h2>
+    <p>
+      Pamoja is rooted in Sudanese traditions of hospitality — the jebena
+      coffee ceremony, the tea poured for whoever arrives, the seat that is
+      always made. Those traditions found fertile ground in Hamilton at the
+      Community Permaculture Lab, whose front yard became our first home.
+    </p>
+    <p>
+      What began there as a biweekly tea gathering grew, gathering by
+      gathering, into a collective. The tea gathering itself has since been
+      handed on — it is now fully owned and run by the Community Permaculture
+      Lab, which is what growth looks like when the roots take.
+    </p>
+    <p class="next-step">
+      See what the tree has grown: <a href="/our-work">our work</a>, and the
+      people in <a href="/who-we-grow-with">the grove around it</a>.
+    </p>
+  </section>
+</Base>
+
+<style>
+  .page-head {
+    padding-block: 3rem 2rem;
+  }
+  .page-head h1 {
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    margin: 0 0 1.25rem;
+  }
+  .lede {
+    font-size: 1.25rem;
+    max-width: var(--max-prose);
+  }
+
+  .flow {
+    padding-block: 1rem 2rem;
+  }
+  .flow h2 {
+    font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+    margin: 2.5rem 0 1rem;
+  }
+  .flow > section {
+    margin: 2.5rem 0;
+  }
+  .flow > section h2 {
+    margin-top: 0;
+  }
+
+  .what-we-are {
+    background: var(--soil-deep);
+    color: var(--paper);
+    border-radius: 14px;
+    padding: clamp(1.75rem, 4vw, 3rem);
+  }
+  .what-we-are h2 {
+    color: var(--paper);
+  }
+  .what-we-are p {
+    max-width: var(--max-prose);
+  }
+  .what-we-are a {
+    color: var(--leaf-light);
+  }
+
+  .braids {
+    padding-block: 2rem;
+  }
+  .braid-list {
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+    counter-reset: braid;
+  }
+  .braid-list li {
+    counter-increment: braid;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 1.5rem;
+    position: relative;
+  }
+  .braid-list li::before {
+    content: counter(braid, decimal-leading-zero);
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--soil);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  .braid-list h3 {
+    margin: 0 0 0.5rem;
+  }
+  .braid-list p {
+    margin: 0;
+    font-size: 0.98rem;
+  }
+
+  .origin {
+    padding-block: 2rem var(--space-section);
+  }
+  .next-step {
+    font-size: 1.1rem;
+  }
+</style>

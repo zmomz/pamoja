@@ -1,0 +1,319 @@
+---
+import { SECTIONS, CONTACT, type SectionId } from '../lib/sections';
+
+interface Props {
+  currentSection?: SectionId;
+}
+
+const { currentSection } = Astro.props;
+const links = [...SECTIONS.map((s) => ({ id: s.id as SectionId, label: s.label, path: s.path })), { id: CONTACT.id as SectionId, label: CONTACT.label, path: CONTACT.path }];
+---
+
+<header class="site-header" id="site-header">
+  <a class="brand" href="/" aria-label="Pamoja Cultural Collective — home">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <span class="brand-word">PAMOJA</span>
+  </a>
+
+  <nav class="nav-desktop" aria-label="Primary">
+    {links.map((link) => (
+      <a
+        href={link.path}
+        class:list={[{ 'is-active': currentSection === link.id }]}
+        aria-current={currentSection === link.id ? 'page' : undefined}
+      >
+        {link.label}
+      </a>
+    ))}
+  </nav>
+
+  <button
+    class="menu-toggle"
+    id="menu-toggle"
+    type="button"
+    aria-label="Open menu"
+    aria-expanded="false"
+    aria-controls="mobile-nav"
+    hidden
+  >
+    <span class="menu-icon" aria-hidden="true"></span>
+  </button>
+</header>
+
+<div class="mobile-nav" id="mobile-nav" hidden>
+  <div class="mobile-nav-inner">
+    <nav aria-label="Menu">
+      {links.map((link) => (
+        <a
+          href={link.path}
+          aria-current={currentSection === link.id ? 'page' : undefined}
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
+  </div>
+</div>
+
+<script is:inline>
+  (function () {
+    var header = document.getElementById('site-header');
+    var toggle = document.getElementById('menu-toggle');
+    var overlay = document.getElementById('mobile-nav');
+    if (!header || !toggle || !overlay) return;
+
+    // JS is running: swap the compact link row for the hamburger on small screens.
+    document.documentElement.classList.add('js');
+    toggle.hidden = false;
+
+    function setMenu(open) {
+      overlay.hidden = !open;
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      document.body.style.overflow = open ? 'hidden' : '';
+      if (open) {
+        var first = overlay.querySelector('a');
+        if (first) first.focus();
+      } else {
+        toggle.focus();
+      }
+    }
+    toggle.addEventListener('click', function () {
+      setMenu(overlay.hidden);
+    });
+    overlay.addEventListener('click', function (e) {
+      if (e.target.closest('a')) setMenu(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !overlay.hidden) setMenu(false);
+    });
+
+    // Condense the header once the page is scrolled.
+    var ticking = false;
+    function onScroll() {
+      header.classList.toggle('scrolled', window.scrollY > 40);
+      ticking = false;
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { requestAnimationFrame(onScroll); ticking = true; }
+    }, { passive: true });
+    onScroll();
+  })();
+</script>
+
+<style>
+  .site-header {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.1rem 4vw;
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: padding 0.35s ease, box-shadow 0.35s ease, background 0.35s ease;
+  }
+  .site-header.scrolled {
+    padding-block: 0.55rem;
+    background: color-mix(in srgb, var(--paper) 94%, transparent);
+    box-shadow: 0 1px 0 var(--line);
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    color: var(--soil-deep);
+  }
+  .brand-mark {
+    width: 26px;
+    height: 26px;
+    flex: none;
+    background: var(--leaf);
+    border-radius: 80% 10% 80% 10%;
+    transform: rotate(-18deg);
+    position: relative;
+    transition: transform 0.5s ease, background 0.5s ease;
+  }
+  .brand-mark::after {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 12px;
+    width: 13px;
+    height: 2px;
+    background: var(--paper);
+    transform: rotate(-38deg);
+    border-radius: 2px;
+  }
+  .brand:hover .brand-mark {
+    transform: rotate(14deg);
+    background: var(--leaf-deep);
+  }
+  .brand-word {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.22em;
+  }
+
+  .nav-desktop {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+  .nav-desktop a {
+    position: relative;
+    padding: 0.45rem 0.7rem;
+    border-radius: 30px;
+    font-family: var(--font-ui);
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--ink);
+    white-space: nowrap;
+    transition: background 0.25s ease;
+  }
+  .nav-desktop a:hover {
+    background: color-mix(in srgb, var(--white) 70%, transparent);
+  }
+  .nav-desktop a::after {
+    content: "";
+    position: absolute;
+    left: 0.7rem;
+    right: 0.7rem;
+    bottom: 2px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--coffee-cherry);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+  .nav-desktop a.is-active::after,
+  .nav-desktop a[aria-current="page"]::after {
+    transform: scaleX(1);
+  }
+
+  .menu-toggle {
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--paper) 90%, transparent);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    color: var(--soil-deep);
+  }
+  .menu-icon,
+  .menu-icon::before,
+  .menu-icon::after {
+    display: block;
+    width: 18px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+  }
+  .menu-icon {
+    position: relative;
+  }
+  .menu-icon::before,
+  .menu-icon::after {
+    content: "";
+    position: absolute;
+    left: 0;
+  }
+  .menu-icon::before { top: -6px; }
+  .menu-icon::after { top: 6px; }
+  .menu-toggle[aria-expanded="true"] .menu-icon {
+    background: transparent;
+  }
+  .menu-toggle[aria-expanded="true"] .menu-icon::before {
+    top: 0;
+    transform: rotate(45deg);
+  }
+  .menu-toggle[aria-expanded="true"] .menu-icon::after {
+    top: 0;
+    transform: rotate(-45deg);
+  }
+
+  .mobile-nav {
+    position: fixed;
+    inset: 0;
+    z-index: 55;
+    background: var(--soil-deep);
+    color: var(--paper);
+    padding: 6.5rem 8vw 3rem;
+    overflow-y: auto;
+  }
+  .mobile-nav nav {
+    display: grid;
+    gap: 0.25rem;
+  }
+  .mobile-nav a {
+    display: block;
+    padding: 0.55rem 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.7rem, 7vw, 2.4rem);
+    letter-spacing: -0.02em;
+    color: var(--paper);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--paper) 14%, transparent);
+  }
+  .mobile-nav a:hover {
+    color: var(--leaf-light);
+  }
+  .mobile-nav a[aria-current="page"] {
+    color: var(--leaf-light);
+  }
+  .mobile-nav a[aria-current="page"]::before {
+    content: "";
+    display: inline-block;
+    width: 0.5em;
+    height: 0.5em;
+    margin-right: 0.5em;
+    border-radius: 50%;
+    background: var(--coffee-cherry);
+  }
+
+  /* The hamburger only ever appears when JS is on (the script unhides it).
+     Without JS, the desktop nav collapses to a compact wrapped link row. */
+  .menu-toggle {
+    display: none;
+  }
+  @media (max-width: 1080px) {
+    .nav-desktop {
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 0 2px;
+      max-width: 70vw;
+    }
+    .nav-desktop a {
+      font-size: 0.75rem;
+      padding: 0.35rem 0.55rem;
+    }
+  }
+  @media (max-width: 1080px) {
+    :global(html.js) .nav-desktop {
+      display: none;
+    }
+    :global(html.js) .menu-toggle:not([hidden]) {
+      display: grid;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-header,
+    .brand-mark,
+    .nav-desktop a,
+    .nav-desktop a::after {
+      transition: none;
+    }
+  }
+</style>

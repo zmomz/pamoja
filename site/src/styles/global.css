@@ -1,0 +1,128 @@
+/* ==========================================================================
+   Pamoja — design tokens
+   Palette is drawn from the physical world of the work (see DESIGN.md):
+   the earth of a Hamilton park in July, roasted coffee, black tea,
+   bark, leaf canopy, and parchment field-notes paper.
+   Deliberately NOT the stock cream + high-contrast serif + terracotta combo.
+   ========================================================================== */
+:root {
+  /* Ground & earth */
+  --soil-deep: #2e2419;   /* wet topsoil, near-black brown */
+  --soil: #4a3826;        /* park earth */
+  --clay: #6b5233;        /* dried clay path */
+
+  /* The practice: coffee & tea */
+  --coffee: #3b2a1e;      /* roasted bean */
+  --tea: #a5743c;         /* black tea in a glass, amber */
+  --coffee-cherry: #8c3b2e; /* coffee cherry — the one restrained accent */
+
+  /* Growth */
+  --bark: #54402c;
+  --leaf-deep: #3d5231;
+  --leaf: #5f7a45;
+  --leaf-light: #93a86f;
+  --moss: #77875c;
+
+  /* Paper & ink */
+  --paper: #f2ede1;       /* parchment field-notes, not template cream */
+  --paper-warm: #e9e1cf;
+  --ink: #24291f;         /* deep green-black ink */
+  --ink-soft: #4c5344;
+
+  /* Utility */
+  --line: #d3c9b2;
+  --white: #fdfbf5;
+  --focus: #1f5f8b;       /* focus ring — distinct from any brand hue */
+
+  /* Type */
+  --font-display: "Bricolage Grotesque", Georgia, serif;
+  --font-body: "Source Serif 4", "Noto Naskh Arabic", Georgia, serif;
+  --font-ui: "Karla", system-ui, sans-serif;
+
+  /* Rhythm */
+  --max-prose: 62ch;
+  --space-section: clamp(4rem, 12vh, 9rem);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1.075rem;
+  line-height: 1.7;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--soil-deep);
+}
+h1 { font-size: clamp(3.2rem, 9vw, 7.5rem); margin: 0; }
+h2 { font-size: clamp(2.2rem, 5.5vw, 4.25rem); margin: 0 0 1rem; }
+h3 { font-size: 1.4rem; margin: 0 0 0.5rem; }
+p { max-width: var(--max-prose); }
+a { color: var(--coffee-cherry); text-underline-offset: 0.2em; }
+img, svg { max-width: 100%; height: auto; }
+button { font: inherit; }
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  z-index: 200;
+  background: var(--white);
+  color: var(--ink);
+  padding: 0.75rem 1.25rem;
+  font-family: var(--font-ui);
+  font-weight: 700;
+}
+.skip-link:focus { left: 0.75rem; top: 0.75rem; }
+
+.wrap {
+  width: min(1120px, 100% - 2.5rem);
+  margin-inline: auto;
+}
+
+/* Eyebrow / tag label used across sections. Small caps need 4.5:1, so this
+   is --soil (9.5:1 on paper) — never --tea (3.5:1, large display text only). */
+.tag {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--soil);
+  margin: 0 0 0.75rem;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
