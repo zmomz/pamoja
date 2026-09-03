@@ -1,6 +1,4 @@
 ---
-import { SECTIONS, CONTACT } from '../lib/sections';
-
 interface Props {
   /** Pre-rendered HTML from the CMS; omitted while wording is placeholder. */
   landAcknowledgmentHtml?: string;
@@ -8,12 +6,33 @@ interface Props {
 }
 
 const { landAcknowledgmentHtml, contactEmail = 'hello@pamoja.example' } = Astro.props;
+
+// Same homepage-relative trick as the header: plain anchors at "/", absolute
+// "/#…" from the 404/thank-you pages.
+const home = Astro.url.pathname === '/';
+const links = [
+  { href: '#ground', label: 'Ground' },
+  { href: '#roots', label: 'Roots' },
+  { href: '#who-we-are', label: 'Who we are' },
+  { href: '#our-work', label: 'Work' },
+  { href: '#what-we-offer', label: 'Offer' },
+  { href: '#seeds', label: 'Seeds' },
+  { href: '#contact', label: 'Contact' },
+].map((link) => ({ ...link, href: (home ? '' : '/') + link.href }));
 ---
 
 <footer class="site-footer">
   <div class="footer-grid">
     <div class="footer-brand">
-      <a class="footer-wordmark" href="/">PAMOJA</a>
+      <a class="footer-wordmark" href="/" aria-label="Pamoja Cultural Collective — home">
+        <img
+          src="/brand/logo-white-860.png"
+          alt="Pamoja"
+          width="860"
+          height="493"
+          class="footer-logo"
+        />
+      </a>
       <p class="footer-tagline">Pamoja means together.</p>
       <p class="footer-contact">
         <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
@@ -22,10 +41,9 @@ const { landAcknowledgmentHtml, contactEmail = 'hello@pamoja.example' } = Astro.
 
     <nav class="footer-nav" aria-label="Footer">
       <ul>
-        {SECTIONS.map((s) => (
-          <li><a href={s.path}>{s.label}</a></li>
+        {links.map((link) => (
+          <li><a href={link.href}>{link.label}</a></li>
         ))}
-        <li><a href={CONTACT.path}>{CONTACT.label}</a></li>
       </ul>
     </nav>
 
@@ -42,7 +60,7 @@ const { landAcknowledgmentHtml, contactEmail = 'hello@pamoja.example' } = Astro.
 
 <style>
   .site-footer {
-    background: var(--soil-deep);
+    background: var(--night);
     color: var(--paper);
     padding: clamp(3rem, 8vh, 5rem) 4vw 2rem;
     font-family: var(--font-ui);
@@ -60,16 +78,17 @@ const { landAcknowledgmentHtml, contactEmail = 'hello@pamoja.example' } = Astro.
   }
 
   .footer-wordmark {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 2rem;
-    letter-spacing: 0.08em;
-    color: var(--paper);
+    display: inline-block;
     text-decoration: none;
   }
+  .footer-logo {
+    display: block;
+    height: 56px;
+    width: auto;
+  }
   .footer-tagline {
-    margin: 0.5rem 0 1.25rem;
-    color: var(--leaf-light);
+    margin: 0.75rem 0 1.25rem;
+    color: var(--ochre-light);
     font-size: 0.95rem;
   }
   .footer-contact {
@@ -78,7 +97,7 @@ const { landAcknowledgmentHtml, contactEmail = 'hello@pamoja.example' } = Astro.
   }
 
   .site-footer a {
-    color: var(--leaf-light);
+    color: var(--river-light);
     text-underline-offset: 0.2em;
   }
   .site-footer a:hover {
@@ -106,7 +125,7 @@ const { landAcknowledgmentHtml, contactEmail = 'hello@pamoja.example' } = Astro.
     font-weight: 700;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: var(--leaf-light);
+    color: var(--ochre-light);
     margin: 0 0 0.6rem;
   }
   .land-ack p {

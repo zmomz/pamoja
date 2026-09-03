@@ -6,7 +6,9 @@ ground in Hamilton, Ontario.
 
 ## Stack
 
-- **Astro 5**, fully static output (`output: 'static'`) — 20 pages, no client framework.
+- **Astro 5**, fully static output (`output: 'static'`) — one scrolling homepage
+  (all content lives in anchored sections of `/`), plus `/thank-you` and `/404`.
+  No client framework.
 - **Sanity 3** — content backend, with the Studio embedded at `/studio`
   (`@sanity/astro` integration, `studioBasePath: '/studio'`).
 - **Netlify** — hosting + Netlify Forms for the inquiry form (no third-party form service).
@@ -80,10 +82,10 @@ Node 22, and an SPA fallback redirect for `/studio/*`.
 
 ## Repository map
 
-- `src/pages/` — one file per route; `[...slug].astro` routes render event/service detail pages.
-- `src/layouts/Base.astro` — head (SEO/OG/canonical/Plausible), skip link, header, footer, tree indicator.
-- `src/components/` — header, footer, tree indicator, inquiry form, homepage hero tree (inline SVG).
-- `src/lib/` — data layer (Sanity + seed fallback), section registry, portable-text renderer.
+- `src/pages/` — `index.astro` (the whole site), `404.astro`, `thank-you.astro`.
+- `src/layouts/Base.astro` — head (SEO/OG/canonical/Plausible), skip link, header, footer, journey rail, shared popover, and the reveal/scrollspy script.
+- `src/components/` — header, footer, journey rail, popover, inquiry form; `src/components/sections/` holds the homepage sections in scroll order (hero → contact), including the inline SVG scenes.
+- `src/lib/` — data layer (Sanity + seed fallback) and portable-text renderer.
 - `src/seed/` — launch content, also the payload for `npm run import-seed`.
 - `src/sanity/schemas/` — Sanity schema; `sanity.config.ts` mounts the Studio at `/studio`.
 - `scripts/import-seed.mjs` — seed importer (idempotent).

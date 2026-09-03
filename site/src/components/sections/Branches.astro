@@ -1,0 +1,115 @@
+---
+// 04 · Branches — Our Work. The four branches from the data layer as a 2×2
+// grid of cards; each card is a link to the archive below carrying
+// data-branch-target, which the Archive section's script turns into a filter
+// action (without JS it simply jumps to the archive).
+import { getBranches } from '../../lib/data';
+
+const branches = await getBranches();
+---
+
+<section id="our-work" class="journey journey--tinted" data-number="04" aria-labelledby="our-work-title">
+  <div class="art reveal">
+    <div class="branch-grid">
+      {branches.map((branch, i) => (
+        <a
+          class="branch-card"
+          href={`?serves=${branch.slug}#archive`}
+          data-branch-target={branch.slug}
+          aria-label={`${branch.title} — see the gatherings that served it`}
+        >
+          <span class="branch-num" aria-hidden="true">
+            Branch {String(i + 1).padStart(2, '0')}
+          </span>
+          <h3>{branch.title}</h3>
+          <p>{branch.description}</p>
+          <span class="go">Gatherings that served {branch.title.toLowerCase()} →</span>
+        </a>
+      ))}
+    </div>
+  </div>
+  <div class="copy">
+    <p class="tag reveal">04 · Branches</p>
+    <h2 class="reveal" data-d="1" id="our-work-title">Our Work</h2>
+    <p class="reveal" data-d="2">
+      Everything Pamoja grows hangs off four branches. They overlap on
+      purpose: an event can build connection, strengthen cohesion, deepen a
+      partnership, and link existing efforts at the same time. The filter
+      below shows the overlap rather than hiding it.
+    </p>
+    <a class="cta reveal" data-d="3" href="#archive">Explore the archive →</a>
+  </div>
+</section>
+
+<style>
+  .art {
+    min-height: 0;
+  }
+  .branch-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    width: 100%;
+    max-width: 590px;
+  }
+  .branch-card {
+    display: block;
+    padding: 1.5rem;
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--river);
+    border-radius: 18px;
+    background: color-mix(in srgb, var(--white) 55%, transparent);
+    min-height: 160px;
+    text-decoration: none;
+    color: var(--ink);
+    transition: transform 0.35s ease, box-shadow 0.35s ease, background 0.35s ease;
+  }
+  .branch-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 14px 28px color-mix(in srgb, var(--night) 10%, transparent);
+    background: var(--white);
+  }
+  .branch-num {
+    display: block;
+    font-family: var(--font-ui);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--karkadeh);
+    margin-bottom: 0.5rem;
+  }
+  .branch-card h3 {
+    font-size: 1.4rem;
+    margin: 0 0 0.5rem;
+  }
+  .branch-card p {
+    font-size: 0.92rem;
+    margin: 0;
+  }
+  .go {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-family: var(--font-ui);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--river-deep);
+  }
+  .branch-card:hover .go {
+    color: var(--hibiscus);
+  }
+
+  @media (max-width: 850px) {
+    .branch-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .branch-card {
+      transition: none;
+    }
+  }
+</style>

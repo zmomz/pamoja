@@ -1,7 +1,7 @@
 ---
 // The inquiry form (brief §5.6): relationship-first, not a booking form.
 // Netlify Forms — submissions route to email, no third-party harvesting.
-// Shared by /what-we-offer and /contact.
+// Lives in the homepage's contact section.
 ---
 
 <div class="inquiry">
@@ -120,7 +120,7 @@
     font-family: var(--font-ui);
     font-weight: 700;
     font-size: 0.95rem;
-    color: var(--soil-deep);
+    color: var(--night);
   }
   .hint {
     margin: 0;
@@ -142,7 +142,7 @@
   }
   input:focus,
   textarea:focus {
-    border-color: var(--clay);
+    border-color: var(--ochre);
   }
   .submit {
     justify-self: start;
@@ -150,7 +150,7 @@
     font-weight: 700;
     font-size: 1rem;
     color: var(--paper);
-    background: var(--soil-deep);
+    background: var(--karkadeh);
     border: none;
     border-radius: 999px;
     padding: 0.9rem 1.8rem;
@@ -158,7 +158,7 @@
     transition: background 0.25s ease;
   }
   .submit:hover {
-    background: var(--leaf-deep);
+    background: var(--river-deep);
   }
   @media (prefers-reduced-motion: reduce) {
     .submit {

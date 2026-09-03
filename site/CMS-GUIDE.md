@@ -15,7 +15,9 @@ each), then **Events/Programs, Services, Branches, Partners**.
 **Content → Event / Program → +**. Every field, in one line:
 
 - **Title** — the gathering's public name.
-- **Slug** — click Generate; becomes the URL (`/our-work/your-slug`).
+- **Slug** — click Generate; identifies the event internally. Events don't get
+  their own pages — they appear as cards in the archive ("Things we've grown")
+  on the homepage.
 - **Date or date range (display)** — as it should read, e.g. "October 2026" or "2023–2026".
 - **Start date** — real date; sorts the archive (most recent first).
 - **End date** — optional, for ranges.
@@ -26,7 +28,7 @@ each), then **Events/Programs, Services, Branches, Partners**.
 - **Handed on to** — the partner who now owns and runs it. Required when status is Handed on.
 - **Branches served** — which of the four branches this gathering served; pick every one
   that genuinely applies (most events serve several — that overlap is the point). This
-  drives the filter on /our-work.
+  drives the archive filter on the homepage.
 - **Description** — 2–3 paragraphs. Write the community as the actor: who hosted, who
   taught, what knowledge was shared. See the copy rules below.
 - **Partners and funders credited** — name everyone who co-created, hosted, or funded.
@@ -40,10 +42,12 @@ each), then **Events/Programs, Services, Branches, Partners**.
 - **Pull quote** — optional; one line that carries the gathering.
 - **Featured** — optional flag for highlighting.
 
-## Editing a service page
+## Editing a service
 
-**Content → Service** (Workshops, Hospitality rituals, Consultation). Every service page
-uses the same eight fixed sections, in this order — the consistency is deliberate:
+**Content → Service** (Workshops, Hospitality rituals, Consultation). Services appear
+as cards in the What We Offer section of the homepage; each card opens a popover that
+compresses the sections below. Every service uses the same eight fixed fields, in this
+order — the consistency is deliberate:
 
 1. **Summary** — one sentence, used in cards and search previews.
 2. **What it is** — a paragraph.
@@ -55,15 +59,15 @@ uses the same eight fixed sections, in this order — the consistency is deliber
 7. **What this is not** — the short list that prevents wrong inquiries.
 8. **Time and lead time** — how long, how far ahead to ask.
 
-The last section on the page ("Start a conversation") is built in — no editing needed.
+The popover ends with a built-in link to the contact section — no editing needed.
 
-## Homepage passages and site settings
+## Homepage content and site settings
 
-- **Home Page** — the hero tagline, the positioning statement (the two short paragraphs
-  right after the hero), and one 40–80 word passage per tree part. Any paragraph you
-  start with `[` (a draft note) will **not** appear on the site — use that for works
-  in progress.
-- **Site Settings** — contact email (footer + contact page), social links, the **land
+- **Home Page** — the positioning statement (the dark band right after the hero).
+  Any paragraph you start with `[` (a draft note) will **not** appear on the site —
+  use that for works in progress. The per-tree-part passages and hero tagline stay
+  in the CMS but are not shown while the homepage carries its own section copy.
+- **Site Settings** — contact email (footer + contact section), social links, the **land
   acknowledgment** (appears in the footer of every page once real wording is entered),
   the default social-share image, and the Plausible analytics domain.
 

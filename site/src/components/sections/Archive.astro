@@ -1,0 +1,337 @@
+---
+// The archive — Leaves & fruit. A dark band holding the gathering filter and
+// grid from the former /our-work page: cards link nowhere (the old detail
+// routes are gone) and filtering happens in place, synced to ?serves=.
+import {
+  getBranches,
+  getEvents,
+  sortEvents,
+  type Event,
+} from '../../lib/data';
+
+const branches = await getBranches();
+const events = sortEvents(await getEvents());
+
+function teaser(event: Event, maxLength = 200): string {
+  const first = event.body.find((b) => b._type === 'block');
+  if (!first) return '';
+  const text = (first.children ?? []).map((c) => c.text).join('');
+  if (text.length <= maxLength) return text;
+  return text.slice(0, text.lastIndexOf(' ', maxLength)) + '…';
+}
+
+function statusBadge(event: Event): string {
+  if (event.status === 'handed-on') {
+    return event.handedOnTo
+      ? `Handed on — now stewarded by ${event.handedOnTo.name}`
+      : 'Handed on';
+  }
+  return event.status === 'upcoming' ? 'Upcoming' : 'Past';
+}
+---
+
+<section class="archive" id="archive" aria-labelledby="archive-heading">
+  <div class="archive-head">
+    <p class="tag reveal">Leaves &amp; fruit</p>
+    <h2 class="reveal" data-d="1" id="archive-heading">Things we've grown.</h2>
+    <p class="reveal" data-d="2">
+      Stories of hosting, teaching, making, gathering, and building together —
+      not a tally of people helped. Most events belong to more than one
+      branch; each card names the branches it served.
+    </p>
+  </div>
+
+  <div class="filters reveal" data-d="2" role="group" aria-label="Filter gatherings by branch" id="filters">
+    <a class="chip filter is-active" href="/#archive" data-branch="all" aria-pressed="true">All</a>
+    {branches.map((branch) => (
+      <a
+        class="chip filter"
+        href={`/?serves=${branch.slug}#archive`}
+        data-branch={branch.slug}
+        aria-pressed="false"
+      >
+        {branch.title}
+      </a>
+    ))}
+  </div>
+  <p class="visually-hidden" role="status" id="filter-status">
+    Showing all {events.length} gatherings.
+  </p>
+
+  <div class="events" id="events">
+    {events.map((event, i) => (
+      <article
+        class="event-card reveal"
+        data-d={String((i % 4) + 1)}
+        data-branches={event.branchesServed.map((b) => b.slug).join(' ')}
+      >
+        <p class="event-meta">{event.dateOrRange}</p>
+        <span class:list={['badge', `badge-${event.status}`]}>
+          {statusBadge(event)}
+        </span>
+        <h3>{event.title}</h3>
+        <p class="teaser">{teaser(event)}</p>
+        <ul class="branch-tags" aria-label="Branches this gathering served">
+          {event.branchesServed.map((branch) => (
+            <li>
+              <a href={`/?serves=${branch.slug}#archive`} data-branch-target={branch.slug}>
+                {branch.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+        {event.partnersCredited.length > 0 && (
+          <p class="credits">
+            With {event.partnersCredited.map((p) => p.name).join(' · ')}
+          </p>
+        )}
+      </article>
+    ))}
+  </div>
+
+  <p class="quiet-line reveal">
+    Since 2023, Pamoja's community has hosted roughly 50 community
+    gatherings and public programs, grown a network of seven-plus partners,
+    and earned support from five municipal, corporate, and arts funders.
+  </p>
+</section>
+
+<script is:inline>
+  (function () {
+    var filters = document.getElementById('filters');
+    var eventsEl = document.getElementById('events');
+    var status = document.getElementById('filter-status');
+    if (!filters || !eventsEl || !status) return;
+
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var links = Array.prototype.slice.call(filters.querySelectorAll('a[data-branch]'));
+    var cards = Array.prototype.slice.call(eventsEl.querySelectorAll('[data-branches]'));
+
+    // Progressive enhancement: links become toggle controls. Without JS they
+    // stay ordinary links and every event remains visible.
+    links.forEach(function (link) {
+      link.setAttribute('role', 'button');
+    });
+
+    function isBranch(value) {
+      return links.some(function (l) { return l.getAttribute('data-branch') === value; });
+    }
+
+    function currentBranch() {
+      var value = new URLSearchParams(window.location.search).get('serves');
+      return value && isBranch(value) ? value : 'all';
+    }
+
+    function apply(branch, updateUrl) {
+      var count = 0;
+      cards.forEach(function (card) {
+        var show = branch === 'all' || card.getAttribute('data-branches').split(' ').indexOf(branch) !== -1;
+        card.hidden = !show;
+        if (show) count++;
+      });
+      links.forEach(function (link) {
+        var active = link.getAttribute('data-branch') === branch;
+        link.setAttribute('aria-pressed', String(active));
+        link.classList.toggle('is-active', active);
+      });
+      status.textContent =
+        branch === 'all'
+          ? 'Showing all ' + count + ' gatherings.'
+          : 'Showing ' + count + ' gathering' + (count === 1 ? '' : 's') + '.';
+      if (updateUrl) {
+        var url = branch === 'all'
+          ? window.location.pathname + window.location.hash
+          : window.location.pathname + '?serves=' + branch + window.location.hash;
+        window.history.replaceState(null, '', url);
+      }
+    }
+
+    function scrollToArchive() {
+      var archive = document.getElementById('archive');
+      if (!archive) return;
+      archive.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+      if (!archive.hasAttribute('tabindex')) archive.setAttribute('tabindex', '-1');
+      archive.focus({ preventScroll: true });
+    }
+
+    filters.addEventListener('click', function (event) {
+      var link = event.target.closest('a[data-branch]');
+      if (!link) return;
+      event.preventDefault();
+      apply(link.getAttribute('data-branch'), true);
+    });
+
+    // Branch cards (and in-card branch tags) elsewhere on the page set the
+    // filter and travel here. Capture phase + stopPropagation so the global
+    // anchor handler doesn't double-handle the jump.
+    document.addEventListener('click', function (event) {
+      var trigger = event.target.closest('a[data-branch-target]');
+      if (!trigger) return;
+      var branch = trigger.getAttribute('data-branch-target');
+      if (!isBranch(branch)) return;
+      event.preventDefault();
+      event.stopPropagation();
+      apply(branch, true);
+      scrollToArchive();
+    }, true);
+
+    apply(currentBranch(), false);
+  })();
+</script>
+
+<style>
+  .archive {
+    background: var(--night);
+    color: var(--cream);
+    padding: 13vh 8vw;
+    scroll-margin-top: 4rem;
+  }
+  .archive-head {
+    max-width: 760px;
+    margin-bottom: 2.5rem;
+  }
+  .archive .tag {
+    color: var(--river-light);
+  }
+  .archive h2 {
+    color: var(--paper);
+    margin: 0 0 1rem;
+  }
+  .archive-head p {
+    color: color-mix(in srgb, var(--cream) 78%, transparent);
+  }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1.5rem 0 0.5rem;
+  }
+  .filter {
+    text-decoration: none;
+    background: transparent;
+    border-color: color-mix(in srgb, var(--paper) 28%, transparent);
+    color: var(--cream);
+  }
+  .filter:hover {
+    border-color: color-mix(in srgb, var(--paper) 55%, transparent);
+    box-shadow: none;
+  }
+  .filter.is-active,
+  .filter[aria-pressed='true'] {
+    background: var(--cream);
+    border-color: var(--cream);
+    color: var(--night);
+  }
+
+  .events {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+    margin-top: 1.5rem;
+  }
+  .event-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    background: color-mix(in srgb, var(--paper) 5%, transparent);
+    border: 1px solid color-mix(in srgb, var(--paper) 14%, transparent);
+    border-radius: 18px;
+    padding: 1.6rem 1.5rem;
+    transition: border-color 0.35s ease, transform 0.35s ease, background 0.35s ease;
+  }
+  .event-card:hover {
+    border-color: color-mix(in srgb, var(--paper) 32%, transparent);
+    transform: translateY(-4px);
+    background: color-mix(in srgb, var(--paper) 8%, transparent);
+  }
+  .event-card[hidden] {
+    display: none;
+  }
+  .event-meta {
+    font-family: var(--font-ui);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--river-light);
+    margin: 0;
+  }
+  .badge {
+    align-self: flex-start;
+    font-family: var(--font-ui);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    border-radius: 999px;
+    padding: 0.25rem 0.75rem;
+  }
+  .badge-upcoming {
+    background: var(--river);
+    color: var(--paper);
+  }
+  .badge-past {
+    background: transparent;
+    color: color-mix(in srgb, var(--cream) 75%, transparent);
+    border: 1px solid color-mix(in srgb, var(--paper) 25%, transparent);
+  }
+  .badge-handed-on {
+    background: var(--ochre);
+    color: var(--night);
+  }
+  .event-card h3 {
+    margin: 0;
+    font-size: 1.35rem;
+    color: var(--paper);
+  }
+  .teaser {
+    margin: 0;
+    font-size: 0.98rem;
+    color: color-mix(in srgb, var(--cream) 78%, transparent);
+  }
+  .branch-tags {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0.25rem 0 0;
+    padding: 0;
+  }
+  .branch-tags a {
+    display: inline-block;
+    font-family: var(--font-ui);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--river-light);
+    border: 1px solid color-mix(in srgb, var(--river-light) 45%, transparent);
+    border-radius: 999px;
+    padding: 0.2rem 0.7rem;
+  }
+  .branch-tags a:hover {
+    color: var(--paper);
+    border-color: var(--river-light);
+  }
+  .credits {
+    margin: auto 0 0;
+    padding-top: 0.75rem;
+    border-top: 1px dashed color-mix(in srgb, var(--paper) 20%, transparent);
+    font-family: var(--font-ui);
+    font-size: 0.82rem;
+    color: color-mix(in srgb, var(--cream) 65%, transparent);
+  }
+
+  .quiet-line {
+    margin: 3rem 0 0;
+    padding-top: 1.5rem;
+    border-top: 1px solid color-mix(in srgb, var(--paper) 18%, transparent);
+    font-size: 0.95rem;
+    color: color-mix(in srgb, var(--cream) 65%, transparent);
+    max-width: var(--max-prose);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .event-card {
+      transition: none;
+    }
+  }
+</style>

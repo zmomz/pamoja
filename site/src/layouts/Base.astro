@@ -9,8 +9,8 @@ import '../styles/global.css';
 
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
-import TreeIndicator from '../components/TreeIndicator.astro';
-import type { SectionId } from '../lib/sections';
+import JourneyRail from '../components/JourneyRail.astro';
+import Popover from '../components/Popover.astro';
 import { getSiteSettings, sanityConfigured } from '../lib/data';
 import { renderPortableText, blockPlainText } from '../lib/portableText';
 
@@ -18,11 +18,8 @@ interface Props {
   title: string;
   description: string;
   ogImage?: string;
-  currentSection?: SectionId;
   /** Privacy-respecting analytics; also read from PUBLIC_PLAUSIBLE_DOMAIN. No GA. */
   plausibleDomain?: string;
-  /** Forwarded to TreeIndicator: link to homepage anchors instead of routes. */
-  useAnchors?: boolean;
 }
 
 const settings = await getSiteSettings();
@@ -31,10 +28,8 @@ const {
   title,
   description,
   ogImage,
-  currentSection,
   plausibleDomain = import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN ??
     (sanityConfigured ? settings.plausibleDomain : undefined),
-  useAnchors = false,
 } = Astro.props;
 
 // Land acknowledgment (brief §9.5). Editorial placeholder blocks render as
@@ -53,7 +48,7 @@ const pageTitle =
 
 const site = Astro.site ?? new URL('https://pamoja-collective.netlify.app');
 const canonicalUrl = new URL(Astro.url.pathname, site);
-const ogImageUrl = new URL(ogImage ?? settings.ogDefaultImage?.url ?? '/og-default.png', site);
+const ogImageUrl = new URL(ogImage ?? settings.ogDefaultImage?.url ?? '/brand/og-image.png', site);
 ---
 
 <!doctype html>
@@ -61,7 +56,11 @@ const ogImageUrl = new URL(ogImage ?? settings.ogDefaultImage?.url ?? '/og-defau
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+    <link rel="icon" type="image/png" sizes="32x32" href="/brand/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/brand/apple-touch-icon.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
@@ -77,7 +76,7 @@ const ogImageUrl = new URL(ogImage ?? settings.ogDefaultImage?.url ?? '/og-defau
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
 
-    <meta name="theme-color" content="#2e2419" />
+    <meta name="theme-color" content="#822B2D" />
 
     {plausibleDomain && (
       <script is:inline defer data-domain={plausibleDomain} src="https://plausible.io/js/script.js"></script>
@@ -87,12 +86,159 @@ const ogImageUrl = new URL(ogImage ?? settings.ogDefaultImage?.url ?? '/og-defau
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <SiteHeader currentSection={currentSection} />
+    <SiteHeader />
     <main id="main">
       <slot />
     </main>
     <SiteFooter landAcknowledgmentHtml={landAcknowledgmentHtml} contactEmail={settings.contactEmail} />
-    <TreeIndicator currentSection={currentSection} useAnchors={useAnchors} />
+    {Astro.url.pathname === '/' && (
+      <>
+        <JourneyRail />
+        <Popover />
+      </>
+    )}
+
+    <script is:inline>
+      // Shared motion for the single page. Everything visual is gated on
+      // motion being welcome; scrollspy/rail state updates regardless.
+      // Without JS: .reveal/.art children are simply visible and anchors
+      // jump natively.
+      (function () {
+        var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        // Reveal-on-scroll (.reveal, stagger via data-d) and section art
+        // choreography (.art gets .in, playing .draw/.grow/.fade-in).
+        var revealEls = document.querySelectorAll('.reveal');
+        var artEls = document.querySelectorAll('.art');
+        if (reduceMotion || !('IntersectionObserver' in window)) {
+          revealEls.forEach(function (el) { el.classList.add('in'); });
+          artEls.forEach(function (el) { el.classList.add('in'); });
+        } else {
+          var revealObs = new IntersectionObserver(function (entries) {
+            entries.forEach(function (en) {
+              if (en.isIntersecting) {
+                en.target.classList.add('in');
+                revealObs.unobserve(en.target);
+              }
+            });
+          }, { threshold: 0.18 });
+          revealEls.forEach(function (el) { revealObs.observe(el); });
+
+          var artObs = new IntersectionObserver(function (entries) {
+            entries.forEach(function (en) {
+              if (en.isIntersecting) {
+                en.target.classList.add('in');
+                artObs.unobserve(en.target);
+              }
+            });
+          }, { threshold: 0.3 });
+          artEls.forEach(function (el) { artObs.observe(el); });
+        }
+
+        // Smooth-scroll for in-page anchors, with focus moved to the target
+        // so keyboard and screen-reader users land in the section.
+        document.addEventListener('click', function (e) {
+          var a = e.target.closest('a[href^="#"]');
+          if (!a) return;
+          var hash = a.getAttribute('href');
+          if (!hash || hash.length < 2) return;
+          var t = document.getElementById(hash.slice(1));
+          if (!t) return;
+          e.preventDefault();
+          t.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+          history.pushState(null, '', hash);
+          if (!t.hasAttribute('tabindex')) t.setAttribute('tabindex', '-1');
+          t.focus({ preventScroll: true });
+        });
+
+        // Scrollspy: rail fill, rail stop positions and done/current state,
+        // header active link, ghost-number intensify.
+        var railStops = Array.prototype.slice.call(document.querySelectorAll('.rail-stop[data-stop]'));
+        var chipLinks = Array.prototype.slice.call(document.querySelectorAll('.journey-chip a[data-stop]'));
+        var headerLinks = Array.prototype.slice.call(document.querySelectorAll('.nav-desktop a[href^="#"]'));
+        var fill = document.getElementById('rail-fill');
+
+        var ids = [];
+        railStops.forEach(function (el) {
+          var id = el.getAttribute('data-stop');
+          if (ids.indexOf(id) === -1) ids.push(id);
+        });
+        headerLinks.forEach(function (el) {
+          var id = el.getAttribute('href').slice(1);
+          if (ids.indexOf(id) === -1) ids.push(id);
+        });
+        var targets = ids
+          .map(function (id) { return { id: id, el: document.getElementById(id) }; })
+          .filter(function (s) { return s.el; });
+        var journeySections = document.querySelectorAll('section.journey');
+
+        function absTop(el) { return el.getBoundingClientRect().top + window.scrollY; }
+
+        function updateJourney() {
+          if (!targets.length) return;
+          var vh = window.innerHeight;
+          targets.sort(function (a, b) { return absTop(a.el) - absTop(b.el); });
+          var top = absTop(targets[0].el);
+          var last = targets[targets.length - 1].el;
+          var bottom = absTop(last) + last.offsetHeight;
+          var span = Math.max(1, bottom - top);
+          var pos = window.scrollY + vh * 0.5;
+          if (fill) {
+            fill.style.transform = 'scaleY(' + Math.min(1, Math.max(0, (pos - top) / span)) + ')';
+          }
+
+          var currentIndex = -1;
+          targets.forEach(function (s, i) {
+            if (absTop(s.el) <= window.scrollY + vh * 0.45) currentIndex = i;
+          });
+          var currentId = currentIndex >= 0 ? targets[currentIndex].id : null;
+
+          railStops.forEach(function (stop) {
+            var id = stop.getAttribute('data-stop');
+            var idx = -1;
+            targets.forEach(function (s, i) { if (s.id === id) idx = i; });
+            if (idx > -1) {
+              var s = targets[idx];
+              var frac = Math.min(1, Math.max(0, (absTop(s.el) + s.el.offsetHeight * 0.4 - top) / span));
+              stop.style.top = (frac * 100) + '%';
+            }
+            stop.classList.toggle('is-done', idx > -1 && idx < currentIndex);
+            stop.classList.toggle('is-current', idx === currentIndex);
+            if (idx === currentIndex) stop.setAttribute('aria-current', 'location');
+            else stop.removeAttribute('aria-current');
+          });
+          chipLinks.forEach(function (link) {
+            var isCurrent = link.getAttribute('data-stop') === currentId;
+            link.classList.toggle('is-current', isCurrent);
+            if (isCurrent) link.setAttribute('aria-current', 'location');
+            else link.removeAttribute('aria-current');
+          });
+          headerLinks.forEach(function (link) {
+            var isActive = link.getAttribute('href') === '#' + currentId;
+            link.classList.toggle('is-active', isActive);
+            if (isActive) link.setAttribute('aria-current', 'location');
+            else link.removeAttribute('aria-current');
+          });
+          journeySections.forEach(function (s) {
+            var r = s.getBoundingClientRect();
+            s.classList.toggle('in-view', r.top < vh * 0.6 && r.bottom > vh * 0.4);
+          });
+        }
+
+        var ticking = false;
+        window.addEventListener('scroll', function () {
+          if (!ticking) {
+            ticking = true;
+            requestAnimationFrame(function () {
+              ticking = false;
+              updateJourney();
+            });
+          }
+        }, { passive: true });
+        window.addEventListener('resize', updateJourney);
+        updateJourney();
+      })();
+    </script>
   </body>
 </html>
 

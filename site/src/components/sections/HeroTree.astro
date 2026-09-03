@@ -2,7 +2,7 @@
 // The whole Pamoja tree standing in its ground — the site's central asset.
 // Every named part group is wrapped in a keyboard-focusable link to its
 // journey anchor. Pure SVG + CSS; the scroll-linked descent is driven by the
-// --hero-p custom property (set by the homepage script, no-preference only).
+// --hero-p custom property (set by the Hero script, no-preference only).
 ---
 
 <div class="hero-tree" id="hero-tree">
@@ -22,35 +22,35 @@
 
     <defs>
       <radialGradient id="ht-sky" cx="0.5" cy="0.42" r="0.75">
-        <stop offset="0" style="stop-color: var(--paper-warm)" stop-opacity="0.9" />
-        <stop offset="0.6" style="stop-color: var(--paper-warm)" stop-opacity="0.35" />
-        <stop offset="1" style="stop-color: var(--paper-warm)" stop-opacity="0" />
+        <stop offset="0" style="stop-color: var(--cream)" stop-opacity="0.9" />
+        <stop offset="0.6" style="stop-color: var(--cream)" stop-opacity="0.35" />
+        <stop offset="1" style="stop-color: var(--cream)" stop-opacity="0" />
       </radialGradient>
       <linearGradient id="ht-soil" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" style="stop-color: var(--clay)" />
-        <stop offset="0.45" style="stop-color: var(--soil)" />
-        <stop offset="1" style="stop-color: var(--soil-deep)" />
+        <stop offset="0" style="stop-color: var(--ochre)" />
+        <stop offset="0.45" style="stop-color: var(--karkadeh)" />
+        <stop offset="1" style="stop-color: var(--karkadeh-deep)" />
       </linearGradient>
       <linearGradient id="ht-bark" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0" style="stop-color: var(--coffee)" />
-        <stop offset="0.45" style="stop-color: var(--bark)" />
-        <stop offset="0.75" style="stop-color: var(--clay)" />
-        <stop offset="1" style="stop-color: var(--coffee)" />
+        <stop offset="0" style="stop-color: var(--night)" />
+        <stop offset="0.45" style="stop-color: var(--karkadeh-deep)" />
+        <stop offset="0.75" style="stop-color: var(--karkadeh)" />
+        <stop offset="1" style="stop-color: var(--night)" />
       </linearGradient>
       <radialGradient id="ht-leaf-a" cx="0.4" cy="0.35" r="1">
-        <stop offset="0" style="stop-color: var(--leaf-light)" />
-        <stop offset="0.55" style="stop-color: var(--leaf)" />
-        <stop offset="1" style="stop-color: var(--leaf-deep)" />
+        <stop offset="0" style="stop-color: var(--river-pale)" />
+        <stop offset="0.55" style="stop-color: var(--river)" />
+        <stop offset="1" style="stop-color: var(--river-deep)" />
       </radialGradient>
       <radialGradient id="ht-leaf-b" cx="0.42" cy="0.32" r="1">
-        <stop offset="0" style="stop-color: var(--leaf-light)" />
-        <stop offset="0.55" style="stop-color: var(--moss)" />
-        <stop offset="1" style="stop-color: var(--leaf-deep)" />
+        <stop offset="0" style="stop-color: var(--river-pale)" />
+        <stop offset="0.55" style="stop-color: var(--river-light)" />
+        <stop offset="1" style="stop-color: var(--river-deep)" />
       </radialGradient>
       <radialGradient id="ht-leaf-c" cx="0.45" cy="0.3" r="1">
-        <stop offset="0" style="stop-color: var(--moss)" />
-        <stop offset="0.6" style="stop-color: var(--leaf)" />
-        <stop offset="1" style="stop-color: var(--leaf-deep)" />
+        <stop offset="0" style="stop-color: var(--river-light)" />
+        <stop offset="0.6" style="stop-color: var(--river)" />
+        <stop offset="1" style="stop-color: var(--river-deep)" />
       </radialGradient>
     </defs>
 
@@ -65,17 +65,17 @@
             d="M30 656 Q200 630 360 636 Q520 642 690 656 L690 800 L30 800 Z"
             fill="url(#ht-soil)"
           />
-          <path d="M30 656 Q200 630 360 636 Q520 642 690 656" fill="none" class="st-clay" stroke-width="5" stroke-linecap="round" opacity="0.85" />
+          <path d="M30 656 Q200 630 360 636 Q520 642 690 656" fill="none" class="st-ochre" stroke-width="5" stroke-linecap="round" opacity="0.85" />
           {/* Strata — quiet, horizontal, held in common */}
-          <path d="M62 706 Q360 684 658 708" fill="none" class="st-clay" stroke-width="3" stroke-linecap="round" opacity="0.35" />
-          <path d="M92 758 Q360 742 628 760" fill="none" class="st-clay" stroke-width="3" stroke-linecap="round" opacity="0.25" />
+          <path d="M62 706 Q360 684 658 708" fill="none" class="st-ochre" stroke-width="3" stroke-linecap="round" opacity="0.35" />
+          <path d="M92 758 Q360 742 628 760" fill="none" class="st-ochre" stroke-width="3" stroke-linecap="round" opacity="0.25" />
           {/*
             Three marks in the soil at equal weight (brief §2): two parallel
             paths, one shared vessel, one ring — abstract forms of our own for
             the Two Row, the Dish With One Spoon, and the Charter. Never
             wampum imagery (§9.1).
           */}
-          <g fill="none" class="st-paperwarm" stroke-width="4" stroke-linecap="round" opacity="0.8">
+          <g fill="none" class="st-cream" stroke-width="4" stroke-linecap="round" opacity="0.8">
             <path d="M96 744 Q150 732 204 744" />
             <path d="M96 764 Q150 752 204 764" />
             <path d="M312 744 L408 744" />
@@ -83,29 +83,29 @@
             <circle cx="570" cy="754" r="17" />
           </g>
           {/* Grass and stones along the horizon */}
-          <g fill="none" class="st-leaf" stroke-width="3" stroke-linecap="round" opacity="0.8">
+          <g fill="none" class="st-river" stroke-width="3" stroke-linecap="round" opacity="0.8">
             <path d="M118 646 l-5 -16 M127 648 l2 -19 M136 648 l7 -15" />
             <path d="M584 648 l-5 -16 M593 650 l2 -19 M602 650 l7 -15" />
             <path d="M268 640 l-4 -14 M276 642 l4 -15" />
             <path d="M470 642 l-3 -12 M477 643 l4 -13" />
           </g>
-          <ellipse cx="216" cy="666" rx="10" ry="6" class="f-clay" opacity="0.9" />
-          <ellipse cx="516" cy="670" rx="8" ry="5" class="f-clay" opacity="0.7" />
+          <ellipse cx="216" cy="666" rx="10" ry="6" class="f-ochre" opacity="0.9" />
+          <ellipse cx="516" cy="670" rx="8" ry="5" class="f-ochre" opacity="0.7" />
         </g>
       </a>
 
       <a href="#roots" class="tree-link" aria-label="Roots — Our Roots">
         <g id="tree-roots" fill="none" stroke-linecap="round">
-          {/* Distinctly Pamoja's: warm coffee tones reaching down into the shared soil */}
-          <path d="M358 648 C352 692 363 732 356 780" class="st-coffee" stroke-width="13" />
-          <path d="M352 652 C300 668 240 676 168 686" class="st-coffee" stroke-width="12" />
-          <path d="M368 652 C420 670 482 678 554 688" class="st-coffee" stroke-width="12" />
-          <path d="M354 656 C330 692 306 716 272 738" class="st-coffee" stroke-width="9" />
-          <path d="M366 656 C392 694 418 718 452 740" class="st-coffee" stroke-width="9" />
-          <path d="M352 650 C296 656 236 660 178 664" class="st-bark" stroke-width="6" opacity="0.85" />
-          <path d="M368 650 C424 658 484 662 542 666" class="st-bark" stroke-width="6" opacity="0.85" />
-          <path d="M186 684 l-10 8 M202 682 l-7 10 M518 686 l10 8 M502 684 l7 10" class="st-bark" stroke-width="2.5" opacity="0.55" />
-          <path d="M352 652 C302 666 246 674 184 684" class="st-tea" stroke-width="2.5" opacity="0.5" />
+          {/* Distinctly Pamoja's: deep karkadeh tones reaching down into the shared soil */}
+          <path d="M358 648 C352 692 363 732 356 780" class="st-karkadeh-deep" stroke-width="13" />
+          <path d="M352 652 C300 668 240 676 168 686" class="st-karkadeh-deep" stroke-width="12" />
+          <path d="M368 652 C420 670 482 678 554 688" class="st-karkadeh-deep" stroke-width="12" />
+          <path d="M354 656 C330 692 306 716 272 738" class="st-karkadeh-deep" stroke-width="9" />
+          <path d="M366 656 C392 694 418 718 452 740" class="st-karkadeh-deep" stroke-width="9" />
+          <path d="M352 650 C296 656 236 660 178 664" class="st-karkadeh" stroke-width="6" opacity="0.85" />
+          <path d="M368 650 C424 658 484 662 542 666" class="st-karkadeh" stroke-width="6" opacity="0.85" />
+          <path d="M186 684 l-10 8 M202 682 l-7 10 M518 686 l10 8 M502 684 l7 10" class="st-karkadeh" stroke-width="2.5" opacity="0.55" />
+          <path d="M352 652 C302 666 246 674 184 684" class="st-ochre" stroke-width="2.5" opacity="0.5" />
         </g>
       </a>
     </g>
@@ -119,18 +119,18 @@
             fill="url(#ht-bark)"
           />
           <g fill="none" stroke-linecap="round">
-            <path d="M346 640 C342 560 342 480 350 400" class="st-coffee" stroke-width="3.5" opacity="0.5" />
-            <path d="M380 644 C384 560 382 470 374 380" class="st-coffee" stroke-width="3" opacity="0.45" />
-            <path d="M360 336 C356 306 352 288 344 272" class="st-coffee" stroke-width="2.5" opacity="0.5" />
-            <path d="M392 520 C396 470 392 430 386 396" class="st-tea" stroke-width="2.5" opacity="0.4" />
+            <path d="M346 640 C342 560 342 480 350 400" class="st-night" stroke-width="3.5" opacity="0.5" />
+            <path d="M380 644 C384 560 382 470 374 380" class="st-night" stroke-width="3" opacity="0.45" />
+            <path d="M360 336 C356 306 352 288 344 272" class="st-night" stroke-width="2.5" opacity="0.5" />
+            <path d="M392 520 C396 470 392 430 386 396" class="st-ochre" stroke-width="2.5" opacity="0.4" />
           </g>
-          <ellipse cx="368" cy="470" rx="11" ry="18" class="f-coffee" />
-          <ellipse cx="368" cy="470" rx="11" ry="18" fill="none" class="st-tea" stroke-width="3" opacity="0.45" />
+          <ellipse cx="368" cy="470" rx="11" ry="18" class="f-night" />
+          <ellipse cx="368" cy="470" rx="11" ry="18" fill="none" class="st-ochre" stroke-width="3" opacity="0.45" />
         </g>
       </a>
 
       <a href="#our-work" class="tree-link" aria-label="Branches — Our Work">
-        <g id="tree-branches" fill="none" class="st-bark" stroke-linecap="round">
+        <g id="tree-branches" fill="none" class="st-karkadeh-deep" stroke-linecap="round">
           <path d="M336 430 C280 396 224 378 156 366" stroke-width="17" />
           <path d="M398 420 C452 388 512 372 578 364" stroke-width="17" />
           <path d="M340 330 C308 282 276 258 232 240" stroke-width="12" />
@@ -158,16 +158,16 @@
             fill="url(#ht-leaf-c)"
           />
           {/* Inner shade and light */}
-          <path d="M300 200 C330 176 380 172 412 194 C444 216 450 256 428 280 C406 304 360 308 330 288 C300 268 288 232 300 200 Z" class="f-leafdeep" opacity="0.35" />
-          <path d="M170 290 C192 264 234 258 260 278 C286 298 288 334 266 352 C244 370 204 368 182 346 C162 326 158 306 170 290 Z" class="f-leafdeep" opacity="0.3" />
-          <path d="M470 284 C494 260 536 256 560 278 C584 300 584 334 560 350 C536 366 498 362 478 340 C460 320 458 300 470 284 Z" class="f-leafdeep" opacity="0.3" />
-          <g fill="none" class="st-leaflight" stroke-width="5" stroke-linecap="round" opacity="0.5">
+          <path d="M300 200 C330 176 380 172 412 194 C444 216 450 256 428 280 C406 304 360 308 330 288 C300 268 288 232 300 200 Z" class="f-river-deep" opacity="0.35" />
+          <path d="M170 290 C192 264 234 258 260 278 C286 298 288 334 266 352 C244 370 204 368 182 346 C162 326 158 306 170 290 Z" class="f-river-deep" opacity="0.3" />
+          <path d="M470 284 C494 260 536 256 560 278 C584 300 584 334 560 350 C536 366 498 362 478 340 C460 320 458 300 470 284 Z" class="f-river-deep" opacity="0.3" />
+          <g fill="none" class="st-river-light" stroke-width="5" stroke-linecap="round" opacity="0.5">
             <path d="M268 150 C330 118 420 116 486 150" />
             <path d="M150 262 C196 238 258 234 308 250" />
             <path d="M430 246 C480 226 540 228 584 252" />
           </g>
           {/* A few individual leaves catching light */}
-          <g class="f-leaflight" opacity="0.75">
+          <g class="f-river-light" opacity="0.75">
             <path d="M256 118 C261 112 271 113 275 120 C270 128 260 127 256 122 Z" />
             <path d="M474 96 C479 90 489 91 493 98 C488 106 478 105 474 100 Z" />
             <path d="M586 216 C591 210 601 211 605 218 C600 226 590 225 586 220 Z" />
@@ -180,19 +180,19 @@
       <a href="#seeds" class="tree-link" aria-label="Seeds — What's Growing">
         <g id="tree-seeds">
           {/* Seeds resting at the foot of the tree */}
-          <ellipse cx="300" cy="670" rx="7" ry="11" transform="rotate(-18 300 670)" class="f-cherry" />
-          <ellipse cx="430" cy="672" rx="6" ry="10" transform="rotate(15 430 672)" class="f-tea" />
+          <ellipse cx="300" cy="670" rx="7" ry="11" transform="rotate(-18 300 670)" class="f-hibiscus" />
+          <ellipse cx="430" cy="672" rx="6" ry="10" transform="rotate(15 430 672)" class="f-ochre" />
           {/*
             The exchange made visible (brief §2): motes drift UP and OUT from
             the canopy into the sky — the tree gives back. Positioned by the
             wrapper transform; the rise animation lives on the child shape.
           */}
-          <g transform="translate(250 130)"><path class="mote m1 f-leaflight" d="M0 -6 C4.5 -2.5 4.5 2.5 0 6 C-4.5 2.5 -4.5 -2.5 0 -6 Z" /></g>
-          <g transform="translate(332 88)"><path class="mote m2 f-tea" d="M0 -5 C4 -2 4 2 0 5 C-4 2 -4 -2 0 -5 Z" /></g>
-          <g transform="translate(430 66)"><path class="mote m3 f-leaflight" d="M0 -6 C4.5 -2.5 4.5 2.5 0 6 C-4.5 2.5 -4.5 -2.5 0 -6 Z" /></g>
-          <g transform="translate(506 108)"><ellipse class="mote m4 f-cherry" rx="4.5" ry="7" transform="rotate(20)" /></g>
-          <g transform="translate(150 210)"><path class="mote m5 f-moss" d="M0 -5 C4 -2 4 2 0 5 C-4 2 -4 -2 0 -5 Z" /></g>
-          <g transform="translate(580 190)"><path class="mote m6 f-leaflight" d="M0 -5.5 C4.2 -2.2 4.2 2.2 0 5.5 C-4.2 2.2 -4.2 -2.2 0 -5.5 Z" /></g>
+          <g transform="translate(250 130)"><path class="mote m1 f-river-light" d="M0 -6 C4.5 -2.5 4.5 2.5 0 6 C-4.5 2.5 -4.5 -2.5 0 -6 Z" /></g>
+          <g transform="translate(332 88)"><path class="mote m2 f-ochre" d="M0 -5 C4 -2 4 2 0 5 C-4 2 -4 -2 0 -5 Z" /></g>
+          <g transform="translate(430 66)"><path class="mote m3 f-river-light" d="M0 -6 C4.5 -2.5 4.5 2.5 0 6 C-4.5 2.5 -4.5 -2.5 0 -6 Z" /></g>
+          <g transform="translate(506 108)"><ellipse class="mote m4 f-hibiscus" rx="4.5" ry="7" transform="rotate(20)" /></g>
+          <g transform="translate(150 210)"><path class="mote m5 f-river" d="M0 -5 C4 -2 4 2 0 5 C-4 2 -4 -2 0 -5 Z" /></g>
+          <g transform="translate(580 190)"><path class="mote m6 f-river-light" d="M0 -5.5 C4.2 -2.2 4.2 2.2 0 5.5 C-4.2 2.2 -4.2 -2.2 0 -5.5 Z" /></g>
         </g>
       </a>
     </g>
@@ -201,31 +201,29 @@
 
 <style>
   .hero-tree {
-    width: min(600px, 94vw);
-    margin-inline: auto;
+    width: 100%;
   }
   .hero-tree svg {
     display: block;
     width: 100%;
     height: auto;
-    filter: drop-shadow(0 26px 22px color-mix(in srgb, var(--soil-deep) 16%, transparent));
+    filter: drop-shadow(0 26px 22px color-mix(in srgb, var(--night) 16%, transparent));
   }
 
   /* Token fills/strokes (var() is unreliable in presentation attributes). */
-  .f-clay { fill: var(--clay); }
-  .f-coffee { fill: var(--coffee); }
-  .f-tea { fill: var(--tea); }
-  .f-cherry { fill: var(--coffee-cherry); }
-  .f-leafdeep { fill: var(--leaf-deep); }
-  .f-leaflight { fill: var(--leaf-light); }
-  .f-moss { fill: var(--moss); }
-  .st-clay { stroke: var(--clay); }
-  .st-coffee { stroke: var(--coffee); }
-  .st-bark { stroke: var(--bark); }
-  .st-tea { stroke: var(--tea); }
-  .st-paperwarm { stroke: var(--paper-warm); }
-  .st-leaf { stroke: var(--leaf); }
-  .st-leaflight { stroke: var(--leaf-light); }
+  .f-ochre { fill: var(--ochre); }
+  .f-night { fill: var(--night); }
+  .f-hibiscus { fill: var(--hibiscus); }
+  .f-river { fill: var(--river); }
+  .f-river-deep { fill: var(--river-deep); }
+  .f-river-light { fill: var(--river-light); }
+  .st-ochre { stroke: var(--ochre); }
+  .st-night { stroke: var(--night); }
+  .st-karkadeh { stroke: var(--karkadeh); }
+  .st-karkadeh-deep { stroke: var(--karkadeh-deep); }
+  .st-cream { stroke: var(--cream); }
+  .st-river { stroke: var(--river); }
+  .st-river-light { stroke: var(--river-light); }
 
   .tree-link > g {
     transition: filter 0.3s ease;
@@ -235,7 +233,7 @@
     filter: brightness(1.1);
   }
   .tree-link:focus-visible {
-    outline: 3px solid var(--focus);
+    outline: 3px solid var(--hibiscus);
     outline-offset: 4px;
   }
 

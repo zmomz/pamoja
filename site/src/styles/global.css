@@ -1,38 +1,30 @@
 /* ==========================================================================
-   Pamoja — design tokens
-   Palette is drawn from the physical world of the work (see DESIGN.md):
-   the earth of a Hamilton park in July, roasted coffee, black tea,
-   bark, leaf canopy, and parchment field-notes paper.
-   Deliberately NOT the stock cream + high-contrast serif + terracotta combo.
+   Pamoja — brand design system (single-page redesign)
+   Palette from the physical brand swatches: ochre, karkadeh red, river
+   green, hibiscus red. Warm neutrals (paper/cream/ink/night) are derived.
+   Hibiscus is a micro-accent only — large text, icons, focus rings. Links
+   and eyebrows at body size use river green for contrast.
    ========================================================================== */
 :root {
-  /* Ground & earth */
-  --soil-deep: #2e2419;   /* wet topsoil, near-black brown */
-  --soil: #4a3826;        /* park earth */
-  --clay: #6b5233;        /* dried clay path */
+  /* Brand */
+  --ochre: #D79031;
+  --ochre-light: #E8B06A;
+  --karkadeh: #822B2D;
+  --karkadeh-deep: #5E1F21;
+  --river: #437261;
+  --river-deep: #33584A;
+  --river-light: #7FA693;
+  --river-pale: #AFCDBD;
+  --hibiscus: #CC3300;
 
-  /* The practice: coffee & tea */
-  --coffee: #3b2a1e;      /* roasted bean */
-  --tea: #a5743c;         /* black tea in a glass, amber */
-  --coffee-cherry: #8c3b2e; /* coffee cherry — the one restrained accent */
-
-  /* Growth */
-  --bark: #54402c;
-  --leaf-deep: #3d5231;
-  --leaf: #5f7a45;
-  --leaf-light: #93a86f;
-  --moss: #77875c;
-
-  /* Paper & ink */
-  --paper: #f2ede1;       /* parchment field-notes, not template cream */
-  --paper-warm: #e9e1cf;
-  --ink: #24291f;         /* deep green-black ink */
-  --ink-soft: #4c5344;
-
-  /* Utility */
-  --line: #d3c9b2;
-  --white: #fdfbf5;
-  --focus: #1f5f8b;       /* focus ring — distinct from any brand hue */
+  /* Neutrals */
+  --paper: #FAF6EE;
+  --cream: #F2EBDC;
+  --ink: #28211B;
+  --night: #211C17;
+  --ink-soft: #5B5142;
+  --line: #DFD4BD;
+  --white: #FDFBF7;
 
   /* Type */
   --font-display: "Bricolage Grotesque", Georgia, serif;
@@ -49,11 +41,6 @@
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
 }
 
 body {
@@ -62,27 +49,38 @@ body {
   color: var(--ink);
   font-family: var(--font-body);
   font-size: 1.075rem;
-  line-height: 1.7;
+  line-height: 1.65;
   text-rendering: optimizeLegibility;
+}
+
+/* Grain: a whisper of fractal noise over everything, never interactive. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
 }
 
 h1, h2, h3 {
   font-family: var(--font-display);
   font-weight: 600;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-  color: var(--soil-deep);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--night);
 }
-h1 { font-size: clamp(3.2rem, 9vw, 7.5rem); margin: 0; }
-h2 { font-size: clamp(2.2rem, 5.5vw, 4.25rem); margin: 0 0 1rem; }
+h1 { font-size: clamp(4rem, 10vw, 9rem); margin: 0; }
+h2 { font-size: clamp(2.8rem, 6vw, 6rem); margin: 0 0 1rem; font-weight: 500; }
 h3 { font-size: 1.4rem; margin: 0 0 0.5rem; }
 p { max-width: var(--max-prose); }
-a { color: var(--coffee-cherry); text-underline-offset: 0.2em; }
+a { color: var(--river); text-underline-offset: 0.2em; }
 img, svg { max-width: 100%; height: auto; }
 button { font: inherit; }
 
 :focus-visible {
-  outline: 3px solid var(--focus);
+  outline: 3px solid var(--hibiscus);
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -91,7 +89,7 @@ button { font: inherit; }
   position: absolute;
   left: -999px;
   top: 0;
-  z-index: 200;
+  z-index: 1200;
   background: var(--white);
   color: var(--ink);
   padding: 0.75rem 1.25rem;
@@ -105,16 +103,15 @@ button { font: inherit; }
   margin-inline: auto;
 }
 
-/* Eyebrow / tag label used across sections. Small caps need 4.5:1, so this
-   is --soil (9.5:1 on paper) — never --tea (3.5:1, large display text only). */
+/* Eyebrow / tag label. River green holds 4.5:1 on paper at this size. */
 .tag {
   font-family: var(--font-ui);
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 700;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--soil);
-  margin: 0 0 0.75rem;
+  color: var(--river);
+  margin: 0 0 1.1rem;
 }
 
 .visually-hidden {
@@ -125,4 +122,353 @@ button { font: inherit; }
   clip: rect(0 0 0 0);
   white-space: nowrap;
   border: 0;
+}
+
+/* ==========================================================================
+   Journey sections — the shared section grammar for the single page.
+   <section id="ground" class="journey" data-number="01">
+     <div class="art reveal">…svg scene…</div>
+     <div class="copy">…tag, h2, prose, .cta…</div>
+   </section>
+   A child that must span both columns gets style="grid-column: 1 / -1".
+   Alternate bands add .journey--tinted (cream background).
+   ========================================================================== */
+section.journey {
+  position: relative;
+  min-height: 100vh;
+  padding: 13vh 8vw;
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 8vw;
+  align-items: center;
+  border-top: 1px solid var(--line);
+  overflow: hidden;
+  scroll-margin-top: 4rem;
+  background: var(--paper);
+}
+section.journey--tinted { background: var(--cream); }
+
+@media (max-width: 850px) {
+  section.journey {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    min-height: auto;
+    padding: 100px 7vw;
+  }
+}
+
+.copy { position: relative; z-index: 2; }
+
+/* Ghost numeral: driven by the section's data-number attribute. */
+.ghost-number::before,
+section.journey::before {
+  content: attr(data-number);
+  position: absolute;
+  right: 5vw;
+  top: 7vh;
+  z-index: 1;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(5rem, 13vw, 9rem);
+  line-height: 1;
+  color: color-mix(in srgb, var(--ink) 15%, transparent);
+  pointer-events: none;
+  transition: color 1s ease;
+}
+section.journey.in-view::before {
+  color: color-mix(in srgb, var(--ink) 24%, transparent);
+}
+
+/* ==========================================================================
+   Reveal-on-scroll. Elements are ONLY hidden when JS is running
+   (html.js, set before paint in Base.astro); without JS every .reveal is
+   fully visible. The motion script adds .in on intersection.
+   Stagger with data-d="1"…"4".
+   ========================================================================== */
+.reveal {
+  transition: opacity 0.9s cubic-bezier(0.22, 0.8, 0.3, 1),
+    transform 0.9s cubic-bezier(0.22, 0.8, 0.3, 1);
+}
+html.js .reveal { opacity: 0; transform: translateY(26px); }
+html.js .reveal.in { opacity: 1; transform: none; }
+.reveal[data-d="1"] { transition-delay: 0.1s; }
+.reveal[data-d="2"] { transition-delay: 0.2s; }
+.reveal[data-d="3"] { transition-delay: 0.32s; }
+.reveal[data-d="4"] { transition-delay: 0.44s; }
+
+/* ==========================================================================
+   Section art. An .art panel stages an SVG scene; the motion script adds
+   .in when it intersects, which plays the draw/grow/fade-in choreography.
+   Hidden states are JS-gated like .reveal: no JS, full scene.
+   ========================================================================== */
+.art {
+  min-height: 480px;
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+.art svg {
+  width: 100%;
+  height: auto;
+  max-width: 560px;
+  overflow: visible;
+}
+@media (max-width: 850px) {
+  .art { min-height: 340px; }
+}
+
+.art .draw {
+  transition: stroke-dashoffset 2.4s ease 0.2s;
+}
+html.js .art .draw {
+  stroke-dasharray: 1600;
+  stroke-dashoffset: 1600;
+}
+html.js .art.in .draw { stroke-dashoffset: 0; }
+
+.art .grow {
+  transition: transform 1.2s cubic-bezier(0.34, 1.4, 0.4, 1);
+}
+html.js .art .grow { transform: scale(0); }
+html.js .art.in .grow { transform: scale(1); }
+.art .grow.g1 { transition-delay: 0.15s; }
+.art .grow.g2 { transition-delay: 0.4s; }
+.art .grow.g3 { transition-delay: 0.65s; }
+.art .grow.g4 { transition-delay: 0.9s; }
+
+.art .fade-in {
+  transition: opacity 1.1s ease 1s;
+}
+html.js .art .fade-in { opacity: 0; }
+html.js .art.in .fade-in { opacity: 1; }
+
+/* A sprout grows from its base, a beat after the rest. */
+.art .sprout-grow {
+  transition: transform 1.4s cubic-bezier(0.34, 1.5, 0.4, 1) 1.1s;
+  transform-origin: 50% 100%;
+}
+html.js .art .sprout-grow { transform: scale(0); }
+html.js .art.in .sprout-grow { transform: scale(1); }
+
+/* ==========================================================================
+   Shared interactive elements.
+   ========================================================================== */
+
+/* Pill chip: word-chips over art, filter chips, partner chips.
+   Active state via .is-active or aria-pressed="true". */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--ink);
+  padding: 0.55rem 1.05rem;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: border-color 0.25s ease, background 0.25s ease,
+    transform 0.25s ease, box-shadow 0.25s ease;
+}
+.chip:hover {
+  border-color: var(--river);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px color-mix(in srgb, var(--night) 12%, transparent);
+}
+.chip.is-active,
+.chip[aria-pressed="true"] {
+  background: var(--karkadeh);
+  border-color: var(--karkadeh);
+  color: var(--paper);
+}
+
+/* Word-chip: the large display-face variant floated over section art. */
+.chip--word {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
+  padding: 0.7rem 1.25rem;
+}
+
+/* Chips floated over section art (.chip-float) appear once the scene has
+   played in — JS-gated like .reveal, so without JS they are simply visible.
+   Position each chip in the section's own scoped styles. */
+.chip-float {
+  position: absolute;
+  z-index: 3;
+  transition: opacity 0.7s ease, transform 0.7s ease,
+    border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+}
+html.js .art .chip-float {
+  opacity: 0;
+  transform: translateY(12px);
+}
+html.js .art.in .chip-float {
+  opacity: 1;
+  transform: none;
+}
+html.js .art.in .chip-float.d2 { transition-delay: 0.2s; }
+html.js .art.in .chip-float.d3 { transition-delay: 0.4s; }
+html.js .art.in .chip-float.d4 { transition-delay: 0.6s; }
+html.js .art.in .chip-float.d5 { transition-delay: 0.8s; }
+
+.card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 2rem 1.75rem;
+}
+
+/* Primary action: karkadeh on paper, lifts and turns river on hover. */
+.cta {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 1.1rem;
+  padding: 0.85rem 1.4rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--karkadeh);
+  color: var(--paper);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+.cta:hover {
+  background: var(--river);
+  color: var(--paper);
+  transform: translateY(-3px);
+}
+
+/* ==========================================================================
+   Idle ambient motion for section art. Only ever defined when motion is
+   welcome, so the reduced-motion block below never has to chase them.
+   ========================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  .sway {
+    transform-origin: 50% 80%;
+    animation: sway 10s ease-in-out infinite;
+  }
+  @keyframes sway {
+    0%, 100% { transform: rotate(-0.8deg); }
+    50% { transform: rotate(1.2deg); }
+  }
+
+  .bob { animation: bob 7s ease-in-out infinite; }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .rustle { transform-box: fill-box; }
+  .rustle-a { transform-origin: 55% 85%; animation: rustleA 7s ease-in-out infinite; }
+  .rustle-b { transform-origin: 50% 90%; animation: rustleB 8.5s ease-in-out infinite; }
+  .rustle-c { transform-origin: 45% 85%; animation: rustleC 7.8s ease-in-out infinite; }
+  @keyframes rustleA {
+    0%, 100% { transform: rotate(-1.2deg); }
+    50% { transform: rotate(1.5deg); }
+  }
+  @keyframes rustleB {
+    0%, 100% { transform: rotate(1.2deg); }
+    50% { transform: rotate(-1.8deg); }
+  }
+  @keyframes rustleC {
+    0%, 100% { transform: rotate(-1deg); }
+    50% { transform: rotate(1.6deg); }
+  }
+
+  .flutter {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: flutter 5s ease-in-out infinite;
+  }
+  .flutter.f2 { animation-delay: 1.5s; }
+  .flutter.f3 { animation-delay: 2.5s; }
+  @keyframes flutter {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(6deg); }
+  }
+
+  .realistic-leaf {
+    transform-box: fill-box;
+    transform-origin: bottom center;
+    animation: leafFlutter 4s ease-in-out infinite;
+  }
+  .realistic-leaf.rl2 { animation-delay: 1.2s; animation-duration: 5s; }
+  .realistic-leaf.rl3 { animation-delay: 2.4s; animation-duration: 4.5s; }
+  @keyframes leafFlutter {
+    0%, 100% { transform: rotate(-3deg) scale(1); }
+    50% { transform: rotate(4deg) scale(1.02); }
+  }
+
+  .soil-particle { animation: soilFloat 8s ease-in-out infinite; }
+  .soil-particle.sp2 { animation-delay: -3s; animation-duration: 10s; }
+  .soil-particle.sp3 { animation-delay: -6s; animation-duration: 9s; }
+  @keyframes soilFloat {
+    0%, 100% { transform: translateY(0) translateX(0); }
+    33% { transform: translateY(-4px) translateX(2px); }
+    66% { transform: translateY(2px) translateX(-2px); }
+  }
+
+  .cloud-drift { animation: cloudMove 30s ease-in-out infinite alternate; }
+  .cloud-drift.cd2 { animation-delay: -10s; animation-duration: 35s; }
+  @keyframes cloudMove {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(20px); }
+  }
+
+  .sun-rays { animation: spin 100s linear infinite; }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .flow path { animation: march 6s linear infinite; }
+  @keyframes march {
+    to { stroke-dashoffset: -180; }
+  }
+
+  .art.in .tip { animation: tipPulse 3.5s ease-in-out infinite 1.8s; }
+  @keyframes tipPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .art.in .sprout-grow { animation: sproutSway 6s ease-in-out infinite 2.8s; }
+  @keyframes sproutSway {
+    0%, 100% { transform: rotate(-3deg) scale(1); }
+    50% { transform: rotate(4deg) scale(1); }
+  }
+}
+
+/* ==========================================================================
+   Reduced motion: everything stops, everything is already visible.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+  html.js .reveal,
+  html.js .art .fade-in {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  html.js .art .draw {
+    stroke-dashoffset: 0 !important;
+    transition: none !important;
+  }
+  html.js .art .grow,
+  html.js .art .sprout-grow {
+    transform: scale(1) !important;
+    transition: none !important;
+  }
 }

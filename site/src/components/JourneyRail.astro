@@ -1,0 +1,262 @@
+---
+// The fixed left rail (≥1150px): a vertical track whose ochre→river fill
+// grows with scroll progress, with eight labeled stops — one per journey
+// section. The shared motion script in Base.astro positions the stops at
+// their sections' document offsets and marks them done/current; without
+// JS they sit at even intervals and still navigate. Below 1150px a
+// details/summary chip offers the same anchors with no JS at all.
+
+const STOPS = [
+  { id: 'ground', part: 'Soil' },
+  { id: 'roots', part: 'Roots' },
+  { id: 'who-we-are', part: 'Trunk' },
+  { id: 'our-work', part: 'Branches' },
+  { id: 'archive', part: 'Fruit' },
+  { id: 'what-we-offer', part: 'Canopy' },
+  { id: 'who-we-grow-with', part: 'Grove' },
+  { id: 'seeds', part: 'Seeds' },
+];
+---
+
+<nav class="journey-rail" aria-label="Where you are on the tree">
+  <div class="rail-track">
+    <div class="rail-fill" id="rail-fill" aria-hidden="true"></div>
+    {STOPS.map((stop, i) => (
+      <a
+        class="rail-stop"
+        href={`#${stop.id}`}
+        data-stop={stop.id}
+        style={`top: ${(i / (STOPS.length - 1)) * 100}%`}
+      >
+        <span class="rail-dot" aria-hidden="true"></span>
+        <span class="rail-label">{stop.part}</span>
+      </a>
+    ))}
+  </div>
+</nav>
+
+<details class="journey-chip">
+  <summary>
+    <span class="chip-mark" aria-hidden="true"></span>
+    On the tree
+  </summary>
+  <nav class="chip-panel" aria-label="Where you are on the tree">
+    <ul>
+      {STOPS.map((stop) => (
+        <li>
+          <a href={`#${stop.id}`} data-stop={stop.id}>
+            <span class="chip-part">{stop.part}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</details>
+
+<script is:inline>
+  (function () {
+    var chip = document.querySelector('.journey-chip');
+    if (!chip) return;
+    chip.addEventListener('click', function (e) {
+      if (e.target.closest('a')) chip.open = false;
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && chip.open) chip.open = false;
+    });
+  })();
+</script>
+
+<style>
+  /* ---------- Desktop rail ---------- */
+  .journey-rail {
+    display: none;
+  }
+  @media (min-width: 1150px) {
+    .journey-rail {
+      display: block;
+      position: fixed;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 40;
+      padding: 20px 14px;
+      background: color-mix(in srgb, var(--paper) 88%, transparent);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid var(--line);
+      border-radius: 40px;
+      box-shadow: 0 10px 30px color-mix(in srgb, var(--night) 10%, transparent);
+    }
+  }
+  .rail-track {
+    position: relative;
+    width: 2px;
+    height: min(52vh, 430px);
+    margin: 0 auto;
+    background: color-mix(in srgb, var(--ink) 15%, transparent);
+    border-radius: 2px;
+  }
+  .rail-fill {
+    position: absolute;
+    top: 0;
+    left: -1px;
+    width: 4px;
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(var(--ochre), var(--river));
+    transform-origin: top;
+    transform: scaleY(0);
+  }
+  .rail-stop {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: block;
+    padding: 8px;
+    margin: -8px;
+  }
+  .rail-dot {
+    display: block;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--paper);
+    border: 2px solid color-mix(in srgb, var(--ink) 25%, transparent);
+    transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+  .rail-stop.is-done .rail-dot {
+    background: var(--river);
+    border-color: var(--river);
+  }
+  .rail-stop.is-current .rail-dot {
+    background: var(--hibiscus);
+    border-color: var(--hibiscus);
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--hibiscus) 18%, transparent);
+  }
+  .rail-label {
+    position: absolute;
+    left: 26px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--font-ui);
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+  .rail-stop:hover .rail-label,
+  .rail-stop:focus-visible .rail-label,
+  .rail-stop.is-current .rail-label,
+  .journey-rail:hover .rail-stop.is-done .rail-label {
+    opacity: 0.9;
+  }
+
+  /* ---------- Mobile chip ---------- */
+  .journey-chip {
+    position: fixed;
+    right: 14px;
+    bottom: 14px;
+    z-index: 45;
+    font-family: var(--font-ui);
+  }
+  .journey-chip summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    list-style: none;
+    cursor: pointer;
+    padding: 0.6rem 0.95rem;
+    border-radius: 40px;
+    border: 1px solid var(--line);
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--night) 16%, transparent);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--night);
+  }
+  .journey-chip summary::-webkit-details-marker {
+    display: none;
+  }
+  .chip-mark {
+    width: 14px;
+    height: 14px;
+    flex: none;
+    background: var(--river);
+    border-radius: 80% 10% 80% 10%;
+    transform: rotate(-18deg);
+  }
+  .journey-chip[open] summary {
+    background: var(--night);
+    color: var(--paper);
+    border-color: var(--night);
+  }
+  .chip-panel {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 10px);
+    min-width: 200px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    box-shadow: 0 18px 44px color-mix(in srgb, var(--night) 22%, transparent);
+    padding: 0.5rem;
+  }
+  .chip-panel ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+  }
+  .chip-panel a {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    padding: 0.55rem 0.7rem;
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .chip-panel a:hover {
+    background: var(--cream);
+  }
+  .chip-part {
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--karkadeh);
+  }
+  .chip-panel a.is-current {
+    background: var(--cream);
+  }
+  .chip-panel a.is-current::before {
+    content: "";
+    align-self: center;
+    width: 0.55em;
+    height: 0.55em;
+    flex: none;
+    border-radius: 50%;
+    background: var(--hibiscus);
+  }
+  @media (min-width: 1150px) {
+    .journey-chip {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rail-dot,
+    .rail-label {
+      transition: none;
+    }
+  }
+</style>

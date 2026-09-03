@@ -1,0 +1,135 @@
+---
+// One shared popover for the whole page. Any trigger button carrying
+// data-popover-title opens it; the script below owns open/close/position.
+//
+// Trigger API:
+//   <button type="button" class="chip"
+//     data-popover-title="Ta'aruf"
+//     data-popover-body="Ethical, dialogical relationship — …"
+//     data-popover-link="#contact"            (optional)
+//     data-popover-link-text="Start a conversation →">  (optional)
+//     Ta'aruf
+//   </button>
+// Closes on Escape, outside click, or scroll; focus returns to the trigger.
+---
+
+<div class="popover" id="popover" role="status" hidden>
+  <strong class="popover-title" id="popover-title"></strong>
+  <p class="popover-body" id="popover-body"></p>
+  <a class="popover-link" id="popover-link" href="#contact"></a>
+</div>
+
+<script is:inline>
+  (function () {
+    var pop = document.getElementById('popover');
+    var popTitle = document.getElementById('popover-title');
+    var popBody = document.getElementById('popover-body');
+    var popLink = document.getElementById('popover-link');
+    if (!pop || !popTitle || !popBody || !popLink) return;
+    var trigger = null;
+
+    function openPop(el) {
+      popTitle.textContent = el.getAttribute('data-popover-title') || '';
+      popBody.textContent = el.getAttribute('data-popover-body') || '';
+      var link = el.getAttribute('data-popover-link');
+      if (link) {
+        popLink.hidden = false;
+        popLink.textContent = el.getAttribute('data-popover-link-text') || 'See more →';
+        popLink.setAttribute('href', link);
+      } else {
+        popLink.hidden = true;
+      }
+      pop.hidden = false;
+      pop.classList.add('show');
+      var r = el.getBoundingClientRect();
+      var w = pop.offsetWidth;
+      var h = pop.offsetHeight;
+      var x = Math.min(Math.max(12, r.left + r.width / 2 - w / 2), window.innerWidth - w - 12);
+      var y = r.top - h - 14;
+      if (y < 12) y = r.bottom + 18;
+      pop.style.left = x + 'px';
+      pop.style.top = y + 'px';
+      if (trigger) trigger.setAttribute('aria-expanded', 'false');
+      trigger = el;
+      el.setAttribute('aria-expanded', 'true');
+    }
+
+    function closePop(refocus) {
+      if (!pop.classList.contains('show')) return;
+      pop.classList.remove('show');
+      var el = trigger;
+      if (el) el.setAttribute('aria-expanded', 'false');
+      trigger = null;
+      setTimeout(function () {
+        if (!pop.classList.contains('show')) pop.hidden = true;
+      }, 220);
+      if (refocus && el) el.focus();
+    }
+
+    document.addEventListener('click', function (e) {
+      var el = e.target.closest('[data-popover-title]');
+      if (el) {
+        e.stopPropagation();
+        if (trigger === el) closePop(true);
+        else openPop(el);
+        return;
+      }
+      if (trigger && !e.target.closest('#popover')) closePop(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closePop(true);
+    });
+    window.addEventListener('scroll', function () { closePop(false); }, { passive: true, capture: true });
+    window.addEventListener('resize', function () { closePop(false); });
+  })();
+</script>
+
+<style>
+  .popover {
+    position: fixed;
+    z-index: 1100;
+    max-width: 300px;
+    background: var(--night);
+    color: var(--cream);
+    padding: 20px 22px;
+    border-radius: 18px;
+    box-shadow: 0 20px 50px color-mix(in srgb, var(--night) 40%, transparent);
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+  }
+  .popover.show {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+  .popover-title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.25rem;
+    letter-spacing: -0.02em;
+    display: block;
+    margin-bottom: 8px;
+    color: var(--paper);
+  }
+  .popover-body {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: color-mix(in srgb, var(--cream) 82%, transparent);
+  }
+  .popover-link {
+    display: inline-block;
+    margin-top: 12px;
+    font-family: var(--font-ui);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--river-light);
+  }
+  .popover-link:hover {
+    color: var(--cream);
+  }
+</style>

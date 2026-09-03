@@ -1,0 +1,284 @@
+---
+import HeroTree from './HeroTree.astro';
+
+const hotspots = [
+  { href: '#what-we-offer', label: 'Canopy', aria: 'Go to What We Offer — the canopy', x: 50, y: 20 },
+  { href: '#our-work', label: 'Branches', aria: 'Go to Our Work — the branches', x: 20, y: 40 },
+  { href: '#who-we-are', label: 'Trunk', aria: 'Go to Who We Are — the trunk', x: 51, y: 56 },
+  { href: '#roots', label: 'Roots', aria: 'Go to Our Roots', x: 28, y: 86 },
+  { href: '#ground', label: 'Ground', aria: 'Go to The Ground We Share', x: 12, y: 91 },
+  { href: '#seeds', label: 'Seeds', aria: "Go to What's Growing — seeds", x: 62, y: 84 },
+];
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-copy">
+    <p class="tag">Cultural Collective · Hamilton</p>
+    <h1 id="hero-title">Pamoja<span class="period" aria-hidden="true">.</span></h1>
+    <p class="lead">
+      <em>Together</em> — building a city through relationship, cultural
+      knowledge, creativity and mutual care.
+    </p>
+  </div>
+
+  <span class="drift-leaf" style="right:14%;top:12%" aria-hidden="true"></span>
+  <span class="drift-leaf dl2" style="right:32%;top:6%" aria-hidden="true"></span>
+  <span class="drift-leaf dl3" style="right:22%;top:18%" aria-hidden="true"></span>
+
+  <div class="hero-tree-stage" id="hero-tree-stage">
+    <HeroTree />
+    {hotspots.map((h) => (
+      <a
+        class="hotspot"
+        href={h.href}
+        aria-label={h.aria}
+        style={`left:${h.x}%;top:${h.y}%`}
+      >
+        <i aria-hidden="true"></i>
+        <span class="hotspot-label" aria-hidden="true">{h.label}</span>
+      </a>
+    ))}
+  </div>
+
+  <p class="scroll-cue" aria-hidden="true">Scroll to travel through the tree ↓</p>
+</section>
+
+<script is:inline>
+  // Subtle 0.12× parallax on the tree within the first viewport, plus the
+  // --hero-p descent the tree's own CSS listens for. Motion-gated; without
+  // it the tree simply stands still.
+  (function () {
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) return;
+    var stage = document.getElementById('hero-tree-stage');
+    var tree = document.getElementById('hero-tree');
+    var hero = document.querySelector('.hero');
+    if (!stage || !hero) return;
+    var ticking = false;
+    function update() {
+      ticking = false;
+      var y = window.scrollY;
+      if (y < window.innerHeight) {
+        var tx = window.innerWidth <= 850 ? 'translateX(-50%) ' : '';
+        stage.style.transform = tx + 'translateY(' + y * 0.12 + 'px)';
+      }
+      if (tree) {
+        var range = hero.offsetHeight || 1;
+        tree.style.setProperty('--hero-p', Math.min(1, Math.max(0, y / range)).toFixed(3));
+      }
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    update();
+  })();
+</script>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    margin-top: -4.5rem;
+    padding-top: 4.5rem;
+    overflow: hidden;
+    background: linear-gradient(var(--cream) 0%, var(--paper) 55%, var(--cream) 100%);
+  }
+  /* The ground the tree stands in. */
+  .hero::after {
+    content: "";
+    position: absolute;
+    bottom: -14%;
+    left: -8%;
+    width: 116%;
+    height: 32%;
+    background: color-mix(in srgb, var(--karkadeh) 62%, var(--night));
+    border-radius: 50% 50% 0 0 / 40% 40% 0 0;
+  }
+
+  .hero-copy {
+    position: absolute;
+    z-index: 5;
+    left: 6vw;
+    top: 22%;
+    max-width: 570px;
+  }
+  .hero-copy h1 .period {
+    color: var(--hibiscus);
+  }
+  .lead {
+    font-size: clamp(1rem, 1.6vw, 1.25rem);
+    max-width: 450px;
+    margin: 1.75rem 0 0;
+  }
+  .lead em {
+    font-family: var(--font-display);
+    font-style: italic;
+  }
+
+  .hero-tree-stage {
+    position: absolute;
+    right: 6%;
+    bottom: 0;
+    z-index: 3;
+    width: min(640px, 56vw);
+    will-change: transform;
+  }
+
+  /* Pulsing hotspots: hibiscus dots with expanding rings; labels appear on
+     hover and keyboard focus. */
+  .hotspot {
+    position: absolute;
+    z-index: 6;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    text-decoration: none;
+  }
+  .hotspot i {
+    position: absolute;
+    inset: 5px;
+    border-radius: 50%;
+    background: var(--hibiscus);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--paper) 90%, transparent);
+    display: block;
+  }
+  .hotspot-label {
+    position: absolute;
+    left: 30px;
+    top: 50%;
+    transform: translateY(-50%) translateX(-6px);
+    background: var(--night);
+    color: var(--cream);
+    padding: 7px 14px;
+    border-radius: 20px;
+    font-family: var(--font-ui);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+  }
+  .hotspot:hover .hotspot-label,
+  .hotspot:focus-visible .hotspot-label {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+
+  .drift-leaf {
+    position: absolute;
+    z-index: 4;
+    width: 22px;
+    height: 14px;
+    border-radius: 80% 10% 80% 10%;
+    background: var(--river);
+    opacity: 0;
+    animation: drift 16s linear infinite;
+  }
+  .drift-leaf.dl2 {
+    background: var(--river-pale);
+    animation-delay: 6s;
+    animation-duration: 20s;
+  }
+  .drift-leaf.dl3 {
+    background: var(--river-deep);
+    animation-delay: 11s;
+    animation-duration: 18s;
+    width: 18px;
+    height: 12px;
+  }
+
+  .scroll-cue {
+    position: absolute;
+    z-index: 8;
+    bottom: 30px;
+    left: 6vw;
+    margin: 0;
+    font-family: var(--font-ui);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--paper);
+    animation: cue-pulse 2.6s ease-in-out infinite;
+  }
+
+  @keyframes drift {
+    0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.8; }
+    90% { opacity: 0.5; }
+    100% { transform: translate(-50vw, 60vh) rotate(340deg); opacity: 0; }
+  }
+  @keyframes pulse {
+    0% { transform: scale(0.5); opacity: 0.9; }
+    70% { transform: scale(1.8); opacity: 0; }
+    100% { opacity: 0; }
+  }
+  @keyframes cue-pulse {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hotspot i::before,
+    .hotspot i::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      border: 2.5px solid var(--hibiscus);
+      animation: pulse 2.4s ease-out infinite;
+    }
+    .hotspot i::before { inset: -8px; }
+    .hotspot i::after {
+      inset: -16px;
+      border-width: 1.5px;
+      opacity: 0.4;
+      animation-delay: 0.6s;
+    }
+  }
+
+  @media (max-width: 850px) {
+    .hero {
+      display: block;
+      min-height: 100svh;
+    }
+    .hero-copy {
+      left: 7vw;
+      right: 7vw;
+      top: 14%;
+      text-align: center;
+    }
+    .lead {
+      margin-inline: auto;
+    }
+    .hero-tree-stage {
+      width: 92%;
+      max-width: 480px;
+      left: 50%;
+      right: auto;
+      transform: translateX(-50%);
+      bottom: 24px;
+    }
+    .drift-leaf {
+      display: none;
+    }
+    .scroll-cue {
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+    }
+    .hotspot-label {
+      font-size: 0.6rem;
+      padding: 6px 10px;
+    }
+    .hotspot[href="#what-we-offer"] { left: 56% !important; top: 18% !important; }
+    .hotspot[href="#our-work"] { left: 22% !important; top: 38% !important; }
+    .hotspot[href="#who-we-are"] { left: 53% !important; top: 54% !important; }
+    .hotspot[href="#roots"] { left: 30% !important; top: 84% !important; }
+    .hotspot[href="#ground"] { left: 12% !important; top: 90% !important; }
+    .hotspot[href="#seeds"] { left: 72% !important; top: 86% !important; }
+  }
+</style>

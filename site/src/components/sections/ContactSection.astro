@@ -1,0 +1,80 @@
+---
+// The contact band — the last stop, where every path has been pointing.
+// Heading and lede from the former /contact page; the inquiry form keeps its
+// Netlify Forms behavior untouched.
+import InquiryForm from '../InquiryForm.astro';
+import { getSiteSettings } from '../../lib/data';
+
+const settings = await getSiteSettings();
+---
+
+<section class="contact" id="contact" aria-labelledby="contact-heading">
+  <div class="contact-copy">
+    <p class="tag reveal">The first step</p>
+    <h2 class="reveal" data-d="1" id="contact-heading">
+      We start with a conversation. And we don't move fast.
+    </h2>
+    <p class="reveal" data-d="2">
+      Whether you're an institution hoping to learn, a funder considering an
+      investment, or a neighbour with something to contribute — the first step
+      is the same: sit down with us.
+    </p>
+    <p class="direct reveal" data-d="3">
+      Prefer email? Write to us at
+      <a href={`mailto:${settings.contactEmail}`}>{settings.contactEmail}</a>.
+    </p>
+    {settings.socialLinks.length > 0 && (
+      <ul class="social reveal" data-d="3">
+        {settings.socialLinks.map((link) => (
+          <li>
+            <a href={link.url} rel="noopener">{link.label}</a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+  <div class="contact-form reveal" data-d="2">
+    <InquiryForm />
+  </div>
+</section>
+
+<style>
+  .contact {
+    background: var(--cream);
+    padding: 14vh 8vw;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9vw;
+    align-items: start;
+    border-top: 1px solid var(--line);
+    scroll-margin-top: 4rem;
+  }
+  .contact h2 {
+    font-size: clamp(2.4rem, 4.5vw, 4rem);
+    margin: 0 0 1.25rem;
+  }
+  .contact-copy > p {
+    max-width: var(--max-prose);
+  }
+  .direct {
+    font-size: 1.1rem;
+  }
+  .social {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 1rem 0 0;
+    padding: 0;
+    font-family: var(--font-ui);
+    font-weight: 700;
+  }
+
+  @media (max-width: 850px) {
+    .contact {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      padding: 100px 7vw;
+    }
+  }
+</style>
