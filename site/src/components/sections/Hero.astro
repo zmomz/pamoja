@@ -6,7 +6,7 @@ const hotspots = [
   { href: '#our-work', label: 'Branches', aria: 'Go to Our Work — the branches', x: 20, y: 40 },
   { href: '#who-we-are', label: 'Trunk', aria: 'Go to Who We Are — the trunk', x: 51, y: 56 },
   { href: '#roots', label: 'Roots', aria: 'Go to Our Roots', x: 28, y: 86 },
-  { href: '#ground', label: 'Ground', aria: 'Go to The Ground We Share', x: 12, y: 91 },
+  { href: '#ground', label: 'Ground', aria: 'Go to The Ground We Share', x: 20, y: 90 },
   { href: '#seeds', label: 'Seeds', aria: "Go to What's Growing — seeds", x: 62, y: 84 },
 ];
 ---
@@ -83,8 +83,9 @@ const hotspots = [
     overflow: hidden;
     background: linear-gradient(var(--cream) 0%, var(--paper) 55%, var(--cream) 100%);
   }
-  /* The ground the tree stands in. Exactly the color the tree's soil
-     gradient ends on, so the two meet without a seam. */
+  /* The ground the tree stands in. A faint lift of karkadeh along its
+     crest, settling into exactly --karkadeh-deep — the color the tree's
+     soil mound sinks to — so the two meet without a seam. */
   .hero::after {
     content: "";
     position: absolute;
@@ -92,7 +93,11 @@ const hotspots = [
     left: -8%;
     width: 116%;
     height: 32%;
-    background: var(--karkadeh-deep);
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--karkadeh) 28%, var(--karkadeh-deep)) 0%,
+      var(--karkadeh-deep) 42%
+    );
     border-radius: 50% 50% 0 0 / 40% 40% 0 0;
   }
 
@@ -279,7 +284,7 @@ const hotspots = [
     .hotspot[href="#our-work"] { left: 22% !important; top: 38% !important; }
     .hotspot[href="#who-we-are"] { left: 53% !important; top: 54% !important; }
     .hotspot[href="#roots"] { left: 30% !important; top: 84% !important; }
-    .hotspot[href="#ground"] { left: 12% !important; top: 90% !important; }
+    .hotspot[href="#ground"] { left: 20% !important; top: 90% !important; }
     .hotspot[href="#seeds"] { left: 72% !important; top: 86% !important; }
   }
 </style>
