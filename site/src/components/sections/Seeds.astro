@@ -18,17 +18,28 @@
             <stop offset="0" style="stop-color: var(--river-light)" />
             <stop offset="1" style="stop-color: var(--river-deep)" />
           </linearGradient>
+          <linearGradient id="seeds-fade-x" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#fff" stop-opacity="0" />
+            <stop offset="0.16" stop-color="#fff" stop-opacity="1" />
+            <stop offset="0.84" stop-color="#fff" stop-opacity="1" />
+            <stop offset="1" stop-color="#fff" stop-opacity="0" />
+          </linearGradient>
+          <mask id="seeds-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="480" height="450">
+            <rect width="480" height="450" fill="url(#seeds-fade-x)" />
+          </mask>
         </defs>
 
-        <path d="M20 370 Q240 320 460 370 L460 450 L20 450Z" class="f-karkadeh" />
-        <path class="draw st-ochre" d="M35 376 Q240 332 445 376" fill="none" stroke-width="4" stroke-linecap="round" />
-        <path d="M60 390 Q240 355 420 390" fill="none" class="st-karkadeh-deep" stroke-width="2" stroke-linecap="round" opacity="0.4" />
-
-        <g class="soil-particle f-ochre" opacity="0.35">
-          <circle cx="100" cy="400" r="3" /><circle cx="350" cy="410" r="2.5" /><circle cx="220" cy="420" r="2" />
-        </g>
-        <g class="soil-particle sp2 f-ochre" opacity="0.3">
-          <circle cx="280" cy="395" r="2" /><circle cx="150" cy="415" r="3" /><circle cx="380" cy="405" r="2.5" />
+        {/* Soil fades at its sides; the sprout's sway is this scene's one idle motion. */}
+        <g mask="url(#seeds-mask)">
+          <path d="M0 370 Q240 320 480 370 L480 450 L0 450Z" class="f-karkadeh" />
+          <path class="draw st-ochre" d="M35 376 Q240 332 445 376" fill="none" stroke-width="4" stroke-linecap="round" />
+          <path d="M60 390 Q240 355 420 390" fill="none" class="st-karkadeh-deep" stroke-width="2" stroke-linecap="round" opacity="0.4" />
+          <g class="f-ochre" opacity="0.35">
+            <circle cx="100" cy="400" r="3" /><circle cx="350" cy="410" r="2.5" /><circle cx="220" cy="420" r="2" />
+          </g>
+          <g class="f-ochre" opacity="0.3">
+            <circle cx="280" cy="395" r="2" /><circle cx="150" cy="415" r="3" /><circle cx="380" cy="405" r="2.5" />
+          </g>
         </g>
 
         <g class="grow g1" style="transform-origin: 155px 340px">
@@ -50,8 +61,8 @@
           <path d="M252 276 C228 260 204 260 190 268" fill="none" class="st-river-deep" stroke-width="1.5" opacity="0.5" />
 
           <g class="f-river-light" opacity="0.7">
-            <path class="realistic-leaf" d="M290 235 C295 231 304 232 306 237 C302 242 295 241 290 237Z" />
-            <path class="realistic-leaf rl2" d="M220 268 C225 264 234 265 236 270 C232 275 225 274 220 270Z" />
+            <path d="M290 235 C295 231 304 232 306 237 C302 242 295 241 290 237Z" />
+            <path d="M220 268 C225 264 234 265 236 270 C232 275 225 274 220 270Z" />
           </g>
         </g>
 
@@ -103,7 +114,7 @@
     <a class="cta reveal" data-d="4" href="#contact">Plant something with us →</a>
   </div>
 
-  <div class="ask" style="grid-column: 1 / -1" aria-labelledby="ask-heading">
+  <div class="ask block" aria-labelledby="ask-heading">
     <h3 class="reveal" id="ask-heading">The ask.</h3>
     <div class="ask-grid">
       <article class="card ask-card reveal" data-d="1">
@@ -134,31 +145,33 @@
     </div>
   </div>
 
-  <div class="examples" style="grid-column: 1 / -1" aria-labelledby="examples-heading">
-    <h3 class="reveal" id="examples-heading">What a successful partnership looks like.</h3>
-    <ul class="example-list">
-      <li class="reveal" data-d="1">
+  <div class="examples block-split" aria-labelledby="examples-heading">
+    <div class="block-head">
+      <h3 class="reveal" id="examples-heading">What a successful partnership looks like.</h3>
+    </div>
+    <ul class="example-list block-body">
+      <li class="list-item reveal" data-d="1">
         <strong>Co-hosting a community meal</strong> — your organization's
         people cooking and eating alongside the community's, as guests and
         co-hosts, not sponsors at a distance.
       </li>
-      <li class="reveal" data-d="2">
+      <li class="list-item reveal" data-d="2">
         <strong>Lending a professional team's time toward incorporation</strong> —
         a legal or financial team's hours, given as capacity the collective
         keeps.
       </li>
-      <li class="reveal" data-d="3">
+      <li class="list-item reveal" data-d="3">
         <strong>Sharing unused space</strong> — a venue that stands empty
         becoming common ground for a season or longer.
       </li>
-      <li class="reveal" data-d="4">
+      <li class="list-item reveal" data-d="4">
         <strong>Helping with a crowdfunding campaign</strong> — reach,
         matching, and credibility lent to a campaign the community runs.
       </li>
     </ul>
   </div>
 
-  <p class="closing-line reveal" style="grid-column: 1 / -1">
+  <p class="closing-line reveal block-end">
     If you have space, funding, capacity, or something we haven't thought to
     ask for — the first step is the same as always:
     <a href="#contact">a conversation</a>.
@@ -188,9 +201,6 @@
     gap: 1.5rem;
     grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   }
-  .ask-card {
-    border-top: 4px solid var(--river);
-  }
   .ask-card h4 {
     font-family: var(--font-display);
     margin: 0 0 0.6rem;
@@ -209,12 +219,6 @@
     display: grid;
     gap: 1rem;
     max-width: var(--max-prose);
-  }
-  .example-list li {
-    padding: 1rem 1.25rem;
-    background: var(--cream);
-    border-radius: 10px;
-    border-left: 4px solid var(--ochre);
   }
 
   .closing-line {

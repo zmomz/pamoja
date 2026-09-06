@@ -14,13 +14,24 @@
             <stop offset="0" style="stop-color: var(--karkadeh)" stop-opacity="0.22" />
             <stop offset="1" style="stop-color: var(--karkadeh)" stop-opacity="0" />
           </radialGradient>
+          <linearGradient id="roots-fade-x" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#fff" stop-opacity="0" />
+            <stop offset="0.18" stop-color="#fff" stop-opacity="1" />
+            <stop offset="0.82" stop-color="#fff" stop-opacity="1" />
+            <stop offset="1" stop-color="#fff" stop-opacity="0" />
+          </linearGradient>
+          <mask id="roots-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="440" height="480">
+            <rect width="440" height="480" fill="url(#roots-fade-x)" />
+          </mask>
         </defs>
 
-        <rect x="0" y="200" width="440" height="280" fill="url(#roots-glow)" />
-
-        <path d="M0 200 Q220 190 440 200" fill="none" class="st-ochre" stroke-width="2" opacity="0.4" />
-        <path d="M0 280 Q220 270 440 280" fill="none" class="st-ochre" stroke-width="2" opacity="0.3" />
-        <path d="M0 360 Q220 350 440 360" fill="none" class="st-ochre" stroke-width="2" opacity="0.2" />
+        {/* Soil glow and strata fade at the sides — no box behind the roots. */}
+        <g mask="url(#roots-mask)">
+          <rect x="0" y="200" width="440" height="280" fill="url(#roots-glow)" />
+          <path d="M0 200 Q220 190 440 200" fill="none" class="st-ochre" stroke-width="2" opacity="0.4" />
+          <path d="M0 280 Q220 270 440 280" fill="none" class="st-ochre" stroke-width="2" opacity="0.3" />
+          <path d="M0 360 Q220 350 440 360" fill="none" class="st-ochre" stroke-width="2" opacity="0.2" />
+        </g>
 
         <path class="draw st-karkadeh-deep" d="M214 12 C210 90 218 170 216 252 C216 300 214 340 218 380 C220 410 224 430 228 450" fill="none" stroke-width="16" stroke-linecap="round" />
 
@@ -40,7 +51,7 @@
           <path d="M260 384 l5 8 M250 392 l3 10 M240 398 l7 6" />
         </g>
 
-        <g class="fade-in flow st-ochre" fill="none" stroke-width="2.5" stroke-dasharray="3 14" stroke-linecap="round" opacity="0.7">
+        <g class="fade-in st-ochre" fill="none" stroke-width="2.5" stroke-dasharray="3 14" stroke-linecap="round" opacity="0.7">
           <path d="M216 262 C170 290 120 310 60 332" />
           <path d="M216 262 C262 292 314 308 376 326" />
           <path d="M217 330 C216 372 216 408 220 436" />
@@ -54,13 +65,13 @@
           <circle class="grow g1 tip f-river-light" cx="378" cy="388" r="6" style="transform-origin: 378px 388px" />
         </g>
 
-        <g class="soil-particle f-ochre" opacity="0.4">
+        <g class="f-ochre" opacity="0.4">
           <circle cx="80" cy="280" r="3" /><circle cx="350" cy="310" r="2.5" /><circle cx="200" cy="340" r="2" />
         </g>
-        <g class="soil-particle sp2 f-ochre" opacity="0.3">
+        <g class="f-ochre" opacity="0.3">
           <circle cx="300" cy="260" r="2" /><circle cx="120" cy="320" r="3" /><circle cx="380" cy="360" r="2.5" />
         </g>
-        <g class="soil-particle sp3 f-ochre" opacity="0.35">
+        <g class="f-ochre" opacity="0.35">
           <circle cx="180" cy="290" r="2.5" /><circle cx="400" cy="280" r="2" /><circle cx="60" cy="360" r="3" />
         </g>
       </svg>
@@ -91,7 +102,7 @@
     <a class="cta reveal" data-d="3" href="#who-we-are">See the trunk →</a>
   </div>
 
-  <div class="root-cards" style="grid-column: 1 / -1" aria-label="The two roots">
+  <div class="root-cards block" aria-label="The two roots">
     <article class="card reveal" data-d="1">
       <figure class="glyph" aria-hidden="true">
         <svg viewBox="0 0 120 72" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
@@ -162,9 +173,11 @@
     </article>
   </div>
 
-  <div class="how-we-work" style="grid-column: 1 / -1">
-    <h3 class="reveal">How we work.</h3>
-    <div class="how-grid">
+  <div class="how-we-work block-split">
+    <div class="block-head">
+      <h3 class="reveal">How we work.</h3>
+    </div>
+    <div class="how-grid block-body">
       <div class="reveal" data-d="1">
         <h4>Internally: consensus-based, self-determined</h4>
         <p>
@@ -217,7 +230,6 @@
   .root-cards .card {
     display: flex;
     flex-direction: column;
-    border-top: 4px solid var(--river-deep);
   }
   .root-cards .glyph {
     margin: 0 0 1.25rem;
@@ -252,7 +264,6 @@
   .how-grid {
     display: grid;
     gap: 2rem;
-    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
   }
   .how-grid h4 {
     font-family: var(--font-display);

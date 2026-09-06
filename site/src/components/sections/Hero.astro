@@ -1,13 +1,17 @@
 ---
 import HeroTree from './HeroTree.astro';
 
+// The tree is the site's map. Each part carries the same number its section
+// uses (01 Soil … 07 Seeds; 06, the grove, stands around the tree rather
+// than on it), a persistent label, and the part's own colour — so the
+// metaphor reads on first sight, on touch as well as with a mouse.
 const hotspots = [
-  { href: '#what-we-offer', label: 'Canopy', aria: 'Go to What We Offer — the canopy', x: 50, y: 20 },
-  { href: '#our-work', label: 'Branches', aria: 'Go to Our Work — the branches', x: 20, y: 40 },
-  { href: '#who-we-are', label: 'Trunk', aria: 'Go to Who We Are — the trunk', x: 51, y: 56 },
-  { href: '#roots', label: 'Roots', aria: 'Go to Our Roots', x: 28, y: 86 },
-  { href: '#ground', label: 'Ground', aria: 'Go to The Ground We Share', x: 20, y: 90 },
-  { href: '#seeds', label: 'Seeds', aria: "Go to What's Growing — seeds", x: 62, y: 84 },
+  { href: '#what-we-offer', num: '05', label: 'Canopy', part: 'canopy', aria: 'Go to What We Offer — the canopy', x: 50, y: 18, side: 'right' },
+  { href: '#our-work', num: '04', label: 'Branches', part: 'branches', aria: 'Go to Our Work — the branches', x: 22, y: 42, side: 'right' },
+  { href: '#who-we-are', num: '03', label: 'Trunk', part: 'trunk', aria: 'Go to Who We Are — the trunk', x: 51, y: 58, side: 'right' },
+  { href: '#roots', num: '02', label: 'Roots', part: 'roots', aria: 'Go to Our Roots', x: 30, y: 87, side: 'right' },
+  { href: '#ground', num: '01', label: 'Ground', part: 'ground', aria: 'Go to The Ground We Share', x: 76, y: 93, side: 'left' },
+  { href: '#seeds', num: '07', label: 'Seeds', part: 'seeds', aria: "Go to What's Growing — seeds", x: 62, y: 79, side: 'left' },
 ];
 ---
 
@@ -21,32 +25,35 @@ const hotspots = [
     </p>
   </div>
 
-  <span class="drift-leaf" style="right:14%;top:12%" aria-hidden="true"></span>
-  <span class="drift-leaf dl2" style="right:32%;top:6%" aria-hidden="true"></span>
-  <span class="drift-leaf dl3" style="right:22%;top:18%" aria-hidden="true"></span>
-
   <div class="hero-tree-stage" id="hero-tree-stage">
     <HeroTree />
     {hotspots.map((h) => (
       <a
-        class="hotspot"
+        class:list={['hotspot', `hotspot--${h.part}`, `hotspot--${h.side}`]}
         href={h.href}
         aria-label={h.aria}
         style={`left:${h.x}%;top:${h.y}%`}
       >
         <i aria-hidden="true"></i>
-        <span class="hotspot-label" aria-hidden="true">{h.label}</span>
+        <span class="hotspot-tag" aria-hidden="true">
+          <span class="hotspot-num">{h.num}</span>
+          {h.label}
+        </span>
       </a>
     ))}
   </div>
 
-  <p class="scroll-cue" aria-hidden="true">Scroll to travel through the tree ↓</p>
+  <p class="scroll-cue" aria-hidden="true">
+    <span class="cue-long">Scroll down through the tree: ground, roots, trunk, branches, canopy, seeds ↓</span>
+    <span class="cue-short">Scroll down through the tree ↓</span>
+  </p>
 </section>
 
 <script is:inline>
   // Subtle 0.12× parallax on the tree within the first viewport, plus the
   // --hero-p descent the tree's own CSS listens for. Motion-gated; without
-  // it the tree simply stands still.
+  // it the tree simply stands still. The stage is never centred by a
+  // transform (mobile uses flow layout), so a bare translateY is safe.
   (function () {
     var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduceMotion) return;
@@ -59,8 +66,7 @@ const hotspots = [
       ticking = false;
       var y = window.scrollY;
       if (y < window.innerHeight) {
-        var tx = window.innerWidth <= 850 ? 'translateX(-50%) ' : '';
-        stage.style.transform = tx + 'translateY(' + y * 0.12 + 'px)';
+        stage.style.transform = 'translateY(' + y * 0.12 + 'px)';
       }
       if (tree) {
         var range = hero.offsetHeight || 1;
@@ -85,7 +91,8 @@ const hotspots = [
   }
   /* The ground the tree stands in. A faint lift of karkadeh along its
      crest, settling into exactly --karkadeh-deep — the color the tree's
-     soil mound sinks to — so the two meet without a seam. */
+     soil mound sinks to — so the two meet without a seam. Two quiet
+     strata lines keep it reading as ground rather than a colour block. */
   .hero::after {
     content: "";
     position: absolute;
@@ -93,11 +100,14 @@ const hotspots = [
     left: -8%;
     width: 116%;
     height: 32%;
-    background: linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--karkadeh) 28%, var(--karkadeh-deep)) 0%,
-      var(--karkadeh-deep) 42%
-    );
+    background:
+      linear-gradient(180deg, transparent 0, transparent 34%, color-mix(in srgb, var(--ochre) 22%, transparent) 34.4%, transparent 35.2%),
+      linear-gradient(180deg, transparent 0, transparent 58%, color-mix(in srgb, var(--ochre) 14%, transparent) 58.4%, transparent 59.2%),
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--karkadeh) 28%, var(--karkadeh-deep)) 0%,
+        var(--karkadeh-deep) 42%
+      );
     border-radius: 50% 50% 0 0 / 40% 40% 0 0;
   }
 
@@ -105,186 +115,184 @@ const hotspots = [
     position: absolute;
     z-index: 5;
     left: 6vw;
-    top: 22%;
+    top: 20%;
     max-width: 570px;
+  }
+  /* Clear the journey rail and its hero-state labels. */
+  @media (min-width: 1150px) {
+    .hero-copy { left: max(6vw, 132px); }
   }
   .hero-copy h1 .period {
     color: var(--hibiscus);
   }
   .lead {
     font-size: clamp(1rem, 1.6vw, 1.25rem);
-    max-width: 450px;
-    margin: 1.75rem 0 0;
+    max-width: 34ch;
+    margin: 1.25rem 0 0;
+    text-wrap: balance;
   }
   .lead em {
     font-family: var(--font-display);
     font-style: italic;
   }
 
+  /* Sized by width and by height, so the crown never runs under the
+     header on short, wide viewports. */
   .hero-tree-stage {
     position: absolute;
     right: 6%;
     bottom: 0;
     z-index: 3;
-    width: min(640px, 56vw);
+    width: min(640px, 56vw, 78vh);
     will-change: transform;
   }
 
-  /* Pulsing hotspots: hibiscus dots with expanding rings; labels appear on
-     hover and keyboard focus. */
+  /* Hotspots: a small coloured mark plus a persistent numbered tag. The
+     number matches the section numeral, the colour matches the part. */
   .hotspot {
+    --part: var(--river);
     position: absolute;
     z-index: 6;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    transform: translate(-9px, -50%);
     text-decoration: none;
+    color: var(--ink);
   }
+  .hotspot--left {
+    flex-direction: row-reverse;
+    transform: translate(calc(-100% + 9px), -50%);
+  }
+  .hotspot--ground { --part: var(--ochre); }
+  .hotspot--roots { --part: var(--karkadeh); }
+  .hotspot--trunk { --part: var(--karkadeh-deep); }
+  .hotspot--branches { --part: var(--river-deep); }
+  .hotspot--canopy { --part: var(--river); }
+  .hotspot--seeds { --part: var(--hibiscus); }
   .hotspot i {
-    position: absolute;
-    inset: 5px;
+    flex: none;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
-    background: var(--hibiscus);
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--paper) 90%, transparent);
-    display: block;
+    background: var(--part);
+    border: 3px solid var(--paper);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--part) 55%, transparent);
+    transition: transform 0.25s ease;
   }
-  .hotspot-label {
-    position: absolute;
-    left: 30px;
-    top: 50%;
-    transform: translateY(-50%) translateX(-6px);
-    background: var(--night);
-    color: var(--cream);
-    padding: 7px 14px;
-    border-radius: 20px;
+  .hotspot-tag {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    padding: 0.28rem 0.6rem 0.28rem 0.55rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
+    border: 1px solid var(--line);
     font-family: var(--font-ui);
-    font-size: 0.68rem;
+    font-size: 0.66rem;
     font-weight: 700;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     white-space: nowrap;
-    opacity: 0;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    pointer-events: none;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
   }
-  .hotspot:hover .hotspot-label,
-  .hotspot:focus-visible .hotspot-label {
-    opacity: 1;
-    transform: translateY(-50%) translateX(0);
+  .hotspot-num {
+    color: var(--part);
   }
-
-  .drift-leaf {
-    position: absolute;
-    z-index: 4;
-    width: 22px;
-    height: 14px;
-    border-radius: 80% 10% 80% 10%;
-    background: var(--river);
-    opacity: 0;
-    animation: drift 16s linear infinite;
+  .hotspot:hover .hotspot-tag,
+  .hotspot:focus-visible .hotspot-tag {
+    transform: translateY(-2px);
+    border-color: var(--part);
+    box-shadow: 0 8px 18px color-mix(in srgb, var(--night) 14%, transparent);
   }
-  .drift-leaf.dl2 {
-    background: var(--river-pale);
-    animation-delay: 6s;
-    animation-duration: 20s;
+  .hotspot:hover i,
+  .hotspot:focus-visible i {
+    transform: scale(1.2);
   }
-  .drift-leaf.dl3 {
-    background: var(--river-deep);
-    animation-delay: 11s;
-    animation-duration: 18s;
-    width: 18px;
-    height: 12px;
+  .hotspot:focus-visible {
+    outline: none;
+  }
+  .hotspot:focus-visible .hotspot-tag {
+    outline: 3px solid var(--hibiscus);
+    outline-offset: 2px;
   }
 
+  /* The scroll cue names the journey. It bobs, and the bob keeps the
+     centring transform (--cue-x) instead of replacing it. */
   .scroll-cue {
+    --cue-x: 0px;
     position: absolute;
     z-index: 8;
     bottom: 30px;
     left: 6vw;
     margin: 0;
     font-family: var(--font-ui);
-    font-size: 0.65rem;
+    font-size: 0.7rem;
     font-weight: 700;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--paper);
+    max-width: none;
     animation: cue-pulse 2.6s ease-in-out infinite;
   }
+  .cue-short { display: none; }
 
-  @keyframes drift {
-    0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
-    10% { opacity: 0.8; }
-    90% { opacity: 0.5; }
-    100% { transform: translate(-50vw, 60vh) rotate(340deg); opacity: 0; }
-  }
-  @keyframes pulse {
-    0% { transform: scale(0.5); opacity: 0.9; }
-    70% { transform: scale(1.8); opacity: 0; }
-    100% { opacity: 0; }
-  }
   @keyframes cue-pulse {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(6px); }
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .hotspot i::before,
-    .hotspot i::after {
-      content: "";
-      position: absolute;
-      border-radius: 50%;
-      border: 2.5px solid var(--hibiscus);
-      animation: pulse 2.4s ease-out infinite;
-    }
-    .hotspot i::before { inset: -8px; }
-    .hotspot i::after {
-      inset: -16px;
-      border-width: 1.5px;
-      opacity: 0.4;
-      animation-delay: 0.6s;
-    }
+    0%, 100% { transform: translate(var(--cue-x), 0); }
+    50% { transform: translate(var(--cue-x), 6px); }
   }
 
   @media (max-width: 850px) {
+    /* Flow layout on one column: copy, then the tree, no dead band between
+       them and no tree cut off under a chip. */
     .hero {
-      display: block;
-      min-height: 100svh;
+      min-height: auto;
+      padding-top: calc(4.5rem + 1.75rem);
+      padding-bottom: 5.5rem;
     }
     .hero-copy {
-      left: 7vw;
-      right: 7vw;
-      top: 14%;
-      text-align: center;
+      position: relative;
+      left: auto;
+      top: auto;
+      margin: 0 7vw;
+      max-width: none;
     }
     .lead {
-      margin-inline: auto;
+      max-width: 32ch;
+      margin-top: 0.9rem;
     }
     .hero-tree-stage {
-      width: 92%;
-      max-width: 480px;
-      left: 50%;
+      position: relative;
       right: auto;
-      transform: translateX(-50%);
-      bottom: 24px;
+      bottom: auto;
+      width: min(100%, 520px);
+      margin: 1.5rem auto 0;
     }
-    .drift-leaf {
-      display: none;
-    }
-    .scroll-cue {
-      left: 50%;
-      transform: translateX(-50%);
-      white-space: nowrap;
-    }
-    .hotspot-label {
+    .hotspot-tag {
       font-size: 0.6rem;
-      padding: 6px 10px;
+      padding: 0.22rem 0.5rem 0.22rem 0.45rem;
     }
-    .hotspot[href="#what-we-offer"] { left: 56% !important; top: 18% !important; }
-    .hotspot[href="#our-work"] { left: 22% !important; top: 38% !important; }
-    .hotspot[href="#who-we-are"] { left: 53% !important; top: 54% !important; }
-    .hotspot[href="#roots"] { left: 30% !important; top: 84% !important; }
-    .hotspot[href="#ground"] { left: 20% !important; top: 90% !important; }
-    .hotspot[href="#seeds"] { left: 72% !important; top: 86% !important; }
+    .hotspot i { width: 15px; height: 15px; }
+    .scroll-cue {
+      --cue-x: -50%;
+      left: 50%;
+      bottom: 4.25rem; /* clears the 'On the tree' chip (14px + 42px) */
+      width: max-content;
+      max-width: calc(100vw - 2rem);
+      text-align: center;
+    }
+    .cue-long { display: none; }
+    .cue-short { display: inline; }
+    .hotspot--canopy { left: 54% !important; top: 16% !important; }
+    .hotspot--branches { left: 20% !important; top: 40% !important; }
+    .hotspot--trunk { left: 53% !important; top: 56% !important; }
+    .hotspot--roots { left: 26% !important; top: 88% !important; }
+    .hotspot--ground { left: 82% !important; top: 94% !important; }
+    .hotspot--seeds { left: 62% !important; top: 77% !important; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-cue { animation: none; transform: translate(var(--cue-x), 0); }
+    .hotspot i, .hotspot-tag { transition: none; }
   }
 </style>

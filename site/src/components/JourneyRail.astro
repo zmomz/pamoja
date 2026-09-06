@@ -139,9 +139,9 @@ const STOPS = [
     top: 50%;
     transform: translateY(-50%);
     font-family: var(--font-ui);
-    font-size: 0.6rem;
+    font-size: 0.72rem;
     font-weight: 700;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--ink);
     white-space: nowrap;
@@ -152,7 +152,10 @@ const STOPS = [
   .rail-stop:hover .rail-label,
   .rail-stop:focus-visible .rail-label,
   .rail-stop.is-current .rail-label,
-  .journey-rail:hover .rail-stop.is-done .rail-label {
+  .journey-rail:hover .rail-stop.is-done .rail-label,
+  /* While the hero is on screen the rail shows every label: it is the
+     legend for the tree. Past the hero it collapses to dots. */
+  .journey-rail.in-hero .rail-label {
     opacity: 0.9;
   }
 

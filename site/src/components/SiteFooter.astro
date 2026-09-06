@@ -22,7 +22,7 @@ const links = [
 ---
 
 <footer class="site-footer">
-  <div class="footer-grid">
+  <div class:list={['footer-grid', { 'has-ack': !!landAcknowledgmentHtml }]}>
     <div class="footer-brand">
       <a class="footer-wordmark" href="/" aria-label="Pamoja Cultural Collective — home">
         <img
@@ -75,8 +75,12 @@ const links = [
     max-width: 1120px;
     margin-inline: auto;
   }
+  /* Two columns until the land acknowledgment is confirmed; three after. */
   @media (min-width: 760px) {
     .footer-grid {
+      grid-template-columns: 1.2fr 1fr;
+    }
+    .footer-grid.has-ack {
       grid-template-columns: 1.2fr 1fr 1.4fr;
     }
   }
@@ -129,7 +133,7 @@ const links = [
     font-weight: 700;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: var(--ochre-light);
+    color: var(--river-pale);
     margin: 0 0 0.6rem;
   }
   .land-ack p {

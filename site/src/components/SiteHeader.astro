@@ -13,11 +13,28 @@ const links = [
 ].map((link) => ({ ...link, href: (home ? '' : '/') + link.href }));
 ---
 
-<header class="site-header" id="site-header">
+<header class:list={['site-header', { 'is-home': home }]} id="site-header">
   <a class="brand" href="/" aria-label="Pamoja Cultural Collective — home">
+    {/* One brand mark at a time: the circle badge while the hero's own
+        "Pamoja." is on screen (two wordmarks in one viewport compete), the
+        wordmark once scrolled, the white wordmark over the open menu. */}
+    <img
+      class="brand-badge"
+      src="/brand/badge-colour.png"
+      alt="Pamoja"
+      width="512"
+      height="512"
+    />
     <img
       class="brand-logo"
       src="/brand/logo-karkadeh-860.png"
+      alt="Pamoja"
+      width="860"
+      height="493"
+    />
+    <img
+      class="brand-logo-white"
+      src="/brand/logo-white-860.png"
       alt="Pamoja"
       width="860"
       height="493"
@@ -65,6 +82,7 @@ const links = [
 
     function setMenu(open) {
       overlay.hidden = !open;
+      header.classList.toggle('menu-open', open);
       toggle.setAttribute('aria-expanded', String(open));
       toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
       document.body.style.overflow = open ? 'hidden' : '';
@@ -85,16 +103,25 @@ const links = [
       if (e.key === 'Escape' && !overlay.hidden) setMenu(false);
     });
 
-    // Condense the header once the page is scrolled.
+    // Condense the header once the page is scrolled, and swap the badge for
+    // the wordmark once the hero's own "Pamoja." has left the viewport.
     var ticking = false;
     function onScroll() {
       ticking = false;
       header.classList.toggle('scrolled', window.scrollY > 40);
+      // The header script runs before <main> is parsed, so look the hero
+      // up on each pass rather than once.
+      var hero = document.querySelector('.hero');
+      if (hero) {
+        var heroBottom = hero.offsetTop + hero.offsetHeight;
+        header.classList.toggle('in-hero', window.scrollY < heroBottom - 120);
+      }
     }
     window.addEventListener('scroll', function () {
       if (!ticking) { ticking = true; requestAnimationFrame(onScroll); }
     }, { passive: true });
     onScroll();
+    document.addEventListener('DOMContentLoaded', onScroll);
   })();
 </script>
 
@@ -124,10 +151,21 @@ const links = [
     align-items: center;
     text-decoration: none;
   }
-  .brand-logo {
-    display: block;
-    height: 40px;
+  .brand-logo,
+  .brand-logo-white,
+  .brand-badge {
+    display: none;
     width: auto;
+  }
+  .brand-logo { display: block; height: 48px; }
+  .site-header.scrolled .brand-logo { height: 40px; }
+  :global(html.js) .site-header.is-home.in-hero .brand-logo { display: none; }
+  :global(html.js) .site-header.is-home.in-hero .brand-badge { display: block; height: 44px; }
+  .site-header.menu-open .brand-logo,
+  .site-header.menu-open .brand-badge { display: none; }
+  .site-header.menu-open .brand-logo-white { display: block; height: 40px; }
+  .site-header.menu-open {
+    background: var(--night);
   }
 
   .nav-desktop {
@@ -171,13 +209,18 @@ const links = [
   .menu-toggle {
     width: 44px;
     height: 44px;
-    border: 1px solid var(--line);
+    border: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
     border-radius: 50%;
     background: color-mix(in srgb, var(--paper) 90%, transparent);
     cursor: pointer;
     display: grid;
     place-items: center;
     color: var(--night);
+  }
+  .site-header.menu-open .menu-toggle {
+    background: transparent;
+    border-color: color-mix(in srgb, var(--paper) 35%, transparent);
+    color: var(--paper);
   }
   .menu-icon,
   .menu-icon::before,

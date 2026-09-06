@@ -66,14 +66,26 @@ const chipPartners = partners.slice(0, chipSlots.length);
             <stop offset="0" style="stop-color: var(--river-light)" />
             <stop offset="1" style="stop-color: var(--river-deep)" />
           </radialGradient>
+          <linearGradient id="grove-fade-x" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#fff" stop-opacity="0" />
+            <stop offset="0.16" stop-color="#fff" stop-opacity="1" />
+            <stop offset="0.84" stop-color="#fff" stop-opacity="1" />
+            <stop offset="1" stop-color="#fff" stop-opacity="0" />
+          </linearGradient>
+          <mask id="grove-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="540" height="400">
+            <rect width="540" height="400" fill="url(#grove-fade-x)" />
+          </mask>
         </defs>
 
-        <path d="M20 356 Q270 332 520 356 L520 400 L20 400Z" fill="url(#grove-soil)" />
-
-        <g class="fade-in flow st-ochre-light" fill="none" stroke-width="3" stroke-dasharray="2 12" stroke-linecap="round">
-          <path d="M120 368 C200 350 340 350 420 368" />
-          <path d="M120 378 C210 364 330 364 420 378" />
-          <path d="M140 388 C220 376 320 376 400 388" />
+        {/* The shared soil fades at its sides, like every other scene. The
+            dashed flows are this scene's one idle motion: roots connecting. */}
+        <g mask="url(#grove-mask)">
+          <path d="M0 356 Q270 332 540 356 L540 400 L0 400Z" fill="url(#grove-soil)" />
+          <g class="fade-in flow st-ochre-light" fill="none" stroke-width="3" stroke-dasharray="2 12" stroke-linecap="round">
+            <path d="M120 368 C200 350 340 350 420 368" />
+            <path d="M120 378 C210 364 330 364 420 378" />
+            <path d="M140 388 C220 376 320 376 400 388" />
+          </g>
         </g>
 
         <g>
@@ -83,8 +95,8 @@ const chipPartners = partners.slice(0, chipSlots.length);
             <path d="M112 158 C142 156 164 176 162 204 C160 232 138 248 112 244 C86 248 64 232 62 204 C60 176 82 156 112 158Z" fill="url(#grove-leaf-3)" opacity="0.7" />
           </g>
           <g class="f-river-light" opacity="0.5">
-            <path class="realistic-leaf" d="M90 180 C95 176 104 177 106 182 C102 187 95 186 90 182Z" />
-            <path class="realistic-leaf rl2" d="M130 170 C135 166 144 167 146 172 C142 177 135 176 130 172Z" />
+            <path d="M90 180 C95 176 104 177 106 182 C102 187 95 186 90 182Z" />
+            <path d="M130 170 C135 166 144 167 146 172 C142 177 135 176 130 172Z" />
           </g>
         </g>
         <g>
@@ -94,9 +106,9 @@ const chipPartners = partners.slice(0, chipSlots.length);
             <path d="M268 60 C310 58 342 84 340 122 C338 160 310 178 268 174 C226 178 198 160 196 122 C194 84 226 58 268 60Z" fill="url(#grove-leaf-1)" opacity="0.75" />
           </g>
           <g class="f-river-light" opacity="0.5">
-            <path class="realistic-leaf" d="M240 90 C245 86 254 87 256 92 C252 97 245 96 240 92Z" />
-            <path class="realistic-leaf rl2" d="M290 80 C295 76 304 77 306 82 C302 87 295 86 290 82Z" />
-            <path class="realistic-leaf rl3" d="M268 100 C273 96 282 97 284 102 C280 107 273 106 268 102Z" />
+            <path d="M240 90 C245 86 254 87 256 92 C252 97 245 96 240 92Z" />
+            <path d="M290 80 C295 76 304 77 306 82 C302 87 295 86 290 82Z" />
+            <path d="M268 100 C273 96 282 97 284 102 C280 107 273 106 268 102Z" />
           </g>
         </g>
         <g>
@@ -106,8 +118,8 @@ const chipPartners = partners.slice(0, chipSlots.length);
             <path d="M418 180 C444 178 464 196 462 220 C460 244 440 258 418 254 C396 258 376 244 374 220 C372 196 392 178 418 180Z" fill="url(#grove-leaf-2)" opacity="0.8" />
           </g>
           <g class="f-river-light" opacity="0.5">
-            <path class="realistic-leaf" d="M400 200 C405 196 414 197 416 202 C412 207 405 206 400 202Z" />
-            <path class="realistic-leaf rl2" d="M440 190 C445 186 454 187 456 192 C452 197 445 196 440 192Z" />
+            <path d="M400 200 C405 196 414 197 416 202 C412 207 405 206 400 202Z" />
+            <path d="M440 190 C445 186 454 187 456 192 C452 197 445 196 440 192Z" />
           </g>
         </g>
 
@@ -144,12 +156,13 @@ const chipPartners = partners.slice(0, chipSlots.length);
     <a class="cta reveal" data-d="4" href="#seeds">See what's growing →</a>
   </div>
 
-  <div class="grove-groups" style="grid-column: 1 / -1">
-    {grouped.map((group) => (
-      <section class="grove-group" aria-labelledby={`group-${group.type}`}>
-        <h3 class="reveal" id={`group-${group.type}`}>{group.heading}</h3>
-        <p class="reveal" data-d="1">{group.intro}</p>
-        <ul class="partner-list">
+  {grouped.map((group) => (
+      <section class="grove-group block-split" aria-labelledby={`group-${group.type}`}>
+        <div class="block-head">
+          <h3 class="reveal" id={`group-${group.type}`}>{group.heading}</h3>
+          <p class="reveal" data-d="1">{group.intro}</p>
+        </div>
+        <ul class="partner-list block-body">
           {group.members.map((partner) => (
             <li class="partner reveal">
               <h4>
@@ -167,8 +180,11 @@ const chipPartners = partners.slice(0, chipSlots.length);
     ))}
 
     {settlementPartners.length > 0 && (
-      <section class="grove-group" aria-labelledby="settlement-heading">
+      <section class="grove-group block-split" aria-labelledby="settlement-heading">
+        <div class="block-head">
         <h3 class="reveal" id="settlement-heading">The settlement sector: distinct, not competing.</h3>
+        </div>
+        <div class="block-body">
         <p class="reveal" data-d="1">
           Elsewhere on this site we draw a clear line between Pamoja and
           settlement organizations. This is where we show the line is not a wall.
@@ -192,11 +208,11 @@ const chipPartners = partners.slice(0, chipSlots.length);
             </li>
           ))}
         </ul>
+        </div>
       </section>
     )}
-  </div>
 
-  <p class="closing-line reveal" style="grid-column: 1 / -1">
+  <p class="closing-line reveal block-end">
     If your organization belongs in this grove, the way in is the same as
     every other way in: <a href="#contact">a conversation</a>.
   </p>
@@ -211,35 +227,34 @@ const chipPartners = partners.slice(0, chipSlots.length);
     font-size: 0.72rem;
     padding: 0.45rem 0.85rem;
   }
-  .gc1 { left: -6px; top: 0; }
+  /* Chips placed so none overlaps another or a crown. */
+  .gc1 { left: -6px; top: 2%; }
   .gc2 { right: -6px; top: 16%; }
-  .gc3 { left: 30%; top: -6%; }
+  .gc3 { left: 48%; top: -6%; }
   .gc4 { left: 20%; bottom: -4%; }
   .gc5 { right: 2%; bottom: 0; }
 
-  .grove-groups {
-    display: grid;
-    gap: 2.5rem;
-  }
   .grove-group h3 {
     font-size: clamp(1.7rem, 3.5vw, 2.4rem);
     margin: 0 0 0.75rem;
   }
-  .grove-group > p {
+  .grove-group .block-head p {
     margin: 0;
+    font-size: 1rem;
   }
 
   .partner-list {
     list-style: none;
-    margin: 1.5rem 0 0;
+    margin: 0;
     padding: 0;
     display: grid;
     gap: 1.25rem;
-    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   }
   .partner {
     background: var(--white);
     border: 1px solid var(--line);
+    border-top: 3px solid var(--river);
     border-radius: 18px;
     padding: 1.5rem;
   }
@@ -263,7 +278,7 @@ const chipPartners = partners.slice(0, chipSlots.length);
   @media (max-width: 850px) {
     .gc1 { left: 0; }
     .gc2 { right: 0; }
-    .gc3 { left: 24%; }
+    .gc3 { left: 44%; }
     .gc5 { right: 0; }
   }
 </style>

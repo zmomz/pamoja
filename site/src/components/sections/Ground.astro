@@ -20,15 +20,32 @@
             <stop offset="0.4" style="stop-color: var(--ochre)" />
             <stop offset="1" style="stop-color: var(--ochre)" stop-opacity="0" />
           </radialGradient>
+          {/* The scene's ground and sky fade out at the sides and the top,
+              like the hero mound — no scene shows a hard rectangle. */}
+          <linearGradient id="ground-fade-x" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#fff" stop-opacity="0" />
+            <stop offset="0.16" stop-color="#fff" stop-opacity="1" />
+            <stop offset="0.84" stop-color="#fff" stop-opacity="1" />
+            <stop offset="1" stop-color="#fff" stop-opacity="0" />
+          </linearGradient>
+          <linearGradient id="ground-fade-y" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#000" stop-opacity="1" />
+            <stop offset="0.3" stop-color="#000" stop-opacity="0" />
+          </linearGradient>
+          <mask id="ground-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="540" height="360">
+            <rect width="540" height="360" fill="url(#ground-fade-x)" />
+            <rect width="540" height="360" fill="url(#ground-fade-y)" />
+          </mask>
         </defs>
+        <g mask="url(#ground-mask)">
         <rect width="540" height="360" fill="url(#ground-sky)" />
 
-        <g class="cloud-drift" fill="#FDFBF7" opacity="0.6">
+        <g fill="#FDFBF7" opacity="0.6">
           <ellipse cx="120" cy="80" rx="35" ry="14" />
           <ellipse cx="145" cy="72" rx="28" ry="16" />
           <ellipse cx="95" cy="76" rx="22" ry="12" />
         </g>
-        <g class="cloud-drift cd2" fill="#FDFBF7" opacity="0.45">
+        <g fill="#FDFBF7" opacity="0.45">
           <ellipse cx="420" cy="60" rx="40" ry="16" />
           <ellipse cx="450" cy="52" rx="32" ry="18" />
           <ellipse cx="390" cy="56" rx="26" ry="14" />
@@ -53,8 +70,9 @@
         <path d="M0 300 Q150 278 300 292 T540 284 L540 360 L0 360Z" class="f-karkadeh" />
         <path class="draw st-ochre" d="M10 310 Q160 290 310 304 T530 296" fill="none" stroke-width="4" stroke-linecap="round" />
         <path class="draw st-karkadeh-deep" d="M40 332 Q180 314 330 328 T510 322" fill="none" stroke-width="3" stroke-linecap="round" opacity="0.55" />
+        </g>
 
-        <g class="fade-in flow st-ochre" stroke-width="3" stroke-dasharray="3 16" stroke-linecap="round">
+        <g class="fade-in st-ochre" stroke-width="3" stroke-dasharray="3 16" stroke-linecap="round">
           <path d="M80 228 Q280 208 480 222" fill="none" />
           <path d="M80 210 Q280 190 480 204" fill="none" />
           <path d="M60 248 Q260 228 460 242" fill="none" opacity="0.6" />
@@ -85,7 +103,7 @@
     <a class="cta reveal" data-d="4" href="#roots">Enter the roots →</a>
   </div>
 
-  <div class="covenant-cards" style="grid-column: 1 / -1" aria-label="The three elements of the common ground">
+  <div class="covenant-cards block" aria-label="The three elements of the common ground">
     <article class="card reveal" data-d="1">
       <figure class="glyph" aria-hidden="true">
         <svg viewBox="0 0 120 72" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
@@ -102,7 +120,7 @@
         without. Around the Great Lakes it has governed how peoples share
         hunting grounds and resources for centuries.
       </p>
-      <h4 class="card-sub">What Pamoja has learned from it</h4>
+      <h4 class="card-sub">What we learned</h4>
       <p>Three principles we hold and practise:</p>
       <ul>
         <li>Take only what you need.</li>
@@ -133,7 +151,7 @@
         — each carrying its own laws, customs, and ways — neither steering the
         other's path. An ethic of coexistence without erasure.
       </p>
-      <h4 class="card-sub">What Pamoja has learned from it</h4>
+      <h4 class="card-sub">What we learned</h4>
       <p>
         That difference does not have to be dissolved for people to travel
         together. Two paths, side by side, each whole: this is how Pamoja
@@ -168,7 +186,7 @@
         discrimination. It is not a covenant from one people to another — it
         belongs to everyone who stands here.
       </p>
-      <h4 class="card-sub">What Pamoja has learned from it</h4>
+      <h4 class="card-sub">What we learned</h4>
       <p>
         That rights on paper become real in practice — in rooms, parks, and
         workplaces where people actually assemble, speak, worship, and gather
@@ -183,7 +201,7 @@
     </article>
   </div>
 
-  <p class="closing-line reveal" style="grid-column: 1 / -1">
+  <p class="closing-line reveal block-end">
     The soil is shared; the roots are ours. What Pamoja draws from this ground
     becomes <a href="#roots">our roots</a> — Ta'aruf and Takaful, the
     traditions of our own that we bring to the common ground.
@@ -215,7 +233,7 @@
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--river-deep);
+    color: var(--river);
     margin: 0.75rem 0 0.5rem;
   }
   .covenant-cards p {

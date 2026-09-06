@@ -71,9 +71,11 @@ h1, h2, h3 {
   letter-spacing: -0.03em;
   color: var(--night);
 }
-h1 { font-size: clamp(4rem, 10vw, 9rem); margin: 0; }
-h2 { font-size: clamp(2.8rem, 6vw, 6rem); margin: 0 0 1rem; font-weight: 500; }
+h1 { font-size: clamp(4rem, 9vw, 8rem); margin: 0; }
+h2 { font-size: clamp(2.6rem, 5vw, 4.5rem); margin: 0 0 1rem; font-weight: 500; }
 h3 { font-size: 1.4rem; margin: 0 0 0.5rem; }
+/* Even line breaks on display copy: no orphan words under a 4.5rem heading. */
+h1, h2, h3 { text-wrap: balance; }
 p { max-width: var(--max-prose); }
 a { color: var(--river); text-underline-offset: 0.2em; }
 img, svg { max-width: 100%; height: auto; }
@@ -103,12 +105,13 @@ button { font: inherit; }
   margin-inline: auto;
 }
 
-/* Eyebrow / tag label. River green holds 4.5:1 on paper at this size. */
+/* Eyebrow / tag label. Two colours only: river on light grounds, river-pale
+   on dark ones (set by the dark bands). Karkadeh is reserved for numbering. */
 .tag {
   font-family: var(--font-ui);
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--river);
   margin: 0 0 1.1rem;
@@ -155,9 +158,41 @@ section.journey--tinted { background: var(--cream); }
     min-height: auto;
     padding: 100px 7vw;
   }
+  /* On one column the heading explains the art, so it comes first. */
+  section.journey > .copy { order: -1; }
 }
 
 .copy { position: relative; z-index: 2; }
+
+/* Full-width rows below the art/copy pair. A plain .block spans both
+   columns; a .block-split lines its heading up with the art column and its
+   body with the copy column, so long prose never hugs the left edge with an
+   empty half-page beside it. .block-end sits in the copy column alone. */
+.block { grid-column: 1 / -1; }
+.block-split {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 1rem;
+}
+.block-end { grid-column: 1 / -1; }
+@media (min-width: 851px) {
+  .block-split {
+    grid-template-columns: 0.8fr 1.2fr;
+    column-gap: 8vw;
+    grid-template-columns: subgrid;
+    align-items: start;
+  }
+  .block-split > .block-head {
+    position: sticky;
+    top: 6rem;
+  }
+  .block-end { grid-column: 2; }
+}
+.block-head > h3,
+.block-head > h4 { margin-bottom: 0.75rem; }
+.block-head > p { margin: 0; }
+.block-body > :first-child { margin-top: 0; }
+.block-body > :last-child { margin-bottom: 0; }
 
 /* Ghost numeral: driven by the section's data-number attribute. */
 .ghost-number::before,
@@ -171,12 +206,12 @@ section.journey::before {
   font-weight: 700;
   font-size: clamp(5rem, 13vw, 9rem);
   line-height: 1;
-  color: color-mix(in srgb, var(--ink) 22%, transparent);
+  color: color-mix(in srgb, var(--ink) 8%, transparent);
   pointer-events: none;
   transition: color 1s ease;
 }
 section.journey.in-view::before {
-  color: color-mix(in srgb, var(--ink) 36%, transparent);
+  color: color-mix(in srgb, var(--ink) 13%, transparent);
 }
 
 /* ==========================================================================
@@ -238,6 +273,9 @@ html.js .reveal.in { opacity: 1; transform: none; }
   max-width: 560px;
   overflow: visible;
 }
+/* Every scene's ground fades out at its sides, like the hero mound, so no
+   scene shows a hard rectangular edge: each scene masks its ground layers
+   with its own horizontal fade gradient. */
 @media (max-width: 850px) {
   .art { min-height: 340px; }
 }
@@ -340,11 +378,20 @@ html.js .art.in .chip-float.d3 { transition-delay: 0.4s; }
 html.js .art.in .chip-float.d4 { transition-delay: 0.6s; }
 html.js .art.in .chip-float.d5 { transition-delay: 0.8s; }
 
+/* One rule for card accents: a river top edge on cards, an ochre left edge
+   on list items (see .list-item). Sections no longer set their own. */
 .card {
   background: var(--white);
   border: 1px solid var(--line);
+  border-top: 3px solid var(--river);
   border-radius: 18px;
   padding: 2rem 1.75rem;
+}
+.list-item {
+  padding: 1rem 1.25rem;
+  background: var(--cream);
+  border-radius: 10px;
+  border-left: 4px solid var(--ochre);
 }
 
 /* Primary action: karkadeh on paper, lifts and turns river on hover. */
@@ -372,8 +419,10 @@ html.js .art.in .chip-float.d5 { transition-delay: 0.8s; }
 }
 
 /* ==========================================================================
-   Idle ambient motion for section art. Only ever defined when motion is
-   welcome, so the reduced-motion block below never has to chase them.
+   Idle ambient motion for section art — at most one per scene (canopy
+   sways, trunk leaves flutter, the sun turns, root tips pulse, the grove's
+   flows run, the sprout sways). Only ever defined when motion is welcome,
+   so the reduced-motion block below never has to chase them.
    ========================================================================== */
 @media (prefers-reduced-motion: no-preference) {
   .sway {
@@ -383,29 +432,6 @@ html.js .art.in .chip-float.d5 { transition-delay: 0.8s; }
   @keyframes sway {
     0%, 100% { transform: rotate(-0.8deg); }
     50% { transform: rotate(1.2deg); }
-  }
-
-  .bob { animation: bob 7s ease-in-out infinite; }
-  @keyframes bob {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
-  }
-
-  .rustle { transform-box: fill-box; }
-  .rustle-a { transform-origin: 55% 85%; animation: rustleA 7s ease-in-out infinite; }
-  .rustle-b { transform-origin: 50% 90%; animation: rustleB 8.5s ease-in-out infinite; }
-  .rustle-c { transform-origin: 45% 85%; animation: rustleC 7.8s ease-in-out infinite; }
-  @keyframes rustleA {
-    0%, 100% { transform: rotate(-1.2deg); }
-    50% { transform: rotate(1.5deg); }
-  }
-  @keyframes rustleB {
-    0%, 100% { transform: rotate(1.2deg); }
-    50% { transform: rotate(-1.8deg); }
-  }
-  @keyframes rustleC {
-    0%, 100% { transform: rotate(-1deg); }
-    50% { transform: rotate(1.6deg); }
   }
 
   .flutter {
@@ -418,34 +444,6 @@ html.js .art.in .chip-float.d5 { transition-delay: 0.8s; }
   @keyframes flutter {
     0%, 100% { transform: rotate(-5deg); }
     50% { transform: rotate(6deg); }
-  }
-
-  .realistic-leaf {
-    transform-box: fill-box;
-    transform-origin: bottom center;
-    animation: leafFlutter 4s ease-in-out infinite;
-  }
-  .realistic-leaf.rl2 { animation-delay: 1.2s; animation-duration: 5s; }
-  .realistic-leaf.rl3 { animation-delay: 2.4s; animation-duration: 4.5s; }
-  @keyframes leafFlutter {
-    0%, 100% { transform: rotate(-3deg) scale(1); }
-    50% { transform: rotate(4deg) scale(1.02); }
-  }
-
-  .soil-particle { animation: soilFloat 8s ease-in-out infinite; }
-  .soil-particle.sp2 { animation-delay: -3s; animation-duration: 10s; }
-  .soil-particle.sp3 { animation-delay: -6s; animation-duration: 9s; }
-  @keyframes soilFloat {
-    0%, 100% { transform: translateY(0) translateX(0); }
-    33% { transform: translateY(-4px) translateX(2px); }
-    66% { transform: translateY(2px) translateX(-2px); }
-  }
-
-  .cloud-drift { animation: cloudMove 30s ease-in-out infinite alternate; }
-  .cloud-drift.cd2 { animation-delay: -10s; animation-duration: 35s; }
-  @keyframes cloudMove {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(20px); }
   }
 
   .sun-rays { animation: spin 100s linear infinite; }

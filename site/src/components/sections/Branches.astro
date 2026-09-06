@@ -9,11 +9,29 @@ const branches = await getBranches();
 ---
 
 <section id="our-work" class="journey journey--tinted" data-number="04" aria-labelledby="our-work-title">
-  <div class="art reveal">
-    <div class="branch-grid">
+  {/* This stop breaks the art/copy pair: the heading and lead take the
+      first row, and the four branches get the full width below so each card
+      has room to read. */}
+  <div class="copy block-split our-work-intro">
+    <div class="block-head">
+      <p class="tag reveal">04 · Branches</p>
+      <h2 class="reveal" data-d="1" id="our-work-title">Our Work</h2>
+    </div>
+    <div class="block-body">
+      <p class="reveal" data-d="2">
+        Everything Pamoja grows hangs off four branches. They overlap on
+        purpose: an event can build connection, strengthen cohesion, deepen a
+        partnership, and link existing efforts at the same time. The filter
+        below shows the overlap rather than hiding it.
+      </p>
+      <a class="cta reveal" data-d="3" href="#archive">Explore the archive →</a>
+    </div>
+  </div>
+  <div class="branch-grid block">
       {branches.map((branch, i) => (
         <a
-          class="branch-card"
+          class="branch-card reveal"
+          data-d={String(i + 1)}
           href={`?serves=${branch.slug}#archive`}
           data-branch-target={branch.slug}
           aria-label={`${branch.title} — see the gatherings that served it`}
@@ -28,35 +46,33 @@ const branches = await getBranches();
       ))}
     </div>
   </div>
-  <div class="copy">
-    <p class="tag reveal">04 · Branches</p>
-    <h2 class="reveal" data-d="1" id="our-work-title">Our Work</h2>
-    <p class="reveal" data-d="2">
-      Everything Pamoja grows hangs off four branches. They overlap on
-      purpose: an event can build connection, strengthen cohesion, deepen a
-      partnership, and link existing efforts at the same time. The filter
-      below shows the overlap rather than hiding it.
-    </p>
-    <a class="cta reveal" data-d="3" href="#archive">Explore the archive →</a>
-  </div>
 </section>
 
 <style>
-  .art {
+  #our-work {
     min-height: 0;
+    align-content: start;
+    row-gap: 3rem;
+    /* The intro's body sits in the right column, where the ghost numeral
+       lives; start the content below it. */
+    padding-top: max(13vh, 12.5rem);
   }
+  #our-work::before {
+    top: 3vh;
+  }
+  .our-work-intro .block-head { position: static; }
   .branch-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
     width: 100%;
-    max-width: 590px;
   }
   .branch-card {
-    display: block;
+    display: flex;
+    flex-direction: column;
     padding: 1.5rem;
     border: 1px solid var(--line);
-    border-top: 2px solid var(--river);
+    border-top: 3px solid var(--river);
     border-radius: 18px;
     background: color-mix(in srgb, var(--white) 55%, transparent);
     min-height: 160px;
@@ -89,19 +105,25 @@ const branches = await getBranches();
   }
   .go {
     display: inline-block;
-    margin-top: 0.75rem;
+    margin-top: auto;
+    padding-top: 1rem;
     font-family: var(--font-ui);
     font-size: 0.68rem;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--river-deep);
+    color: var(--river);
   }
   .branch-card:hover .go {
     color: var(--hibiscus);
   }
 
-  @media (max-width: 850px) {
+  @media (max-width: 1100px) {
+    .branch-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 600px) {
     .branch-grid {
       grid-template-columns: 1fr;
     }

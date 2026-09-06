@@ -50,51 +50,10 @@
       <mask id="ht-soil-mask" maskUnits="userSpaceOnUse" x="-40" y="600" width="800" height="240">
         <rect x="-40" y="600" width="800" height="240" fill="url(#ht-soil-fade)" />
       </mask>
-      {/* Contact shadow where the foot meets the soil */}
-      <radialGradient id="ht-contact" cx="0.5" cy="0.5" r="0.5">
-        <stop offset="0" style="stop-color: var(--night)" stop-opacity="0.42" />
-        <stop offset="0.55" style="stop-color: var(--night)" stop-opacity="0.16" />
-        <stop offset="1" style="stop-color: var(--night)" stop-opacity="0" />
-      </radialGradient>
-      <linearGradient id="ht-bark" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0" style="stop-color: var(--night)" />
-        <stop offset="0.12" style="stop-color: var(--karkadeh-deep)" />
-        <stop offset="0.42" style="stop-color: var(--karkadeh-deep)" />
-        <stop offset="0.72" style="stop-color: var(--karkadeh)" />
-        <stop offset="0.92" style="stop-color: var(--karkadeh-deep)" />
-        <stop offset="1" style="stop-color: var(--night)" />
-      </linearGradient>
-      {/* Limbs: lit above, shaded below, ending in the trunk's rim tone. */}
-      <linearGradient id="ht-limb" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" style="stop-color: var(--karkadeh-deep)" />
-        <stop offset="0.55" style="stop-color: var(--karkadeh-deep)" />
-        <stop offset="1" style="stop-color: var(--night)" />
-      </linearGradient>
-      <radialGradient id="ht-leaf-a" cx="0.4" cy="0.35" r="1">
-        <stop offset="0" style="stop-color: var(--river-pale)" />
-        <stop offset="0.55" style="stop-color: var(--river)" />
-        <stop offset="1" style="stop-color: var(--river-deep)" />
-      </radialGradient>
-      <radialGradient id="ht-leaf-b" cx="0.42" cy="0.32" r="1">
-        <stop offset="0" style="stop-color: var(--river-pale)" />
-        <stop offset="0.55" style="stop-color: var(--river-light)" />
-        <stop offset="1" style="stop-color: var(--river-deep)" />
-      </radialGradient>
-      <radialGradient id="ht-leaf-c" cx="0.45" cy="0.3" r="1">
-        <stop offset="0" style="stop-color: var(--river-light)" />
-        <stop offset="0.6" style="stop-color: var(--river)" />
-        <stop offset="1" style="stop-color: var(--river-deep)" />
-      </radialGradient>
-      {/* Inner shade of the crown: soft-edged so it reads as depth, not blobs. */}
-      <radialGradient id="ht-shade" cx="0.5" cy="0.55" r="0.55">
-        <stop offset="0" style="stop-color: var(--river-deep)" stop-opacity="0.5" />
-        <stop offset="0.6" style="stop-color: var(--river-deep)" stop-opacity="0.22" />
-        <stop offset="1" style="stop-color: var(--river-deep)" stop-opacity="0" />
-      </radialGradient>
     </defs>
 
     {/* Sky warmth behind the crown */}
-    <circle cx="360" cy="210" r="310" fill="url(#ht-sky)" />
+    <circle cx="360" cy="210" r="310" fill="url(#ht-sky)" opacity="0.6" />
 
     {/* Lower layer: the shared ground. It sinks on scroll; the tree — roots
         included — lifts as one body, so nothing pulls apart. */}
@@ -136,8 +95,8 @@
           </g>
           <ellipse cx="216" cy="672" rx="10" ry="6" class="f-ochre" opacity="0.9" />
           <ellipse cx="516" cy="676" rx="8" ry="5" class="f-ochre" opacity="0.7" />
-          {/* Contact shadow: the foot presses into the soil */}
-          <ellipse cx="368" cy="670" rx="126" ry="18" fill="url(#ht-contact)" />
+          {/* Contact shadow: a flat night wash where the foot presses in */}
+          <ellipse cx="368" cy="670" rx="110" ry="14" class="f-night" opacity="0.22" />
         </g>
       </a>
     </g>
@@ -164,7 +123,7 @@
       </a>
 
       <a href="#our-work" class="tree-link" aria-label="Branches — Our Work">
-        <g id="tree-branches" fill="url(#ht-limb)">
+        <g id="tree-branches" class="f-karkadeh-deep">
           <path d="M359 389 C354 390 338 393 329 393 C320 392 312 389 303 386 C294 384 286 381 277 379 C268 376 259 374 249 371 C240 369 230 366 221 363 C211 360 201 357 191 354 C182 351 171 347 161 343 C151 339 136 333 131 331 C125 329 125 330 129 333 C134 336 150 343 159 348 C169 353 179 357 188 362 C198 366 207 371 216 375 C225 380 234 384 243 388 C251 392 260 397 268 401 C276 405 284 409 292 413 C300 418 308 420 314 427 C320 433 327 447 329 451 Z" />
           <path d="M404 443 C407 439 414 425 421 419 C427 413 435 410 443 406 C451 402 459 398 467 394 C475 390 483 386 492 382 C500 378 508 375 517 370 C525 366 534 362 543 358 C552 354 560 349 569 345 C578 340 592 334 597 331 C601 328 600 327 595 329 C591 330 577 337 567 340 C558 344 549 347 540 350 C531 353 521 356 512 358 C503 361 494 363 485 366 C477 368 468 370 459 372 C450 374 441 377 433 379 C424 381 416 385 407 385 C397 385 381 382 376 381 Z" />
           <path d="M376 337 C372 335 359 330 352 326 C345 321 340 316 334 311 C328 306 322 301 316 296 C310 291 305 286 299 282 C294 277 288 273 283 269 C278 265 272 261 267 257 C262 253 257 249 252 245 C247 242 239 236 237 235 C234 234 233 235 235 237 C237 239 244 245 249 249 C254 253 258 257 263 262 C267 266 272 271 277 276 C281 281 286 286 291 291 C295 296 300 302 305 307 C310 313 315 319 320 325 C324 330 330 336 334 343 C338 350 342 363 344 367 Z" />
@@ -184,7 +143,13 @@
           {/* The trunk flares into a foot that the roots grow out of. */}
           <path
             d="M296 674 C318 662 324 622 326 560 C328 500 322 460 330 420 C338 356 344 320 338 268 L392 262 C388 316 396 358 404 424 C412 470 406 520 408 560 C410 622 418 662 440 674 C416 683 320 683 296 674 Z"
-            fill="url(#ht-bark)"
+            class="f-karkadeh-deep"
+          />
+          {/* Flat shade down the trunk's right side, like the logo's cut shapes */}
+          <path
+            d="M372 264 L392 262 C388 316 396 358 404 424 C412 470 406 520 408 560 C410 622 418 662 440 674 C428 678 410 680 392 681 C396 640 390 600 388 560 C386 520 392 470 384 424 C376 358 370 316 372 264 Z"
+            class="f-night"
+            opacity="0.35"
           />
           <g fill="none" stroke-linecap="round">
             <path d="M346 640 C342 560 342 480 350 400" class="st-night" stroke-width="3.5" opacity="0.5" />
@@ -203,20 +168,22 @@
         <g id="tree-canopy" class="canopy-sway">
           <path
             d="M238 210 C216 172 244 128 292 122 C302 84 356 62 398 80 C438 54 498 74 512 116 C556 118 584 160 570 200 C592 232 566 270 526 274 C502 306 448 310 420 288 C384 312 326 304 306 276 C262 284 232 252 238 210 Z"
-            fill="url(#ht-leaf-b)"
+            class="f-river-light crown-lobe"
           />
           <path
             d="M112 330 C92 300 108 258 148 248 C156 214 204 196 240 210 C268 186 316 192 332 222 C366 226 384 262 370 292 C388 320 366 354 330 356 C306 384 254 386 232 364 C196 380 148 372 134 344 C118 342 108 336 112 330 Z"
-            fill="url(#ht-leaf-a)"
+            class="f-river crown-lobe"
           />
           <path
             d="M610 328 C630 296 612 254 572 246 C564 210 514 192 478 208 C450 184 402 192 388 224 C354 230 338 266 354 296 C336 324 360 356 396 356 C422 382 474 382 494 360 C532 376 578 366 590 338 C604 336 614 332 610 328 Z"
-            fill="url(#ht-leaf-c)"
+            class="f-river-deep crown-lobe"
           />
-          {/* Inner shade and light */}
-          <ellipse cx="366" cy="242" rx="80" ry="62" fill="url(#ht-shade)" />
-          <ellipse cx="224" cy="318" rx="70" ry="52" fill="url(#ht-shade)" />
-          <ellipse cx="520" cy="316" rx="70" ry="52" fill="url(#ht-shade)" />
+          {/* Flat lit caps on each lobe, cut the way the logo cuts its shapes */}
+          <g class="f-river-pale" opacity="0.55">
+            <path d="M292 122 C302 84 356 62 398 80 C438 54 498 74 512 116 C470 104 430 110 398 122 C360 108 322 112 292 122 Z" />
+            <path d="M148 248 C156 214 204 196 240 210 C268 186 316 192 332 222 C300 214 268 220 240 232 C208 220 176 230 148 248 Z" />
+            <path d="M572 246 C564 210 514 192 478 208 C450 184 402 192 388 224 C420 216 452 222 478 234 C510 222 542 230 572 246 Z" />
+          </g>
           <g fill="none" class="st-river-light" stroke-width="5" stroke-linecap="round" opacity="0.5">
             <path d="M268 150 C330 118 420 116 486 150" />
             <path d="M150 262 C196 238 258 234 308 250" />
@@ -264,10 +231,13 @@
     width: 100%;
     height: auto;
   }
-  /* Only the standing tree casts a shadow — onto its own soil. The soil
-     itself has no edge to shadow; it is part of the page's ground. */
-  .layer-rise {
-    filter: drop-shadow(0 16px 14px color-mix(in srgb, var(--night) 22%, transparent));
+  /* Flat, cut shapes with a hand-drawn edge — the tree matches the
+     wordmark's treatment (solid swatch fills, no airbrush, no drop
+     shadow) so logo, type and illustration read as one system. */
+  .crown-lobe {
+    stroke: var(--river-deep);
+    stroke-width: 2.5;
+    stroke-linejoin: round;
   }
 
   /* Token fills/strokes live in global.css (f-*, st-*), shared by all art. */
@@ -317,28 +287,16 @@
     .layer-rise {
       transform: translateY(calc(var(--hero-p, 0) * -18px));
     }
+    /* One idle motion for the hero: the crown sways. The motes are part of
+       the still drawing. */
     .canopy-sway {
       transform-origin: 50% 90%;
       animation: ht-sway 12s ease-in-out infinite;
     }
-    .mote {
-      animation: mote-rise 10s ease-in-out infinite;
-    }
-    .m1 { --dx: -26px; animation-delay: -1s; }
-    .m2 { --dx: 12px; animation-delay: -3.5s; animation-duration: 11s; }
-    .m3 { --dx: 30px; animation-delay: -6s; }
-    .m4 { --dx: 42px; animation-delay: -2.2s; animation-duration: 12s; }
-    .m5 { --dx: -40px; animation-delay: -8s; animation-duration: 12s; }
-    .m6 { --dx: 36px; animation-delay: -5s; animation-duration: 9s; }
   }
 
   @keyframes ht-sway {
     0%, 100% { transform: rotate(-0.7deg); }
     50% { transform: rotate(0.9deg); }
-  }
-  @keyframes mote-rise {
-    0% { transform: translate(0, 12px) rotate(0deg); opacity: 0; }
-    18% { opacity: 0.85; }
-    100% { transform: translate(var(--dx, 20px), -72px) rotate(42deg); opacity: 0; }
   }
 </style>

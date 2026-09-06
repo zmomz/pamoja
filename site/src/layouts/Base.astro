@@ -171,6 +171,8 @@ const ogImageUrl = new URL(ogImage ?? settings.ogDefaultImage?.url ?? '/brand/og
           .map(function (id) { return { id: id, el: document.getElementById(id) }; })
           .filter(function (s) { return s.el; });
         var journeySections = document.querySelectorAll('section.journey');
+        var rail = document.querySelector('.journey-rail');
+        var hero = document.querySelector('.hero');
 
         function absTop(el) { return el.getBoundingClientRect().top + window.scrollY; }
 
@@ -223,6 +225,9 @@ const ogImageUrl = new URL(ogImage ?? settings.ogDefaultImage?.url ?? '/brand/og
             var r = s.getBoundingClientRect();
             s.classList.toggle('in-view', r.top < vh * 0.6 && r.bottom > vh * 0.4);
           });
+          if (rail && hero) {
+            rail.classList.toggle('in-hero', window.scrollY < hero.offsetTop + hero.offsetHeight - vh * 0.5);
+          }
         }
 
         var ticking = false;
