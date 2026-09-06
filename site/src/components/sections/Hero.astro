@@ -3,8 +3,9 @@ import HeroTree from './HeroTree.astro';
 
 // The tree is the site's map. Each part carries the same number its section
 // uses (01 Soil … 07 Seeds; 06, the grove, stands around the tree rather
-// than on it), a persistent label, and the part's own colour — so the
-// metaphor reads on first sight, on touch as well as with a mouse.
+// than on it) and the part's own colour. Labels are plain text, no chip:
+// they appear on hover/focus with a pointer, and stay visible on touch,
+// where there is no hover to reveal them.
 const hotspots = [
   { href: '#what-we-offer', num: '05', label: 'Canopy', part: 'canopy', aria: 'Go to What We Offer — the canopy', x: 50, y: 18, side: 'right' },
   { href: '#our-work', num: '04', label: 'Branches', part: 'branches', aria: 'Go to Our Work — the branches', x: 22, y: 42, side: 'right' },
@@ -18,12 +19,18 @@ const hotspots = [
 <section class="hero" aria-labelledby="hero-title">
   <div class="hero-copy">
     <p class="tag">Cultural Collective · Hamilton</p>
-    <h1 id="hero-title">Pamoja<span class="period" aria-hidden="true">.</span></h1>
+    {/* The wordmark in the header is the name; the hero word is the
+        argument. Pamoja is Kiswahili for together. */}
+    <h1 id="hero-title">Together<span class="period" aria-hidden="true">.</span></h1>
     <p class="lead">
-      <em>Together</em> — building a city through relationship, cultural
-      knowledge, creativity and mutual care.
+      <em>Pamoja</em> is Kiswahili for together — building a city through
+      relationship, cultural knowledge, creativity and mutual care.
     </p>
   </div>
+
+  <span class="drift-leaf" style="right:14%;top:12%" aria-hidden="true"></span>
+  <span class="drift-leaf dl2" style="right:32%;top:6%" aria-hidden="true"></span>
+  <span class="drift-leaf dl3" style="right:22%;top:18%" aria-hidden="true"></span>
 
   <div class="hero-tree-stage" id="hero-tree-stage">
     <HeroTree />
@@ -35,18 +42,13 @@ const hotspots = [
         style={`left:${h.x}%;top:${h.y}%`}
       >
         <i aria-hidden="true"></i>
-        <span class="hotspot-tag" aria-hidden="true">
+        <span class="hotspot-label" aria-hidden="true">
           <span class="hotspot-num">{h.num}</span>
           {h.label}
         </span>
       </a>
     ))}
   </div>
-
-  <p class="scroll-cue" aria-hidden="true">
-    <span class="cue-long">Scroll down through the tree: ground, roots, trunk, branches, canopy, seeds ↓</span>
-    <span class="cue-short">Scroll down through the tree ↓</span>
-  </p>
 </section>
 
 <script is:inline>
@@ -127,13 +129,14 @@ const hotspots = [
   }
   .lead {
     font-size: clamp(1rem, 1.6vw, 1.25rem);
-    max-width: 34ch;
+    max-width: 36ch;
     margin: 1.25rem 0 0;
     text-wrap: balance;
   }
   .lead em {
     font-family: var(--font-display);
     font-style: italic;
+    font-weight: 600;
   }
 
   /* Sized by width and by height, so the crown never runs under the
@@ -147,22 +150,23 @@ const hotspots = [
     will-change: transform;
   }
 
-  /* Hotspots: a small coloured mark plus a persistent numbered tag. The
-     number matches the section numeral, the colour matches the part. */
+  /* Hotspots: a small coloured mark, and a plain-text numbered label with
+     no chip behind it. Pointer devices reveal the label on hover/focus;
+     touch devices keep it visible, since nothing hovers there. */
   .hotspot {
     --part: var(--river);
     position: absolute;
     z-index: 6;
     display: flex;
     align-items: center;
-    gap: 0.45rem;
-    transform: translate(-9px, -50%);
+    gap: 0.5rem;
+    transform: translate(-8px, -50%);
     text-decoration: none;
-    color: var(--ink);
+    color: var(--night);
   }
   .hotspot--left {
     flex-direction: row-reverse;
-    transform: translate(calc(-100% + 9px), -50%);
+    transform: translate(calc(-100% + 8px), -50%);
   }
   .hotspot--ground { --part: var(--ochre); }
   .hotspot--roots { --part: var(--karkadeh); }
@@ -172,74 +176,77 @@ const hotspots = [
   .hotspot--seeds { --part: var(--hibiscus); }
   .hotspot i {
     flex: none;
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
     background: var(--part);
     border: 3px solid var(--paper);
     box-shadow: 0 0 0 1px color-mix(in srgb, var(--part) 55%, transparent);
     transition: transform 0.25s ease;
   }
-  .hotspot-tag {
+  .hotspot-label {
     display: inline-flex;
     align-items: baseline;
-    gap: 0.4rem;
-    padding: 0.28rem 0.6rem 0.28rem 0.55rem;
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--paper) 92%, transparent);
-    border: 1px solid var(--line);
+    gap: 0.35rem;
     font-family: var(--font-ui);
     font-size: 0.66rem;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     white-space: nowrap;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    /* Every mark sits on a dark part of the tree (crown, trunk, soil), so
+       the label is paper with a soft night halo — readable without a box. */
+    color: var(--paper);
+    text-shadow:
+      0 0 3px color-mix(in srgb, var(--night) 85%, transparent),
+      0 0 8px color-mix(in srgb, var(--night) 60%, transparent),
+      0 1px 1px color-mix(in srgb, var(--night) 70%, transparent);
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
   }
-  .hotspot-num {
-    color: var(--part);
+  .hotspot--left .hotspot-label { transform: translateX(4px); }
+  .hotspot-num { color: var(--ochre-light); }
+  .hotspot:hover .hotspot-label,
+  .hotspot:focus-visible .hotspot-label {
+    opacity: 1;
+    transform: none;
   }
-  .hotspot:hover .hotspot-tag,
-  .hotspot:focus-visible .hotspot-tag {
-    transform: translateY(-2px);
-    border-color: var(--part);
-    box-shadow: 0 8px 18px color-mix(in srgb, var(--night) 14%, transparent);
+  @media (hover: none) {
+    .hotspot-label { opacity: 1; transform: none; }
   }
   .hotspot:hover i,
   .hotspot:focus-visible i {
     transform: scale(1.2);
   }
   .hotspot:focus-visible {
-    outline: none;
-  }
-  .hotspot:focus-visible .hotspot-tag {
     outline: 3px solid var(--hibiscus);
-    outline-offset: 2px;
+    outline-offset: 4px;
+    border-radius: 999px;
   }
 
-  /* The scroll cue names the journey. It bobs, and the bob keeps the
-     centring transform (--cue-x) instead of replacing it. */
-  .scroll-cue {
-    --cue-x: 0px;
+  /* Leaves drifting down across the hero: the tree gives back. */
+  .drift-leaf {
     position: absolute;
-    z-index: 8;
-    bottom: 30px;
-    left: 6vw;
-    margin: 0;
-    font-family: var(--font-ui);
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--paper);
-    max-width: none;
-    animation: cue-pulse 2.6s ease-in-out infinite;
+    z-index: 4;
+    width: 22px;
+    height: 14px;
+    border-radius: 80% 10% 80% 10%;
+    background: var(--river);
+    opacity: 0;
   }
-  .cue-short { display: none; }
-
-  @keyframes cue-pulse {
-    0%, 100% { transform: translate(var(--cue-x), 0); }
-    50% { transform: translate(var(--cue-x), 6px); }
+  .drift-leaf.dl2 { background: var(--river-pale); }
+  .drift-leaf.dl3 { background: var(--river-deep); width: 18px; height: 12px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .drift-leaf { animation: drift 16s linear infinite; }
+    .drift-leaf.dl2 { animation-delay: 6s; animation-duration: 20s; }
+    .drift-leaf.dl3 { animation-delay: 11s; animation-duration: 18s; }
+  }
+  @keyframes drift {
+    0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.8; }
+    90% { opacity: 0.5; }
+    100% { transform: translate(-50vw, 60vh) rotate(340deg); opacity: 0; }
   }
 
   @media (max-width: 850px) {
@@ -248,7 +255,7 @@ const hotspots = [
     .hero {
       min-height: auto;
       padding-top: calc(4.5rem + 1.75rem);
-      padding-bottom: 5.5rem;
+      padding-bottom: 2.5rem;
     }
     .hero-copy {
       position: relative;
@@ -268,21 +275,9 @@ const hotspots = [
       width: min(100%, 520px);
       margin: 1.5rem auto 0;
     }
-    .hotspot-tag {
-      font-size: 0.6rem;
-      padding: 0.22rem 0.5rem 0.22rem 0.45rem;
-    }
-    .hotspot i { width: 15px; height: 15px; }
-    .scroll-cue {
-      --cue-x: -50%;
-      left: 50%;
-      bottom: 4.25rem; /* clears the 'On the tree' chip (14px + 42px) */
-      width: max-content;
-      max-width: calc(100vw - 2rem);
-      text-align: center;
-    }
-    .cue-long { display: none; }
-    .cue-short { display: inline; }
+    .hotspot-label { font-size: 0.6rem; }
+    .hotspot i { width: 14px; height: 14px; }
+    .drift-leaf { display: none; }
     .hotspot--canopy { left: 54% !important; top: 16% !important; }
     .hotspot--branches { left: 20% !important; top: 40% !important; }
     .hotspot--trunk { left: 53% !important; top: 56% !important; }
@@ -292,7 +287,6 @@ const hotspots = [
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .scroll-cue { animation: none; transform: translate(var(--cue-x), 0); }
-    .hotspot i, .hotspot-tag { transition: none; }
+    .hotspot i, .hotspot-label { transition: none; }
   }
 </style>

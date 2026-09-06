@@ -15,16 +15,7 @@ const links = [
 
 <header class:list={['site-header', { 'is-home': home }]} id="site-header">
   <a class="brand" href="/" aria-label="Pamoja Cultural Collective — home">
-    {/* One brand mark at a time: the circle badge while the hero's own
-        "Pamoja." is on screen (two wordmarks in one viewport compete), the
-        wordmark once scrolled, the white wordmark over the open menu. */}
-    <img
-      class="brand-badge"
-      src="/brand/badge-colour.png"
-      alt="Pamoja"
-      width="512"
-      height="512"
-    />
+    {/* The wordmark, and the white wordmark over the open menu. */}
     <img
       class="brand-logo"
       src="/brand/logo-karkadeh-860.png"
@@ -103,25 +94,16 @@ const links = [
       if (e.key === 'Escape' && !overlay.hidden) setMenu(false);
     });
 
-    // Condense the header once the page is scrolled, and swap the badge for
-    // the wordmark once the hero's own "Pamoja." has left the viewport.
+    // Condense the header once the page is scrolled.
     var ticking = false;
     function onScroll() {
       ticking = false;
       header.classList.toggle('scrolled', window.scrollY > 40);
-      // The header script runs before <main> is parsed, so look the hero
-      // up on each pass rather than once.
-      var hero = document.querySelector('.hero');
-      if (hero) {
-        var heroBottom = hero.offsetTop + hero.offsetHeight;
-        header.classList.toggle('in-hero', window.scrollY < heroBottom - 120);
-      }
     }
     window.addEventListener('scroll', function () {
       if (!ticking) { ticking = true; requestAnimationFrame(onScroll); }
     }, { passive: true });
     onScroll();
-    document.addEventListener('DOMContentLoaded', onScroll);
   })();
 </script>
 
@@ -152,17 +134,13 @@ const links = [
     text-decoration: none;
   }
   .brand-logo,
-  .brand-logo-white,
-  .brand-badge {
+  .brand-logo-white {
     display: none;
     width: auto;
   }
   .brand-logo { display: block; height: 48px; }
   .site-header.scrolled .brand-logo { height: 40px; }
-  :global(html.js) .site-header.is-home.in-hero .brand-logo { display: none; }
-  :global(html.js) .site-header.is-home.in-hero .brand-badge { display: block; height: 44px; }
-  .site-header.menu-open .brand-logo,
-  .site-header.menu-open .brand-badge { display: none; }
+  .site-header.menu-open .brand-logo { display: none; }
   .site-header.menu-open .brand-logo-white { display: block; height: 40px; }
   .site-header.menu-open {
     background: var(--night);
