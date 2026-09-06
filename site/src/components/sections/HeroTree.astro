@@ -29,7 +29,10 @@
       <linearGradient id="ht-soil" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0" style="stop-color: var(--ochre)" />
         <stop offset="0.45" style="stop-color: var(--karkadeh)" />
-        <stop offset="1" style="stop-color: var(--karkadeh-deep)" />
+        <stop offset="0.85" style="stop-color: var(--karkadeh-deep)" />
+        {/* Fades into the hero's ground shape (exactly --karkadeh-deep), so
+            the tree's soil and the page's curve read as one surface. */}
+        <stop offset="1" style="stop-color: var(--karkadeh-deep)" stop-opacity="0" />
       </linearGradient>
       <linearGradient id="ht-bark" x1="0" y1="0" x2="1" y2="0">
         <stop offset="0" style="stop-color: var(--night)" />
@@ -210,20 +213,7 @@
     filter: drop-shadow(0 26px 22px color-mix(in srgb, var(--night) 16%, transparent));
   }
 
-  /* Token fills/strokes (var() is unreliable in presentation attributes). */
-  .f-ochre { fill: var(--ochre); }
-  .f-night { fill: var(--night); }
-  .f-hibiscus { fill: var(--hibiscus); }
-  .f-river { fill: var(--river); }
-  .f-river-deep { fill: var(--river-deep); }
-  .f-river-light { fill: var(--river-light); }
-  .st-ochre { stroke: var(--ochre); }
-  .st-night { stroke: var(--night); }
-  .st-karkadeh { stroke: var(--karkadeh); }
-  .st-karkadeh-deep { stroke: var(--karkadeh-deep); }
-  .st-cream { stroke: var(--cream); }
-  .st-river { stroke: var(--river); }
-  .st-river-light { stroke: var(--river-light); }
+  /* Token fills/strokes live in global.css (f-*, st-*), shared by all art. */
 
   .tree-link > g {
     transition: filter 0.3s ease;

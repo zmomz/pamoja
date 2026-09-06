@@ -36,31 +36,31 @@
 
         <g class="grow g1" style="transform-origin:400px 120px">
           <circle cx="400" cy="120" r="70" fill="url(#ground-sun)" opacity="0.45" />
-          <circle cx="400" cy="120" r="48" style="fill: var(--ochre)" opacity="0.85" />
-          <circle cx="400" cy="120" r="32" style="fill: var(--ochre-light)" opacity="0.9" />
-          <g class="sun-rays" style="transform-origin:400px 120px; stroke: var(--ochre)" stroke-width="4" stroke-linecap="round" opacity="0.55">
+          <circle cx="400" cy="120" r="48" class="f-ochre" opacity="0.85" />
+          <circle cx="400" cy="120" r="32" class="f-ochre-light" opacity="0.9" />
+          <g class="sun-rays st-ochre" style="transform-origin:400px 120px" stroke-width="4" stroke-linecap="round" opacity="0.55">
             <path d="M400 28v-20" /><path d="M460 52l14-14" /><path d="M484 120h20" /><path d="M316 52l-14-14" /><path d="M292 120h-20" /><path d="M466 178l15 13" /><path d="M334 178l-15 13" />
             <path d="M434 34l10-8" /><path d="M366 34l-10-8" /><path d="M506 90l12-4" /><path d="M294 90l-12-4" />
           </g>
         </g>
 
-        <path d="M0 220 Q80 190 160 205 T320 195 T540 210 L540 360 L0 360Z" style="fill: var(--river-pale)" opacity="0.5" />
-        <path class="draw" d="M0 245 Q100 215 200 230 T400 220 T540 235" fill="none" style="stroke: var(--river)" stroke-width="3" stroke-linecap="round" opacity="0.6" />
+        <path d="M0 220 Q80 190 160 205 T320 195 T540 210 L540 360 L0 360Z" class="f-river-pale" opacity="0.5" />
+        <path class="draw st-river" d="M0 245 Q100 215 200 230 T400 220 T540 235" fill="none" stroke-width="3" stroke-linecap="round" opacity="0.6" />
 
-        <path d="M20 265 Q140 235 260 255 T520 245 L520 360 L20 360Z" style="fill: var(--river-light)" opacity="0.55" />
-        <path class="draw" d="M0 280 Q120 258 240 272 T500 262" fill="none" style="stroke: var(--river-deep)" stroke-width="3" stroke-linecap="round" opacity="0.5" />
+        <path d="M20 265 Q140 235 260 255 T520 245 L520 360 L20 360Z" class="f-river-light" opacity="0.55" />
+        <path class="draw st-river-deep" d="M0 280 Q120 258 240 272 T500 262" fill="none" stroke-width="3" stroke-linecap="round" opacity="0.5" />
 
-        <path d="M0 300 Q150 278 300 292 T540 284 L540 360 L0 360Z" style="fill: var(--karkadeh)" />
-        <path class="draw" d="M10 310 Q160 290 310 304 T530 296" fill="none" style="stroke: var(--ochre)" stroke-width="4" stroke-linecap="round" />
-        <path class="draw" d="M40 332 Q180 314 330 328 T510 322" fill="none" style="stroke: var(--karkadeh-deep)" stroke-width="3" stroke-linecap="round" opacity="0.55" />
+        <path d="M0 300 Q150 278 300 292 T540 284 L540 360 L0 360Z" class="f-karkadeh" />
+        <path class="draw st-ochre" d="M10 310 Q160 290 310 304 T530 296" fill="none" stroke-width="4" stroke-linecap="round" />
+        <path class="draw st-karkadeh-deep" d="M40 332 Q180 314 330 328 T510 322" fill="none" stroke-width="3" stroke-linecap="round" opacity="0.55" />
 
-        <g class="fade-in flow" style="stroke: var(--ochre)" stroke-width="3" stroke-dasharray="3 16" stroke-linecap="round">
+        <g class="fade-in flow st-ochre" stroke-width="3" stroke-dasharray="3 16" stroke-linecap="round">
           <path d="M80 228 Q280 208 480 222" fill="none" />
           <path d="M80 210 Q280 190 480 204" fill="none" />
           <path d="M60 248 Q260 228 460 242" fill="none" opacity="0.6" />
         </g>
 
-        <g class="fade-in" style="stroke: var(--river)" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.8">
+        <g class="fade-in st-river" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.8">
           <path d="M100 298 l-3-12 M106 299 l2-14 M112 299 l5-11" />
           <path d="M450 292 l-4-12 M456 293 l3-14 M462 293 l6-11" />
           <path d="M280 288 l-3-10 M286 289 l3-11" />
@@ -85,14 +85,6 @@
     <a class="cta reveal" data-d="4" href="#roots">Enter the roots →</a>
   </div>
 
-  <!--
-    TREATY CONTENT NOTICE: All wording here concerning the Dish With One
-    Spoon Wampum and the Two Row Wampum is placeholder pending Abdo's final
-    approval (brief §8: final approval on all treaty-related content). Per
-    brief §9.1, no Haudenosaunee visual motifs are used anywhere: the
-    covenants are represented only through words and abstract forms — one
-    shared vessel, two parallel paths.
-  -->
   <div class="covenant-cards" style="grid-column: 1 / -1" aria-label="The three elements of the common ground">
     <article class="card reveal" data-d="1">
       <figure class="glyph" aria-hidden="true">

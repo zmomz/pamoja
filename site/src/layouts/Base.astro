@@ -33,7 +33,7 @@ const {
 } = Astro.props;
 
 // Land acknowledgment (brief §9.5). Editorial placeholder blocks render as
-// nothing — the footer appears once Abdo supplies the real wording.
+// nothing — the footer appears once the final wording is confirmed.
 const ackBlocks = (settings.landAcknowledgment ?? []).filter(
   (b) => !blockPlainText(b).trim().startsWith('[')
 );

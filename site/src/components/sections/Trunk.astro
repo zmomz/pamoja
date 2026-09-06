@@ -30,33 +30,33 @@
         <path class="draw" d="M158 470 C154 370 152 290 160 200 C166 140 168 100 160 48 L218 48 C210 100 212 140 218 200 C226 290 224 370 220 470 Z" fill="url(#trunk-bark)" style="stroke: none" />
 
         <g fill="none" opacity="0.5">
-          <path d="M180 450 C178 360 178 270 184 170" style="stroke: var(--night)" stroke-width="4" stroke-linecap="round" />
-          <path d="M200 450 C202 350 200 260 194 150" style="stroke: var(--night)" stroke-width="3" stroke-linecap="round" />
-          <path d="M168 380 C166 320 170 260 176 200" style="stroke: var(--karkadeh-deep)" stroke-width="2" stroke-linecap="round" opacity="0.6" />
-          <path d="M208 400 C210 340 206 280 200 220" style="stroke: var(--karkadeh-deep)" stroke-width="2" stroke-linecap="round" opacity="0.5" />
+          <path d="M180 450 C178 360 178 270 184 170" class="st-night" stroke-width="4" stroke-linecap="round" />
+          <path d="M200 450 C202 350 200 260 194 150" class="st-night" stroke-width="3" stroke-linecap="round" />
+          <path d="M168 380 C166 320 170 260 176 200" class="st-karkadeh-deep" stroke-width="2" stroke-linecap="round" opacity="0.6" />
+          <path d="M208 400 C210 340 206 280 200 220" class="st-karkadeh-deep" stroke-width="2" stroke-linecap="round" opacity="0.5" />
         </g>
 
-        <path class="draw" d="M208 210 C256 168 298 148 340 128" fill="none" style="stroke: var(--karkadeh-deep)" stroke-width="16" stroke-linecap="round" />
-        <path class="draw" d="M168 250 C122 214 84 198 44 182" fill="none" style="stroke: var(--karkadeh-deep)" stroke-width="14" stroke-linecap="round" />
-        <path class="draw" d="M200 140 C232 104 260 86 294 70" fill="none" style="stroke: var(--karkadeh-deep)" stroke-width="11" stroke-linecap="round" />
+        <path class="draw st-karkadeh-deep" d="M208 210 C256 168 298 148 340 128" fill="none" stroke-width="16" stroke-linecap="round" />
+        <path class="draw st-karkadeh-deep" d="M168 250 C122 214 84 198 44 182" fill="none" stroke-width="14" stroke-linecap="round" />
+        <path class="draw st-karkadeh-deep" d="M200 140 C232 104 260 86 294 70" fill="none" stroke-width="11" stroke-linecap="round" />
 
         <g class="grow g2" style="transform-origin: 340px 118px">
           <path class="flutter" d="M342 124 C366 102 382 98 366 124 C382 150 366 154 342 132 Z" fill="url(#trunk-leaf-1)" />
-          <path d="M344 126 L370 124" style="stroke: var(--river-deep)" stroke-width="2" />
+          <path d="M344 126 L370 124" class="st-river-deep" stroke-width="2" />
           <path class="flutter f2" d="M356 108 C378 88 392 86 378 108 C392 130 378 134 356 114 Z" fill="url(#trunk-leaf-2)" opacity="0.85" />
         </g>
         <g class="grow g3" style="transform-origin: 38px 174px">
           <path class="flutter f2" d="M40 180 C14 160 0 156 14 180 C0 204 16 208 40 188 Z" fill="url(#trunk-leaf-2)" />
-          <path d="M38 184 L12 182" style="stroke: var(--river-deep)" stroke-width="2" />
+          <path d="M38 184 L12 182" class="st-river-deep" stroke-width="2" />
           <path class="flutter" d="M26 168 C4 150 -8 148 4 168 C-8 188 6 192 26 174 Z" fill="url(#trunk-leaf-1)" opacity="0.8" />
         </g>
         <g class="grow g4" style="transform-origin: 294px 62px">
           <path class="flutter f3" d="M296 68 C318 48 334 44 320 68 C334 92 318 96 296 76 Z" fill="url(#trunk-leaf-1)" />
-          <path d="M298 72 L322 68" style="stroke: var(--river-deep)" stroke-width="2" />
+          <path d="M298 72 L322 68" class="st-river-deep" stroke-width="2" />
           <path class="flutter" d="M310 52 C330 34 344 32 332 52 C344 72 330 76 310 58 Z" fill="url(#trunk-leaf-2)" opacity="0.85" />
         </g>
 
-        <g style="fill: var(--river-light)" opacity="0.6">
+        <g class="f-river-light" opacity="0.6">
           <path class="realistic-leaf" d="M320 90 C325 85 335 86 338 92 C333 98 325 97 320 92Z" />
           <path class="realistic-leaf rl2" d="M60 160 C65 155 75 156 78 162 C73 168 65 167 60 162Z" />
           <path class="realistic-leaf" d="M280 50 C285 46 294 47 296 52 C292 58 285 57 280 52Z" />
@@ -109,8 +109,6 @@
     </p>
   </div>
 
-  <!-- WORDING NOTICE: the block below carries the full reasoning of brief
-       §1.1. Final wording to be supplied/approved by Abdo. -->
   <section class="what-we-are reveal" style="grid-column: 1 / -1" aria-labelledby="what-we-are-heading">
     <h3 id="what-we-are-heading">What we are, and what we're not.</h3>
     <p>
@@ -229,7 +227,7 @@
     max-width: var(--max-prose);
   }
   .what-we-are a {
-    color: var(--river-light);
+    color: var(--river-pale);
   }
 
   .braid-list {

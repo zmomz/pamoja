@@ -2,10 +2,10 @@
 interface Props {
   /** Pre-rendered HTML from the CMS; omitted while wording is placeholder. */
   landAcknowledgmentHtml?: string;
-  contactEmail?: string;
+  contactEmail: string;
 }
 
-const { landAcknowledgmentHtml, contactEmail = 'hello@pamoja.example' } = Astro.props;
+const { landAcknowledgmentHtml, contactEmail } = Astro.props;
 
 // Same homepage-relative trick as the header: plain anchors at "/", absolute
 // "/#…" from the 404/thank-you pages.
@@ -31,6 +31,8 @@ const links = [
           width="860"
           height="493"
           class="footer-logo"
+          loading="lazy"
+          decoding="async"
         />
       </a>
       <p class="footer-tagline">Pamoja means together.</p>
@@ -64,6 +66,8 @@ const links = [
     color: var(--paper);
     padding: clamp(3rem, 8vh, 5rem) 4vw 2rem;
     font-family: var(--font-ui);
+    /* A thin warm line eases the jump from the cream contact band. */
+    border-top: 3px solid var(--ochre);
   }
   .footer-grid {
     display: grid;
@@ -97,7 +101,7 @@ const links = [
   }
 
   .site-footer a {
-    color: var(--river-light);
+    color: var(--river-pale);
     text-underline-offset: 0.2em;
   }
   .site-footer a:hover {

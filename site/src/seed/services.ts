@@ -20,7 +20,7 @@ export interface SeedService {
 // design: newcomers are the practitioners delivering the service, and
 // institutions are the learners.
 const PROTOCOL_PLACEHOLDER =
-  '[Protocol wording to be supplied by Abdo — these are ancestral practices, not catering.]';
+  '[Protocol wording to be confirmed — these are ancestral practices, not catering.]';
 
 export const services: SeedService[] = [
   {

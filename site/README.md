@@ -35,7 +35,8 @@ Copy `.env.example` to `.env`. All are optional for local dev — see "seed fall
 |---|---|
 | `PUBLIC_SANITY_PROJECT_ID` | Sanity project id. Empty/`pamoja-placeholder` = seed mode. |
 | `PUBLIC_SANITY_DATASET` | Defaults to `production`. |
-| `PUBLIC_SITE_URL` | Canonical origin for sitemap, canonical links, OG tags. |
+| `PUBLIC_SITE_URL` | Canonical origin for sitemap, canonical links, OG tags. Set to the final domain before launch. |
+| `PUBLIC_CONTACT_EMAIL` | Contact inbox shown in the contact section and footer. Overrides the CMS value; the build warns while it is still the placeholder. |
 | `SANITY_WRITE_TOKEN` | Only for `npm run import-seed`. Write-scope token. **Never commit.** |
 | `PUBLIC_PLAUSIBLE_DOMAIN` | Optional; enables the Plausible script tag. |
 

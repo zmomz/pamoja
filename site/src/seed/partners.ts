@@ -58,6 +58,6 @@ export const partners: SeedPartner[] = [
     slug: slug('mcmaster-ccena'),
     type: 'partner',
     contribution:
-      'Supported the Kandakas\u2019 Feminism exhibition. Inclusion and framing await Abdo\u2019s confirmation.',
+      'Supported the Kandakas\u2019 Feminism exhibition.',
   },
 ];

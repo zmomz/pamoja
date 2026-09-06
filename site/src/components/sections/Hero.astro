@@ -83,7 +83,8 @@ const hotspots = [
     overflow: hidden;
     background: linear-gradient(var(--cream) 0%, var(--paper) 55%, var(--cream) 100%);
   }
-  /* The ground the tree stands in. */
+  /* The ground the tree stands in. Exactly the color the tree's soil
+     gradient ends on, so the two meet without a seam. */
   .hero::after {
     content: "";
     position: absolute;
@@ -91,7 +92,7 @@ const hotspots = [
     left: -8%;
     width: 116%;
     height: 32%;
-    background: color-mix(in srgb, var(--karkadeh) 62%, var(--night));
+    background: var(--karkadeh-deep);
     border-radius: 50% 50% 0 0 / 40% 40% 0 0;
   }
 

@@ -171,12 +171,12 @@ section.journey::before {
   font-weight: 700;
   font-size: clamp(5rem, 13vw, 9rem);
   line-height: 1;
-  color: color-mix(in srgb, var(--ink) 15%, transparent);
+  color: color-mix(in srgb, var(--ink) 22%, transparent);
   pointer-events: none;
   transition: color 1s ease;
 }
 section.journey.in-view::before {
-  color: color-mix(in srgb, var(--ink) 24%, transparent);
+  color: color-mix(in srgb, var(--ink) 36%, transparent);
 }
 
 /* ==========================================================================
@@ -201,6 +201,31 @@ html.js .reveal.in { opacity: 1; transform: none; }
    .in when it intersects, which plays the draw/grow/fade-in choreography.
    Hidden states are JS-gated like .reveal: no JS, full scene.
    ========================================================================== */
+
+/* Shared token fills/strokes for section art — var() is unreliable in SVG
+   presentation attributes, so scenes use these classes instead of repeating
+   inline color styles. */
+.f-ochre { fill: var(--ochre); }
+.f-ochre-light { fill: var(--ochre-light); }
+.f-karkadeh { fill: var(--karkadeh); }
+.f-karkadeh-deep { fill: var(--karkadeh-deep); }
+.f-night { fill: var(--night); }
+.f-hibiscus { fill: var(--hibiscus); }
+.f-river { fill: var(--river); }
+.f-river-deep { fill: var(--river-deep); }
+.f-river-light { fill: var(--river-light); }
+.f-river-pale { fill: var(--river-pale); }
+.st-ochre { stroke: var(--ochre); }
+.st-ochre-light { stroke: var(--ochre-light); }
+.st-night { stroke: var(--night); }
+.st-karkadeh { stroke: var(--karkadeh); }
+.st-karkadeh-deep { stroke: var(--karkadeh-deep); }
+.st-cream { stroke: var(--cream); }
+.st-river { stroke: var(--river); }
+.st-river-deep { stroke: var(--river-deep); }
+.st-river-light { stroke: var(--river-light); }
+.st-river-pale { stroke: var(--river-pale); }
+
 .art {
   min-height: 480px;
   display: grid;

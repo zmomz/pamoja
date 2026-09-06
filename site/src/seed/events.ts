@@ -134,8 +134,7 @@ export const events: SeedEvent[] = [
     branchesServed: [ref('branch-creative-collaboration'), ref('branch-connection')],
     body: pt(
       'Newcomer women lead Kandakas\u2019 Feminism: an exhibition of art, storytelling, music, and coffee ceremony that carries the name of the Kandakas — the women who led in ancient Sudan — into present-day Hamilton.',
-      'The artists and knowledge holders are the curators of their own work; McMaster CCENA\u2019s support stands behind their leadership.',
-      'Note: inclusion and framing of this exhibition await Abdo\u2019s confirmation (brief §12). Details here are provisional.'
+      'The artists and knowledge holders are the curators of their own work; McMaster CCENA\u2019s support stands behind their leadership.'
     ),
     partnersCredited: [ref('partner-mcmaster-ccena')],
     gallery: [],

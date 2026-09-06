@@ -20,7 +20,7 @@ export const homePage: SeedHomePage = {
   _type: 'homePage',
   heroTagline: 'Pamoja means together.',
   positioningStatement: pt(
-    '[Draft — Abdo supplies the exact wording.]',
+    '[Draft — final wording to be confirmed.]',
     'Newcomers are building this city. Pamoja works with newcomer Canadians who carry knowledge, wisdom, and traditions Hamilton needs — hosting, teaching, convening, and creating alongside anyone willing to build on common ground.',
     'Hamilton\u2019s settlement organizations do essential work, and our work would not be possible without them. We work in a different direction: building with newcomers, not delivering services to them.'
   ),

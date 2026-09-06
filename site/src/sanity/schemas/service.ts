@@ -67,7 +67,7 @@ export const service = defineType({
       type: 'array',
       of: [defineArrayMember({ type: 'block' })],
       description:
-        'How to engage respectfully with this specific offering. These are ancestral practices, not catering. Abdo supplies the protocol language for each service — leave this room generous.',
+        'How to engage respectfully with this specific offering. These are ancestral practices, not catering — leave this room generous. Final protocol wording to be confirmed.',
       validation: (Rule) => Rule.required().min(1),
     }),
     defineField({

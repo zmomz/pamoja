@@ -15,6 +15,6 @@ export const siteSettings: SeedSiteSettings = {
   _type: 'siteSettings',
   contactEmail: 'hello@pamoja.example',
   socialLinks: [],
-  landAcknowledgment: pt('[Land acknowledgment wording to be supplied by Abdo.]'),
+  landAcknowledgment: pt('[Land acknowledgment wording to be confirmed.]'),
   plausibleDomain: 'pamoja.example',
 };

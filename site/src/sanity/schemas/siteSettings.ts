@@ -42,7 +42,7 @@ export const siteSettings = defineType({
       title: 'Land acknowledgment (footer, sitewide)',
       type: 'array',
       of: [defineArrayMember({ type: 'block' })],
-      description: 'Wording supplied by Abdo; do not improvise.',
+      description: 'Use only the confirmed final wording; do not improvise.',
       validation: (Rule) => Rule.required().min(1),
     }),
     defineField({

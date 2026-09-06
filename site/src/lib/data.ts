@@ -314,11 +314,21 @@ export async function getHomePage(): Promise<HomePage> {
 }
 
 export async function getSiteSettings(): Promise<SiteSettings> {
-  if (!client) return toSiteSettings(siteSettings);
-  return client.fetch(`*[_type == "siteSettings"][0]{
+  const settings: SiteSettings = !client
+    ? toSiteSettings(siteSettings)
+    : await client.fetch(`*[_type == "siteSettings"][0]{
     contactEmail, socialLinks, landAcknowledgment, plausibleDomain,
     "ogDefaultImage": ogDefaultImage { alt, "url": asset->url }
   }`);
+  // The contact inbox is deploy configuration: PUBLIC_CONTACT_EMAIL wins
+  // over both the CMS value and the seed fallback.
+  const contactEmail = env.PUBLIC_CONTACT_EMAIL ?? settings.contactEmail;
+  if (contactEmail.endsWith('.example')) {
+    console.warn(
+      '[pamoja] contactEmail is still the placeholder — set PUBLIC_CONTACT_EMAIL to the real inbox before launch.'
+    );
+  }
+  return { ...settings, contactEmail };
 }
 
 // ---------------------------------------------------------------------------

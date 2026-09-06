@@ -30,7 +30,7 @@ export const homePage = defineType({
       type: 'array',
       of: [defineArrayMember({ type: 'block' })],
       description:
-        'The short-form "who we are / what we\u2019re not" passage — affirmative first, explicit contrast just below. Abdo supplies the exact wording.',
+        'The short-form "who we are / what we\u2019re not" passage — affirmative first, explicit contrast just below. Final wording to be confirmed.',
       validation: (Rule) => Rule.required().min(1),
     }),
     passage(

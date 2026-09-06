@@ -10,6 +10,12 @@ const dataset = process.env.PUBLIC_SANITY_DATASET || 'production';
 export default defineConfig({
   site: process.env.PUBLIC_SITE_URL || 'https://pamoja-collective.netlify.app',
   output: 'static',
+  vite: {
+    build: {
+      // One stylesheet per build instead of per-entry chunks.
+      cssCodeSplit: false,
+    },
+  },
   integrations: [
     react(),
     sitemap({ filter: (page) => !page.includes('/studio') && !page.includes('/thank-you') }),
