@@ -1,0 +1,9 @@
+/* Block editor: the site's type and palette so what you write looks like what readers see. */
+:root {
+  --paper: #FAF6EE; --ink: #28211B; --night: #211C17; --ink-soft: #5B5142; --river: #437261; --ochre: #D79031; --line: #DFD4BD;
+}
+.editor-styles-wrapper { background: var(--paper); color: var(--ink); font-family: "Source Serif 4", Georgia, serif; font-size: 1.075rem; line-height: 1.65; }
+.editor-styles-wrapper h1, .editor-styles-wrapper h2, .editor-styles-wrapper h3, .editor-styles-wrapper h4 { font-family: "Bricolage Grotesque", Georgia, serif; font-weight: 600; letter-spacing: -0.02em; color: var(--night); line-height: 1.1; }
+.editor-styles-wrapper a { color: var(--river); }
+.editor-styles-wrapper blockquote { border-left: 4px solid var(--ochre); padding-left: 1.25rem; font-style: italic; color: var(--ink-soft); }
+.editor-styles-wrapper .wp-block { max-width: 62ch; }

@@ -1,0 +1,34 @@
+.pamoja-fields { display: grid; gap: 18px; padding-top: 4px; }
+.pamoja-field-label { display: block; font-weight: 600; margin-bottom: 4px; }
+.pamoja-field .description { margin-top: 4px; }
+.pamoja-field[hidden] { display: none; }
+.pamoja-checklist { margin: 0; columns: 2; column-gap: 24px; }
+.pamoja-checklist li { break-inside: avoid; margin: 0 0 4px; }
+#side-sortables .pamoja-checklist { columns: 1; }
+
+.pamoja-gallery-list { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 6px; padding: 0; list-style: none; }
+.pamoja-gallery-list li { position: relative; width: 150px; border: 1px solid #c3c4c7; border-radius: 4px; background: #fff; padding: 6px; cursor: grab; }
+.pamoja-gallery-list li img { display: block; width: 100%; height: 110px; object-fit: cover; border-radius: 2px; }
+.pamoja-gallery-status { display: block; margin-top: 6px; font-size: 11px; font-weight: 600; line-height: 1.3; }
+.pamoja-gallery-list li.is-ok .pamoja-gallery-status { color: #00753a; }
+.pamoja-gallery-list li.is-blocked { border-color: #d63638; }
+.pamoja-gallery-list li.is-blocked .pamoja-gallery-status { color: #b32d2e; }
+.pamoja-gallery-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 4px; font-size: 12px; }
+.pamoja-gallery-remove { font-size: 18px; line-height: 1; padding: 0 4px; }
+.pamoja-gallery-placeholder { width: 150px; height: 150px; border: 2px dashed #c3c4c7; border-radius: 4px; }
+
+.pamoja-image-preview img { display: block; max-width: 100%; height: auto; margin-bottom: 8px; border-radius: 4px; }
+
+.pamoja-overview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 20px; }
+.pamoja-overview-card { background: #fff; border: 1px solid #c3c4c7; border-top: 3px solid #437261; border-radius: 6px; padding: 16px 18px; }
+.pamoja-overview-card h2 { margin: 0 0 8px; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+.pamoja-count { font-size: 12px; font-weight: 600; background: #f0f0f1; border-radius: 999px; padding: 2px 8px; }
+.pamoja-overview-card p:last-child { margin-bottom: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+
+.pamoja-settings-tabs { margin: 16px 0 0; }
+.pamoja-settings-section { background: #fff; border: 1px solid #c3c4c7; border-radius: 6px; padding: 4px 20px 16px; margin-bottom: 20px; }
+.pamoja-settings-section > h2 { font-size: 15px; margin: 14px 0 2px; }
+.pamoja-settings-section > .pamoja-section-intro { margin: 0 0 12px; color: #50575e; }
+.pamoja-settings-section .form-table th { width: 220px; }
+.pamoja-settings-section .form-table textarea.large-text { width: 100%; max-width: 760px; }
+.pamoja-settings-section .form-table .regular-text { max-width: 760px; width: 100%; }

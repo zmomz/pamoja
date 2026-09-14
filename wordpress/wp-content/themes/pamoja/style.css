@@ -1,0 +1,15 @@
+/*
+Theme Name: Pamoja
+Theme URI: https://github.com/zmomz/pamoja
+Author: Pamoja Cultural Collective
+Description: The public website for Pamoja Cultural Collective. The tree is the map of the site — the home page hero, the menu, and the small mark in the header — and every page is one scroll: Home, About, Events, Blog, Engage. Requires the Pamoja Content plugin.
+Version: 2.0.0
+Requires at least: 6.4
+Tested up to: 6.7
+Requires PHP: 8.1
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: pamoja
+*/
+
+/* Styles live in assets/css/pamoja.css (enqueued by functions.php). */
