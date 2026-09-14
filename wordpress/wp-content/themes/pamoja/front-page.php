@@ -98,8 +98,9 @@ $map      = pamoja_site_map();
 		<h2 id="seeds-title"><?php pamoja_home_text( 'seeds', 'title' ); ?></h2>
 		<div class="lede prose"><?php pamoja_home_html( 'seeds', 'intro' ); ?></div>
 		<div class="seeds">
-			<?php foreach ( array( 1 => 'engage_volunteer', 2 => 'engage_partner', 3 => 'engage_support' ) as $n => $section ) : ?>
-				<a class="seed" href="<?php echo esc_url( $map['engage']['items'][ $n - 1 ]['url'] ?? pamoja_engage_url() ); ?>"><b><?php pamoja_home_text( $section, 'title' ); ?></b><span><?php pamoja_home_text( 'seeds', "s{$n}_body" ); ?></span><i><?php pamoja_home_text( 'seeds', "s{$n}_link" ); ?></i></a>
+			<?php foreach ( array( 1 => 'volunteer', 2 => 'partner', 3 => 'support' ) as $n => $id ) : ?>
+				<?php $section = 'engage_' . $id; ?>
+				<a class="seed" href="<?php echo esc_url( pamoja_site_map_item( 'engage', $id )['url'] ?? pamoja_engage_url() ); ?>"><b><?php pamoja_home_text( $section, 'title' ); ?></b><span><?php pamoja_home_text( 'seeds', "s{$n}_body" ); ?></span><i><?php pamoja_home_text( 'seeds', "s{$n}_link" ); ?></i></a>
 			<?php endforeach; ?>
 		</div>
 	</div>

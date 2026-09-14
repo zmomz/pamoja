@@ -383,10 +383,11 @@ return array(
 			'body'     => '',
 		),
 		'thank-you' => array(
-			'id'    => 'page-thank-you',
-			'title' => 'The kettle is on.',
-			'slug'  => 'thank-you',
-			'body'  => "<!-- wp:paragraph {\"className\":\"lede\"} -->\n<p class=\"lede\">Your message has reached us. We read everything together, and we reply as a collective — so it may take a little time. That's how trust gets built.</p>\n<!-- /wp:paragraph -->",
+			'id'       => 'page-thank-you',
+			'title'    => 'The kettle is on.',
+			'slug'     => 'thank-you',
+			'template' => 'page-thank-you.php',
+			'body'     => "<!-- wp:paragraph {\"className\":\"lede\"} -->\n<p class=\"lede\">Your message has reached us. We read everything together, and we reply as a collective — so it may take a little time. That's how trust gets built.</p>\n<!-- /wp:paragraph -->",
 		),
 	),
 

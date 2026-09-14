@@ -61,6 +61,26 @@ function pamoja_conversation_url(): string {
 	return pamoja_engage_url( 'conversation' );
 }
 
+function pamoja_thank_you_url(): string {
+	return pamoja_page_url_by_template( 'page-thank-you.php' );
+}
+
+/**
+ * One map item by its id, or null.
+ */
+function pamoja_site_map_item( string $door, string $id ): ?array {
+	foreach ( pamoja_site_map()[ $door ]['items'] ?? array() as $item ) {
+		if ( ( $item['id'] ?? '' ) === $id ) {
+			return $item;
+		}
+	}
+	return null;
+}
+
+// The plugin asks for these so it never has to know a page's slug.
+add_filter( 'pamoja_conversation_url', 'pamoja_conversation_url' );
+add_filter( 'pamoja_thank_you_url', 'pamoja_thank_you_url' );
+
 /**
  * The whole map, in menu order.
  *
@@ -74,10 +94,10 @@ function pamoja_site_map(): array {
 			'part'  => 'trunk',
 			'tree'  => __( 'Soil · trunk · branches · roots', 'pamoja' ),
 			'items' => array(
-				array( 'label' => pamoja_home( 'about_why', 'title' ), 'url' => pamoja_about_url( 'why-we-exist' ), 'part' => 'soil', 'desc' => __( 'The ground we start from', 'pamoja' ) ),
-				array( 'label' => pamoja_home( 'about_story', 'title' ), 'url' => pamoja_about_url( 'our-story' ), 'part' => 'trunk', 'desc' => __( 'Our name, and how we grew', 'pamoja' ) ),
-				array( 'label' => pamoja_home( 'about_how', 'title' ), 'url' => pamoja_about_url( 'how-we-work-together' ), 'part' => 'branches' ),
-				array( 'label' => pamoja_home( 'about_values', 'title' ), 'url' => pamoja_about_url( 'ethics-and-values' ), 'part' => 'roots' ),
+				array( 'id' => 'why-we-exist', 'label' => pamoja_home( 'about_why', 'title' ), 'url' => pamoja_about_url( 'why-we-exist' ), 'part' => 'soil', 'desc' => __( 'The ground we start from', 'pamoja' ) ),
+				array( 'id' => 'our-story', 'label' => pamoja_home( 'about_story', 'title' ), 'url' => pamoja_about_url( 'our-story' ), 'part' => 'trunk', 'desc' => __( 'Our name, and how we grew', 'pamoja' ) ),
+				array( 'id' => 'how-we-work-together', 'label' => pamoja_home( 'about_how', 'title' ), 'url' => pamoja_about_url( 'how-we-work-together' ), 'part' => 'branches' ),
+				array( 'id' => 'ethics-and-values', 'label' => pamoja_home( 'about_values', 'title' ), 'url' => pamoja_about_url( 'ethics-and-values' ), 'part' => 'roots' ),
 			),
 		),
 		'events' => array(
@@ -86,8 +106,8 @@ function pamoja_site_map(): array {
 			'part'  => 'canopy',
 			'tree'  => __( 'Fruit', 'pamoja' ),
 			'items' => array(
-				array( 'label' => __( 'Upcoming events', 'pamoja' ), 'url' => pamoja_events_url( 'upcoming' ), 'part' => 'canopy', 'desc' => pamoja_upcoming_count_label() ),
-				array( 'label' => __( 'Past events', 'pamoja' ), 'url' => pamoja_events_url( 'past' ), 'part' => 'canopy', 'desc' => pamoja_past_count_label() ),
+				array( 'id' => 'upcoming', 'label' => __( 'Upcoming events', 'pamoja' ), 'url' => pamoja_events_url( 'upcoming' ), 'part' => 'canopy', 'desc' => pamoja_upcoming_count_label() ),
+				array( 'id' => 'past', 'label' => __( 'Past events', 'pamoja' ), 'url' => pamoja_events_url( 'past' ), 'part' => 'canopy', 'desc' => pamoja_past_count_label() ),
 			),
 		),
 		'blog'   => array(
@@ -96,7 +116,7 @@ function pamoja_site_map(): array {
 			'part'  => 'canopy',
 			'tree'  => __( 'Leaves', 'pamoja' ),
 			'items' => array(
-				array( 'label' => __( 'Stories from the work', 'pamoja' ), 'url' => pamoja_blog_url(), 'part' => 'canopy' ),
+				array( 'id' => 'stories', 'label' => __( 'Stories from the work', 'pamoja' ), 'url' => pamoja_blog_url(), 'part' => 'canopy' ),
 			),
 		),
 		'engage' => array(
@@ -105,9 +125,9 @@ function pamoja_site_map(): array {
 			'part'  => 'seeds',
 			'tree'  => __( 'Seeds', 'pamoja' ),
 			'items' => array(
-				array( 'label' => pamoja_home( 'engage_volunteer', 'title' ), 'url' => pamoja_engage_url( 'volunteer' ), 'part' => 'seeds' ),
-				array( 'label' => pamoja_home( 'engage_partner', 'title' ), 'url' => pamoja_engage_url( 'partner' ), 'part' => 'seeds' ),
-				array( 'label' => pamoja_home( 'engage_support', 'title' ), 'url' => pamoja_engage_url( 'support' ), 'part' => 'seeds' ),
+				array( 'id' => 'volunteer', 'label' => pamoja_home( 'engage_volunteer', 'title' ), 'url' => pamoja_engage_url( 'volunteer' ), 'part' => 'seeds' ),
+				array( 'id' => 'partner', 'label' => pamoja_home( 'engage_partner', 'title' ), 'url' => pamoja_engage_url( 'partner' ), 'part' => 'seeds' ),
+				array( 'id' => 'support', 'label' => pamoja_home( 'engage_support', 'title' ), 'url' => pamoja_engage_url( 'support' ), 'part' => 'seeds' ),
 			),
 		),
 	);

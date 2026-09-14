@@ -14,6 +14,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 const PAMOJA_CONSENT_META = '_pamoja_consent';
+const PAMOJA_CONSENT_SOURCE_META = '_pamoja_consent_source';
+
+/**
+ * Record consent on an image, with where it came from.
+ */
+function pamoja_set_consent( int $attachment_id, bool $on, string $source = '' ) {
+	update_post_meta( $attachment_id, PAMOJA_CONSENT_META, $on ? '1' : '' );
+	if ( $source ) {
+		update_post_meta( $attachment_id, PAMOJA_CONSENT_SOURCE_META, $source );
+	}
+}
+
+/**
+ * Where an image's consent was recorded, if noted.
+ */
+function pamoja_consent_source( int $attachment_id ): string {
+	return (string) get_post_meta( $attachment_id, PAMOJA_CONSENT_SOURCE_META, true );
+}
 
 /**
  * Consent checkbox on every image in the media library (modal and edit screen).
@@ -23,6 +41,7 @@ function pamoja_attachment_consent_field( array $fields, WP_Post $post ) {
 		return $fields;
 	}
 	$checked = '1' === get_post_meta( $post->ID, PAMOJA_CONSENT_META, true );
+	$source  = pamoja_consent_source( $post->ID );
 	$fields['pamoja_consent'] = array(
 		'label' => __( 'Consent confirmed', 'pamoja' ),
 		'input' => 'html',
@@ -32,14 +51,14 @@ function pamoja_attachment_consent_field( array $fields, WP_Post $post ) {
 			checked( $checked, true, false ),
 			esc_html__( 'Consent is on file for every identifiable person in this photo.', 'pamoja' )
 		),
-		'helps' => __( 'Required before the photo can appear anywhere on the site. Never publish children\'s faces without explicit parental consent. When in doubt, leave the photo out.', 'pamoja' ),
+		'helps' => __( 'Required before the photo can appear anywhere on the site. Never publish children\'s faces without explicit parental consent. When in doubt, leave the photo out.', 'pamoja' ) . ( $source ? ' ' . $source : '' ),
 	);
 	return $fields;
 }
 add_filter( 'attachment_fields_to_edit', 'pamoja_attachment_consent_field', 10, 2 );
 
 function pamoja_attachment_consent_save( array $post, array $attachment ) {
-	update_post_meta( $post['ID'], PAMOJA_CONSENT_META, empty( $attachment['pamoja_consent'] ) ? '' : '1' );
+	pamoja_set_consent( (int) $post['ID'], ! empty( $attachment['pamoja_consent'] ) );
 	return $post;
 }
 add_filter( 'attachment_fields_to_save', 'pamoja_attachment_consent_save', 10, 2 );

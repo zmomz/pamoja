@@ -182,7 +182,7 @@ function pamoja_inquiry_store( string $kind, string $title, array $data, array $
 
 function pamoja_handle_inquiry() {
 	$fields = pamoja_inquiry_fields();
-	$back   = pamoja_inquiry_back_url( home_url( '/engage/#conversation' ) );
+	$back   = pamoja_inquiry_back_url( (string) apply_filters( 'pamoja_conversation_url', home_url( '/engage/#conversation' ) ) );
 
 	$gate = pamoja_inquiry_gate( $back );
 	if ( $gate ) {
@@ -247,7 +247,7 @@ add_action( 'admin_post_pamoja_inquiry', 'pamoja_handle_inquiry' );
 function pamoja_handle_keep_posted() {
 	$event_id = isset( $_POST['event'] ) ? absint( $_POST['event'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$event    = $event_id ? get_post( $event_id ) : null;
-	$back     = pamoja_inquiry_back_url( $event && 'event' === $event->post_type ? (string) get_permalink( $event ) : home_url( '/events/' ) );
+	$back     = pamoja_inquiry_back_url( $event && 'event' === $event->post_type ? (string) get_permalink( $event ) : (string) ( get_post_type_archive_link( 'event' ) ?: home_url( '/events/' ) ) );
 	$wants    = isset( $_SERVER['HTTP_ACCEPT'] ) && str_contains( (string) $_SERVER['HTTP_ACCEPT'], 'application/json' );
 
 	$fail = function ( string $message ) use ( $back, $wants ) {
@@ -293,7 +293,15 @@ function pamoja_handle_keep_posted() {
 add_action( 'admin_post_nopriv_pamoja_keep_posted', 'pamoja_handle_keep_posted' );
 add_action( 'admin_post_pamoja_keep_posted', 'pamoja_handle_keep_posted' );
 
+/**
+ * The thank-you page: the one using the theme's template, else the slug,
+ * else home.
+ */
 function pamoja_inquiry_thank_you_url(): string {
+	$url = (string) apply_filters( 'pamoja_thank_you_url', '' );
+	if ( $url ) {
+		return $url;
+	}
 	$page = get_page_by_path( 'thank-you' );
-	return $page ? (string) get_permalink( $page ) : home_url( '/?inquiry=sent' );
+	return $page ? (string) get_permalink( $page ) : home_url( '/' );
 }

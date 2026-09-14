@@ -1,6 +1,10 @@
 <?php
 /**
- * The thank-you page after an inquiry (slug: thank-you).
+ * Template Name: Thank you
+ * Template Post Type: page
+ *
+ * The page a visitor lands on after the conversation form. The plugin finds
+ * it by this template (see pamoja_thank_you_url()), so it can be renamed.
  */
 
 get_header();

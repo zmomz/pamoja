@@ -9,7 +9,7 @@ while ( have_posts() ) :
 	$id    = get_the_ID();
 	$video = (string) pamoja_meta( $id, 'video_url' );
 	$event = (int) pamoja_meta( $id, 'event' );
-	$embed = $video ? wp_oembed_get( $video, array( 'width' => 1200 ) ) : '';
+	$embed = pamoja_event_video_embed( $id );
 	?>
 	<article <?php post_class( 'article article--wide single-album' ); ?>>
 		<header class="article-head">

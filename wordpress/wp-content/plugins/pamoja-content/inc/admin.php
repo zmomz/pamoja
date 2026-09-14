@@ -250,12 +250,12 @@ function pamoja_custom_column( string $column, int $post_id ) {
 			break;
 		case 'pamoja_status':
 			$status = pamoja_get_meta( $post_id, 'status', 'past' );
-			$labels = array(
-				'past'      => __( 'Past', 'pamoja' ),
-				'upcoming'  => __( 'Upcoming', 'pamoja' ),
-				'handed-on' => __( 'Handed on', 'pamoja' ),
-			);
-			echo esc_html( $labels[ $status ] ?? $status );
+			$labels = pamoja_event_status_options();
+			$label  = $labels[ $status ] ?? $status;
+			if ( 'upcoming' === $status && function_exists( 'pamoja_event_has_passed' ) && pamoja_event_has_passed( (int) $post_id ) ) {
+				$label .= ' — ' . __( 'date has passed', 'pamoja' );
+			}
+			echo esc_html( $label );
 			break;
 		case 'pamoja_photos':
 			$all = count( pamoja_get_gallery_ids( $post_id ) );
@@ -277,12 +277,7 @@ function pamoja_custom_column( string $column, int $post_id ) {
 			break;
 		case 'pamoja_type':
 			$type   = pamoja_get_meta( $post_id, 'partner_type', 'partner' );
-			$labels = array(
-				'partner'           => __( 'Partner', 'pamoja' ),
-				'ally'              => __( 'Ally', 'pamoja' ),
-				'funder'            => __( 'Funder', 'pamoja' ),
-				'settlement-sector' => __( 'Settlement sector', 'pamoja' ),
-			);
+			$labels = pamoja_partner_type_options();
 			echo esc_html( $labels[ $type ] ?? $type );
 			break;
 		case 'pamoja_order':

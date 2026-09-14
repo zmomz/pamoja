@@ -118,7 +118,7 @@ function pamoja_event_when( int $event_id ): string {
 		return $display;
 	}
 	$start = pamoja_event_date( $event_id, 'start_date' );
-	return $start ? $start->format( 'F Y' ) : get_the_date( 'F Y', $event_id );
+	return $start ? wp_date( 'F Y', $start->getTimestamp(), wp_timezone() ) : get_the_date( 'F Y', $event_id );
 }
 
 /**
@@ -146,9 +146,9 @@ function pamoja_event_date_block( int $event_id ): array {
 		return array( pamoja_event_when( $event_id ), '' );
 	}
 	if ( $e && $e->format( 'Y' ) === $s->format( 'Y' ) && $e->format( 'n' ) !== $s->format( 'n' ) ) {
-		return array( date_i18n( 'M', $s->getTimestamp() + $s->getOffset() ) . '–' . date_i18n( 'M', $e->getTimestamp() + $e->getOffset() ), $s->format( 'Y' ) );
+		return array( wp_date( 'M', $s->getTimestamp(), wp_timezone() ) . '–' . wp_date( 'M', $e->getTimestamp(), wp_timezone() ), $s->format( 'Y' ) );
 	}
-	return array( date_i18n( 'M', $s->getTimestamp() + $s->getOffset() ), $s->format( 'Y' ) );
+	return array( wp_date( 'M', $s->getTimestamp(), wp_timezone() ), $s->format( 'Y' ) );
 }
 
 /**

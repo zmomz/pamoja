@@ -109,11 +109,8 @@ function pamoja_social_links(): array {
  * Land acknowledgment HTML, or '' while it is empty or still a draft note.
  */
 function pamoja_land_acknowledgment(): string {
-	$html = trim( pamoja_setting( 'land_ack' ) );
-	if ( '' === $html || str_starts_with( trim( wp_strip_all_tags( $html ) ), '[' ) ) {
-		return '';
-	}
-	return wp_kses_post( wpautop( $html ) );
+	$html = trim( pamoja_strip_draft_notes( wpautop( trim( pamoja_setting( 'land_ack' ) ) ) ) );
+	return '' === trim( wp_strip_all_tags( $html ) ) ? '' : wp_kses_post( $html );
 }
 
 function pamoja_settings_register() {

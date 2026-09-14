@@ -325,8 +325,7 @@ function pamoja_home_html( string $section, string $key ) {
 }
 
 function pamoja_home_html_filter( string $html ): string {
-	// Editorial draft notes ("[Draft — …]") never render.
-	return preg_replace( '/<p[^>]*>\s*\[[^<]*\]\s*<\/p>/', '', $html );
+	return pamoja_strip_draft_notes( $html );
 }
 
 /**
@@ -495,19 +494,3 @@ function pamoja_home_redirect_to_tab( $location ) {
 	return $location;
 }
 add_filter( 'wp_redirect', 'pamoja_home_redirect_to_tab' );
-
-/**
- * Admin styles for our settings pages.
- */
-function pamoja_home_admin_assets( $hook ) {
-	if ( ! in_array( $hook, array( 'pamoja_page_pamoja-homepage', 'pamoja_page_pamoja-settings', 'appearance_page_pamoja-homepage', 'appearance_page_pamoja-settings' ), true ) ) {
-		return;
-	}
-	if ( defined( 'PAMOJA_CONTENT_URL' ) ) {
-		wp_enqueue_style( 'pamoja-admin', PAMOJA_CONTENT_URL . 'assets/admin.css', array(), PAMOJA_CONTENT_VERSION );
-		wp_enqueue_media();
-		wp_enqueue_script( 'pamoja-admin', PAMOJA_CONTENT_URL . 'assets/admin.js', array( 'jquery', 'jquery-ui-sortable', 'media-editor' ), PAMOJA_CONTENT_VERSION, true );
-		wp_localize_script( 'pamoja-admin', 'pamojaAdmin', array( 'chooseImage' => __( 'Choose image', 'pamoja' ), 'addPhotos' => '', 'useThese' => '', 'edit' => '', 'remove' => '' ) );
-	}
-}
-add_action( 'admin_enqueue_scripts', 'pamoja_home_admin_assets' );

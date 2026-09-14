@@ -11,8 +11,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-const PAMOJA_TREE_PARTS = array( 'soil', 'roots', 'trunk', 'branches', 'canopy', 'seeds' );
-
 /**
  * The raw SVG fragment, read once per request.
  */
@@ -25,12 +23,6 @@ function pamoja_tree_markup(): string {
 	}
 	return $svg;
 }
-
-/**
- * Kept for templates that may still call it; the tree no longer needs a
- * shared symbol.
- */
-function pamoja_tree_symbol() {}
 
 /**
  * ViewBoxes for the crops each door opens on.
@@ -93,8 +85,8 @@ function pamoja_tree( array $args = array() ) {
  */
 function pamoja_tree_spots(): array {
 	$map  = pamoja_site_map();
-	$spot = function ( string $door, int $i, int $x, int $y, string $side = 'right', string $sub = '', string $kind = '' ) use ( $map ) {
-		$item = $map[ $door ]['items'][ $i ] ?? null;
+	$spot = function ( string $door, string $id, int $x, int $y, string $side = 'right', string $sub = '', string $kind = '' ) {
+		$item = pamoja_site_map_item( $door, $id );
 		if ( ! $item ) {
 			return null;
 		}
@@ -113,11 +105,11 @@ function pamoja_tree_spots(): array {
 	$spots    = array(
 		array( 'label' => $map['blog']['label'], 'sub' => __( 'stories from the work', 'pamoja' ), 'url' => $map['blog']['url'], 'part' => 'canopy', 'x' => 44, 'y' => 14, 'side' => 'right', 'kind' => '' ),
 		array( 'label' => $map['events']['label'], 'sub' => pamoja_upcoming_count_label( count( $upcoming ) ), 'url' => $map['events']['url'], 'part' => 'canopy', 'x' => 58, 'y' => 26, 'side' => 'right', 'kind' => 'fruit' ),
-		$spot( 'about', 2, 22, 42 ),
-		$spot( 'about', 1, 51, 58 ),
+		$spot( 'about', 'how-we-work-together', 22, 42 ),
+		$spot( 'about', 'our-story', 51, 58 ),
 		array( 'label' => $map['engage']['label'], 'sub' => __( 'volunteer · partner · support', 'pamoja' ), 'url' => $map['engage']['url'], 'part' => 'seeds', 'x' => 62, 'y' => 76, 'side' => 'left', 'kind' => 'seed' ),
-		$spot( 'about', 3, 30, 89 ),
-		$spot( 'about', 0, 76, 93, 'left' ),
+		$spot( 'about', 'ethics-and-values', 30, 89 ),
+		$spot( 'about', 'why-we-exist', 76, 93, 'left' ),
 	);
 	return array_values( array_filter( $spots ) );
 }

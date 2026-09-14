@@ -105,11 +105,12 @@ function pamoja_seed_photo( string $seed_id, array $photo ): int {
 		}
 		$existing = (int) $id;
 		update_post_meta( $existing, PAMOJA_SEED_META, $seed_id );
+		// Consent is recorded once, on first import. Unticking it later in
+		// the Media Library withdraws the photo; re-importing never re-ticks it.
+		pamoja_set_consent( $existing, true, __( 'Supplied by Pamoja for the website (Pamoja_Website.docx, September 2026). Untick "Consent confirmed" to withdraw.', 'pamoja' ) );
 	}
 	wp_update_post( array( 'ID' => $existing, 'post_title' => $photo['title'], 'post_excerpt' => $photo['caption'] ?? '' ) );
 	update_post_meta( $existing, '_wp_attachment_image_alt', $photo['alt'] );
-	update_post_meta( $existing, PAMOJA_CONSENT_META, '1' );
-	update_post_meta( $existing, '_pamoja_consent_source', 'Supplied by Pamoja for the website (Pamoja_Website.docx, September 2026). Untick "Consent confirmed" to withdraw.' );
 	return $existing;
 }
 

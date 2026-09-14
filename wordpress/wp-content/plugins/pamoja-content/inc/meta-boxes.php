@@ -10,6 +10,35 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * The event statuses, once. "Handed on" is about ownership; the others are
+ * about time.
+ *
+ * @return array<string, string>
+ */
+function pamoja_event_status_options(): array {
+	return array(
+		'past'      => __( 'Past', 'pamoja' ),
+		'upcoming'  => __( 'Upcoming', 'pamoja' ),
+		'ongoing'   => __( 'Ongoing', 'pamoja' ),
+		'handed-on' => __( 'Handed on', 'pamoja' ),
+	);
+}
+
+/**
+ * The partner types, once.
+ *
+ * @return array<string, string>
+ */
+function pamoja_partner_type_options(): array {
+	return array(
+		'partner'           => __( 'Partner', 'pamoja' ),
+		'ally'              => __( 'Ally', 'pamoja' ),
+		'funder'            => __( 'Funder', 'pamoja' ),
+		'settlement-sector' => __( 'Settlement sector', 'pamoja' ),
+	);
+}
+
+/**
  * @return array<string, array{title:string, post_types:string[], context?:string, priority?:string, fields:array<int,array>}>
  */
 function pamoja_meta_box_schema(): array {
@@ -49,12 +78,7 @@ function pamoja_meta_box_schema(): array {
 					'key'         => 'status',
 					'label'       => __( 'Status', 'pamoja' ),
 					'type'        => 'select',
-					'options'     => array(
-						'past'      => __( 'Past', 'pamoja' ),
-						'upcoming'  => __( 'Upcoming', 'pamoja' ),
-						'ongoing'   => __( 'Ongoing (recurring)', 'pamoja' ),
-						'handed-on' => __( 'Handed on', 'pamoja' ),
-					),
+					'options'     => pamoja_event_status_options(),
 					'default'     => 'past',
 					'description' => __( 'Upcoming events appear as fruit on the tree and under "Coming up". "Ongoing" is for a recurring gathering. "Handed on" means the work now belongs to someone else — the site says so plainly, neither claiming it nor deleting it.', 'pamoja' ),
 				),
@@ -213,12 +237,7 @@ function pamoja_meta_box_schema(): array {
 					'key'     => 'partner_type',
 					'label'   => __( 'Type', 'pamoja' ),
 					'type'    => 'select',
-					'options' => array(
-						'partner'           => __( 'Partner', 'pamoja' ),
-						'ally'              => __( 'Ally', 'pamoja' ),
-						'funder'            => __( 'Funder', 'pamoja' ),
-						'settlement-sector' => __( 'Settlement sector', 'pamoja' ),
-					),
+					'options' => pamoja_partner_type_options(),
 					'default' => 'partner',
 				),
 				array(

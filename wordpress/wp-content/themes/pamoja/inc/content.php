@@ -29,26 +29,6 @@ function pamoja_meta( int $post_id, string $key, $default = '' ) {
 }
 
 /**
- * Published events, most recent start date first.
- *
- * @return WP_Post[]
- */
-function pamoja_events( int $limit = -1 ): array {
-	if ( ! post_type_exists( 'event' ) ) {
-		return array();
-	}
-	return get_posts(
-		array(
-			'post_type'      => 'event',
-			'post_status'    => 'publish',
-			'posts_per_page' => $limit,
-			'meta_key'       => '_pamoja_start_date',
-			'orderby'        => array( 'meta_value' => 'DESC', 'date' => 'DESC' ),
-		)
-	);
-}
-
-/**
  * Events with one status. Upcoming soonest-first, everything else most
  * recent first. Cached per request: the tree, the menu and the lists all ask.
  *
@@ -74,9 +54,13 @@ function pamoja_events_by_status( string $status ): array {
 	);
 	$out = array();
 	foreach ( $posts as $post ) {
-		if ( in_array( (string) pamoja_meta( $post->ID, 'status', 'past' ), $statuses, true ) ) {
-			$out[] = $post;
+		if ( ! in_array( (string) pamoja_meta( $post->ID, 'status', 'past' ), $statuses, true ) ) {
+			continue;
 		}
+		if ( 'upcoming' === $status && pamoja_event_has_passed( $post->ID ) ) {
+			continue;
+		}
+		$out[] = $post;
 	}
 	return $cache[ $status ] = $out;
 }
@@ -144,34 +128,6 @@ function pamoja_event_video_embed( int $event_id ): string {
 }
 
 /**
- * Albums that have something to show (a consented photo or a video), newest first.
- *
- * @return WP_Post[]
- */
-function pamoja_albums_with_media( int $limit = 4 ): array {
-	if ( ! post_type_exists( 'album' ) ) {
-		return array();
-	}
-	$albums = get_posts(
-		array(
-			'post_type'      => 'album',
-			'post_status'    => 'publish',
-			'posts_per_page' => 40,
-		)
-	);
-	$out = array();
-	foreach ( $albums as $album ) {
-		if ( pamoja_gallery( $album->ID ) || pamoja_thumbnail_id( $album->ID ) || pamoja_meta( $album->ID, 'video_url' ) ) {
-			$out[] = $album;
-			if ( count( $out ) >= $limit ) {
-				break;
-			}
-		}
-	}
-	return $out;
-}
-
-/**
  * Services in menu order.
  *
  * @return WP_Post[]
@@ -210,20 +166,6 @@ function pamoja_partners(): array {
 }
 
 /**
- * Partners of one type.
- *
- * @return WP_Post[]
- */
-function pamoja_partners_of_type( string $type ): array {
-	return array_values(
-		array_filter(
-			pamoja_partners(),
-			fn( $p ) => pamoja_meta( $p->ID, 'partner_type', 'partner' ) === $type
-		)
-	);
-}
-
-/**
  * Partners credited on an event.
  *
  * @return WP_Post[]
@@ -252,18 +194,31 @@ function pamoja_partner_contribution( WP_Post $partner ): string {
 }
 
 /**
- * Event status label for the badge.
+ * Event status label for the badge, from the plugin's one list.
  */
 function pamoja_event_status_label( int $event_id ): string {
-	$status = pamoja_meta( $event_id, 'status', 'past' );
+	$status = (string) pamoja_meta( $event_id, 'status', 'past' );
 	if ( 'handed-on' === $status ) {
 		$to = (int) pamoja_meta( $event_id, 'handed_on_to' );
 		if ( $to && 'publish' === get_post_status( $to ) ) {
 			return sprintf( __( 'Handed on — now stewarded by %s', 'pamoja' ), get_the_title( $to ) );
 		}
-		return __( 'Handed on', 'pamoja' );
 	}
-	return 'upcoming' === $status ? __( 'Upcoming', 'pamoja' ) : __( 'Past', 'pamoja' );
+	$options = function_exists( 'pamoja_event_status_options' ) ? pamoja_event_status_options() : array();
+	return $options[ $status ] ?? ucfirst( $status );
+}
+
+/**
+ * True when an event's last date (end, else start) is before today in the
+ * site's timezone. Used so an "upcoming" event stops being advertised the
+ * day after it happens, whatever its status field still says.
+ */
+function pamoja_event_has_passed( int $event_id ): bool {
+	$last = pamoja_event_date( $event_id, 'end_date' ) ?: pamoja_event_date( $event_id, 'start_date' );
+	if ( ! $last ) {
+		return false;
+	}
+	return $last->format( 'Y-m-d' ) < current_time( 'Y-m-d' );
 }
 
 /**
@@ -301,33 +256,18 @@ function pamoja_post_branches( int $post_id ): array {
 }
 
 /**
- * The popover body for a service card: the eight fields compressed to plain
- * text — what it is, what to expect, what it is not, protocols. Draft notes
- * (paragraphs starting with "[") never render.
- */
-function pamoja_service_popover( WP_Post $service ): string {
-	$plain = function ( $html ) {
-		$paras = preg_split( '/<\/p>|<br\s*\/?>|\n{2,}/i', (string) $html );
-		$paras = array_map( fn( $p ) => trim( wp_strip_all_tags( $p ) ), $paras );
-		$paras = array_filter( $paras, fn( $p ) => '' !== $p && ! str_starts_with( $p, '[' ) );
-		return implode( ' ', $paras );
-	};
-	$not = (array) pamoja_meta( $service->ID, 'what_this_is_not', array() );
-	return trim(
-		pamoja_meta( $service->ID, 'what_it_is' )
-		. ' ' . __( 'What to expect:', 'pamoja' ) . ' ' . $plain( pamoja_meta( $service->ID, 'what_to_expect' ) )
-		. ' ' . __( 'What this is not:', 'pamoja' ) . ' ' . implode( ' ', array_map( 'trim', $not ) )
-		. ' ' . __( 'Cultural protocols:', 'pamoja' ) . ' ' . $plain( pamoja_meta( $service->ID, 'protocols' ) )
-	);
-}
-
-/**
  * Rich-text service field with draft paragraphs removed.
  */
 function pamoja_service_html( int $service_id, string $key ): string {
-	$html  = wpautop( (string) pamoja_meta( $service_id, $key ) );
-	$html  = preg_replace( '/<p>\s*\[[^<]*<\/p>/', '', $html );
-	return wp_kses_post( $html );
+	return wp_kses_post( pamoja_strip_draft_notes( wpautop( (string) pamoja_meta( $service_id, $key ) ) ) );
+}
+
+/**
+ * The one editorial rule for draft notes: a paragraph that starts with "["
+ * never renders, wherever it is written.
+ */
+function pamoja_strip_draft_notes( string $html ): string {
+	return (string) preg_replace( '/<p(?:\s[^>]*)?>\s*\[.*?<\/p>/s', '', $html );
 }
 
 /**
@@ -381,13 +321,3 @@ function pamoja_thumbnail_id( int $post_id ): int {
 	return function_exists( 'pamoja_get_publishable_thumbnail_id' ) ? pamoja_get_publishable_thumbnail_id( $post_id ) : 0;
 }
 
-/**
- * The count of published news posts, cached per request.
- */
-function pamoja_has_news(): bool {
-	static $has = null;
-	if ( null === $has ) {
-		$has = (bool) pamoja_news( 1 );
-	}
-	return $has;
-}

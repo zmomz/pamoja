@@ -21,7 +21,7 @@ while ( have_posts() ) :
 	?>
 	<article <?php post_class( 'article single-event' ); ?>>
 		<header class="article-head">
-			<p class="tag"><a href="<?php echo esc_url( pamoja_events_url( 'upcoming' === $status ? 'upcoming' : 'past' ) ); ?>">← <?php pamoja_home_text( 'listing', 'events_tag' ); ?></a></p>
+			<p class="tag"><a href="<?php echo esc_url( pamoja_events_url( in_array( $status, array( 'upcoming', 'ongoing' ), true ) ? $status : 'past' ) ); ?>">← <?php pamoja_home_text( 'listing', 'events_tag' ); ?></a></p>
 			<h1><?php the_title(); ?></h1>
 			<p class="article-meta">
 				<span class="badge badge-<?php echo esc_attr( $status ); ?>"><?php echo esc_html( pamoja_event_status_label( $id ) ); ?></span>
