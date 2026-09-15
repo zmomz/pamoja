@@ -52,6 +52,23 @@ function pamoja_events_url( string $stop = '' ): string {
 	return $stop ? $url . '#' . $stop : $url;
 }
 
+/**
+ * The media archive, and whether there is anything consented to show in it.
+ * It is only offered as a place to go once there is.
+ */
+function pamoja_media_url(): string {
+	return get_post_type_archive_link( 'album' ) ?: home_url( '/media/' );
+}
+
+function pamoja_has_albums(): bool {
+	static $has = null;
+	if ( null === $has ) {
+		$has = post_type_exists( 'album' )
+			&& (bool) get_posts( array( 'post_type' => 'album', 'post_status' => 'publish', 'posts_per_page' => 1, 'fields' => 'ids' ) );
+	}
+	return $has;
+}
+
 function pamoja_blog_url(): string {
 	$page = (int) get_option( 'page_for_posts' );
 	return $page ? (string) get_permalink( $page ) : home_url( '/blog/' );
@@ -131,6 +148,17 @@ function pamoja_site_map(): array {
 			),
 		),
 	);
+	// Photos and video live under Events, but only once a consented album
+	// exists — an empty page is not a place worth sending anyone.
+	if ( pamoja_has_albums() ) {
+		$map['events']['items'][] = array(
+			'id'    => 'media',
+			'label' => pamoja_home( 'listing', 'media_tag' ),
+			'url'   => pamoja_media_url(),
+			'part'  => 'canopy',
+			'desc'  => __( 'Photos and video', 'pamoja' ),
+		);
+	}
 	return apply_filters( 'pamoja_site_map', $map );
 }
 

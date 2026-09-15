@@ -196,7 +196,10 @@ function pamoja_meta_description(): string {
 
 function pamoja_current_url(): string {
 	global $wp;
-	return home_url( add_query_arg( array(), $wp->request ?? '' ) );
+	$request = (string) ( $wp->request ?? '' );
+	// Trailing slash kept, so og:url and the form's return URL match the
+	// canonical URL instead of taking a 301 on the way back.
+	return '' === $request ? home_url( '/' ) : home_url( user_trailingslashit( $request ) );
 }
 
 function pamoja_og_image_url(): string {
@@ -252,10 +255,50 @@ function pamoja_front_queries( WP_Query $query ) {
 		$query->set( 'posts_per_page', 18 );
 	}
 	if ( $query->is_post_type_archive( 'event' ) ) {
-		$query->set( 'posts_per_page', 1 );
+		// archive-event.php builds its own upcoming/ongoing/past lists, so the
+		// archive is a single page however many events there are.
+		$query->set( 'posts_per_page', -1 );
+		$query->set( 'no_found_rows', true );
 	}
 }
 add_action( 'pre_get_posts', 'pamoja_front_queries' );
+
+/**
+ * /events/page/2/ used to serve the whole archive again under a 200. There is
+ * only ever one page of it, so send anyone who asks for another back to it.
+ */
+function pamoja_events_archive_is_one_page() {
+	if ( is_post_type_archive( 'event' ) && is_paged() ) {
+		wp_safe_redirect( pamoja_events_url(), 301 );
+		exit;
+	}
+}
+add_action( 'template_redirect', 'pamoja_events_archive_is_one_page', 1 );
+
+/**
+ * WordPress 404s its own sitemap while the blog has no published posts:
+ * handle_404() runs first, finds no posts for the sitemap query and sets the
+ * status, so crawlers get valid XML under a 404 and discard it. The sitemap
+ * route knows what it is, so let it answer for itself — render_sitemaps()
+ * still sends a real 404 when a sitemap is genuinely empty.
+ */
+function pamoja_sitemap_sets_its_own_status( $preempt, $query ) {
+	return ! empty( $query->is_sitemap ) ? true : $preempt;
+}
+add_filter( 'pre_handle_404', 'pamoja_sitemap_sets_its_own_status', 10, 2 );
+
+/**
+ * Keep an empty media archive out of search results until there is something
+ * consented to show there.
+ */
+function pamoja_robots( array $robots ): array {
+	if ( is_post_type_archive( 'album' ) && ! have_posts() ) {
+		$robots['noindex'] = true;
+		$robots['follow']  = true;
+	}
+	return $robots;
+}
+add_filter( 'wp_robots', 'pamoja_robots' );
 
 /**
  * Excerpts end quietly.
