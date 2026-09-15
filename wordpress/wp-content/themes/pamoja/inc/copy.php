@@ -26,10 +26,21 @@ function pamoja_home_schema(): array {
 		return $schema;
 	}
 
-	$t = fn( string $label, string $default, string $help = '' ) => array_filter( array( 'label' => $label, 'type' => 'text', 'default' => $default, 'help' => $help ) );
-	$a = fn( string $label, string $default, string $help = '' ) => array_filter( array( 'label' => $label, 'type' => 'textarea', 'default' => $default, 'help' => $help ) );
-	$h = fn( string $label, string $default, string $help = '' ) => array_filter( array( 'label' => $label, 'type' => 'html', 'default' => $default, 'help' => $help ) );
-	$u = fn( string $label, string $default, string $help = '' ) => array_filter( array( 'label' => $label, 'type' => 'url', 'default' => $default, 'help' => $help ) );
+	// A field always carries label, type and default — a default may legitimately
+	// be empty (the source links below), so only 'help' is dropped when unused.
+	$field = static function ( string $type ) {
+		return static function ( string $label, string $default, string $help = '' ) use ( $type ) {
+			$out = array( 'label' => $label, 'type' => $type, 'default' => $default );
+			if ( '' !== $help ) {
+				$out['help'] = $help;
+			}
+			return $out;
+		};
+	};
+	$t = $field( 'text' );
+	$a = $field( 'textarea' );
+	$h = $field( 'html' );
+	$u = $field( 'url' );
 
 	$schema = array(
 		'hero' => array(
