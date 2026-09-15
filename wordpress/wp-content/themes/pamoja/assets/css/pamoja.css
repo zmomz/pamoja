@@ -150,8 +150,9 @@ main { padding-top: var(--header-h); }
 .mapbtn .tree-mini { width: 32px; height: 36px; overflow: hidden; }
 .mapbtn:hover { border-color: var(--river); }
 .hd.menu-open .mapbtn { background: var(--night); color: var(--paper); border-color: var(--night); }
-.go { margin-left: 0.5rem; padding: 0.65rem 1.1rem; border-radius: 999px; background: var(--karkadeh); color: var(--paper); white-space: nowrap; transition: background 0.3s ease; }
-.go:hover { background: var(--river); color: var(--paper); }
+.go { margin-left: 0.5rem; padding: 0.65rem 1.1rem; border-radius: 999px; background: var(--karkadeh); color: #fff; white-space: nowrap; transition: background 0.3s ease; }
+.go:hover, .go:visited, .go:focus { background: var(--river); color: #fff; }
+.go:visited { background: var(--karkadeh); }
 .burger { display: none; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 50%; background: var(--white); cursor: pointer; place-items: center; color: var(--night); }
 .burger i, .burger i::before, .burger i::after { display: block; width: 18px; height: 2px; border-radius: 2px; background: currentColor; }
 .burger i { position: relative; } .burger i::before, .burger i::after { content: ""; position: absolute; left: 0; } .burger i::before { top: -6px; } .burger i::after { top: 6px; }
@@ -238,6 +239,9 @@ body.menu-open .veil, body.menu-open .menu { opacity: 1; transform: none; }
 .group { background: var(--white); border: 1px solid var(--line); border-radius: 18px; padding: 1.4rem; }
 .group h3 { margin-bottom: 0.4rem; }
 .group p { font-size: 0.98rem; color: var(--ink-soft); }
+.group ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.45rem; font-size: 0.98rem; color: var(--ink-soft); }
+.group li { position: relative; padding-left: 1.05rem; }
+.group li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 6px; height: 6px; border-radius: 50%; background: var(--ochre); }
 .strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
 .strip--events { grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr)); }
 .tile { display: block; position: relative; border-radius: 18px; overflow: hidden; aspect-ratio: 3 / 3.4; color: #fff; background: var(--night); }

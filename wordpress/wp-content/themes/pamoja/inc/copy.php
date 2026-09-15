@@ -61,7 +61,7 @@ function pamoja_home_schema(): array {
 				'tag'      => $t( __( 'Eyebrow', 'pamoja' ), 'Who we are' ),
 				'title'    => $t( __( 'Heading', 'pamoja' ), 'A collective built through relationships.' ),
 				'g1_title' => $t( __( 'Group 1 — name', 'pamoja' ), 'Neighbours' ),
-				'g1_body'  => $a( __( 'Group 1 — text', 'pamoja' ), 'Newcomers and immigrants · Settlers and long-established residents · Indigenous neighbours' ),
+				'g1_body'  => $a( __( 'Group 1 — text', 'pamoja' ), "Newcomer and immigrant neighbours\nIndigenous neighbours\nSettler and long-established neighbours", __( 'One line becomes a paragraph; several lines become a list.', 'pamoja' ) ),
 				'g2_title' => $t( __( 'Group 2 — name', 'pamoja' ), 'Connectors & Partners' ),
 				'g2_body'  => $a( __( 'Group 2 — text', 'pamoja' ), 'People and organizations who can open doors, share resources, create opportunities, connect us to communities, and help build this organization.' ),
 				'g3_title' => $t( __( 'Group 3 — name', 'pamoja' ), 'Organizers' ),
@@ -351,6 +351,28 @@ function pamoja_home_inline( string $section, string $key ) {
 	);
 	$html = wp_kses( pamoja_home( $section, $key ), $allowed );
 	echo trim( preg_replace( '/\s+/', ' ', $html ) ); // Sanitized above.
+}
+
+/**
+ * A textarea field as a list when it holds more than one line, and as a
+ * paragraph when it holds one — so a card can name its people or describe
+ * them, whichever the copy does.
+ */
+function pamoja_home_lines( string $section, string $key, string $class = '' ) {
+	$text = trim( pamoja_home( $section, $key ) );
+	if ( '' === $text ) {
+		return;
+	}
+	$lines = array_values( array_filter( array_map( 'trim', preg_split( '/\R/', $text ) ), 'strlen' ) );
+	if ( count( $lines ) < 2 ) {
+		pamoja_home_para( $section, $key, $class );
+		return;
+	}
+	printf( '<ul%s>', $class ? ' class="' . esc_attr( $class ) . '"' : '' );
+	foreach ( $lines as $line ) {
+		printf( '<li>%s</li>', esc_html( $line ) );
+	}
+	echo '</ul>';
 }
 
 /**

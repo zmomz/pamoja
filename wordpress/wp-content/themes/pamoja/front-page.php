@@ -57,7 +57,7 @@ $map      = pamoja_site_map();
 			<?php foreach ( array( 1, 2, 3 ) as $n ) : ?>
 				<div class="group">
 					<h3><?php pamoja_home_text( 'who', "g{$n}_title" ); ?></h3>
-					<?php pamoja_home_para( 'who', "g{$n}_body" ); ?>
+					<?php pamoja_home_lines( 'who', "g{$n}_body" ); ?>
 				</div>
 			<?php endforeach; ?>
 		</div>
