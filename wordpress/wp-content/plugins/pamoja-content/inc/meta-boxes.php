@@ -110,7 +110,7 @@ function pamoja_meta_box_schema(): array {
 					'label'       => __( 'Video (optional)', 'pamoja' ),
 					'type'        => 'url',
 					'placeholder' => 'https://www.youtube.com/watch?v=…',
-					'description' => __( 'A YouTube or Vimeo link. It plays in place on the event page.', 'pamoja' ),
+					'description' => __( 'A YouTube or Vimeo link, or the link to a video file uploaded to this site — the video always plays here on the page, never on the provider’s. An uploaded file never contacts them at all.', 'pamoja' ),
 				),
 				array(
 					'key'            => 'featured',
@@ -149,7 +149,7 @@ function pamoja_meta_box_schema(): array {
 					'label'       => __( 'Video (optional)', 'pamoja' ),
 					'type'        => 'url',
 					'placeholder' => 'https://www.youtube.com/watch?v=…',
-					'description' => __( 'A YouTube or Vimeo link. It is embedded above the photos.', 'pamoja' ),
+					'description' => __( 'A YouTube or Vimeo link, or the link to a video file uploaded to this site — the video always plays here on the page, never on the provider’s. An uploaded file never contacts them at all. It sits above the photos.', 'pamoja' ),
 				),
 				array(
 					'key'         => 'event',

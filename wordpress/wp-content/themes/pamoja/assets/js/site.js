@@ -190,6 +190,29 @@
     if (radio) radio.checked = true;
   });
 
+  /* ---------- Video: our poster until they press play, then play here ----------
+   * Nothing of the provider's is fetched, and no link of theirs is offered,
+   * until the visitor asks for the video. Then the player replaces the poster
+   * in place, already playing, so the page they are on is the page it plays on.
+   */
+  document.querySelectorAll('[data-player] .player-go').forEach(function (go) {
+    go.addEventListener('click', function () {
+      var src = go.getAttribute('data-src');
+      if (!src) return;
+      var frame = document.createElement('iframe');
+      frame.src = src + (src.indexOf('?') === -1 ? '?' : '&') + 'autoplay=1';
+      frame.title = go.getAttribute('data-title') || '';
+      frame.width = 1200;
+      frame.height = 675;
+      frame.frameBorder = '0';
+      frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      frame.referrerPolicy = 'strict-origin-when-cross-origin';
+      frame.allowFullscreen = true;
+      go.replaceWith(frame);
+      frame.focus();
+    });
+  });
+
   /* ---------- "Tell me when it's announced": stay on the page ---------- */
   document.querySelectorAll('form.keep').forEach(function (form) {
     form.addEventListener('submit', function (e) {

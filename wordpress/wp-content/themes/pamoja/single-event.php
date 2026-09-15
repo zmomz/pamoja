@@ -29,7 +29,7 @@ while ( have_posts() ) :
 		</header>
 
 		<?php if ( $video ) : ?>
-			<div class="video-embed"><?php echo $video; // oEmbed HTML from a trusted provider. ?></div>
+			<div class="video-embed"><?php echo $video; // Player markup built in pamoja_event_video_embed(). ?></div>
 		<?php elseif ( $cover ) : ?>
 			<figure class="article-cover"><?php echo wp_get_attachment_image( $cover, 'pamoja-wide', false, array( 'loading' => 'eager', 'fetchpriority' => 'high' ) ); ?>
 				<?php if ( wp_get_attachment_caption( $cover ) ) : ?><figcaption><?php echo esc_html( wp_get_attachment_caption( $cover ) ); ?></figcaption><?php endif; ?>

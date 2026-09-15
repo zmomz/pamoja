@@ -1,6 +1,7 @@
 <?php
 /**
- * One album: video first if there is one, then the consented photos.
+ * One album: video first if there is one, then the consented photos. The
+ * video plays here, on the page, rather than sending anyone to the provider.
  */
 
 get_header();
@@ -20,8 +21,9 @@ while ( have_posts() ) :
 			<div class="prose entry-content"><?php the_content(); ?></div>
 		<?php endif; ?>
 		<?php if ( $embed ) : ?>
-			<div class="video-embed"><?php echo $embed; // oEmbed HTML from a trusted provider. ?></div>
+			<div class="video-embed"><?php echo $embed; // Player markup built in pamoja_event_video_embed(). ?></div>
 		<?php elseif ( $video ) : ?>
+			<?php /* Last resort: a provider we cannot build a player for. */ ?>
 			<p><a href="<?php echo esc_url( $video ); ?>" rel="noopener"><?php esc_html_e( 'Watch the video →', 'pamoja' ); ?></a></p>
 		<?php endif; ?>
 		<?php if ( pamoja_gallery( $id ) ) : ?>

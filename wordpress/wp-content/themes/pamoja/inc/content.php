@@ -156,15 +156,123 @@ function pamoja_past_count_label(): string {
 }
 
 /**
- * The oEmbed for an event's video, or '' when there is none.
+ * The player for an event's video, or '' when there is none.
+ *
+ * The video plays here, on this page. A file the collective has uploaded
+ * plays in the browser's own player and never leaves the site at all. A
+ * video that lives with a provider is held behind our own poster until the
+ * visitor presses play, so nothing is fetched from them and nothing is
+ * offered to them until that moment; the frame is then built here from the
+ * video's id rather than asked for over oEmbed, so it does not depend on
+ * this server being able to reach them. Anything we do not recognise still
+ * falls back to oEmbed.
  */
 function pamoja_event_video_embed( int $event_id ): string {
 	$url = (string) pamoja_meta( $event_id, 'video_url' );
 	if ( ! $url ) {
 		return '';
 	}
+	$title = get_the_title( $event_id );
+
+	$file = pamoja_video_file_src( $url );
+	if ( $file ) {
+		return sprintf(
+			'<video controls playsinline preload="metadata"%s><source src="%s" type="%s" />%s</video>',
+			pamoja_video_poster_attr( $event_id ),
+			esc_url( $file['url'] ),
+			esc_attr( $file['type'] ),
+			esc_html__( 'Your browser cannot play this video.', 'pamoja' )
+		);
+	}
+
+	$src = pamoja_video_player_src( $url );
+	if ( $src ) {
+		return pamoja_video_facade( $src, $title, $event_id );
+	}
+
 	$embed = wp_oembed_get( $url, array( 'width' => 1200 ) );
 	return $embed ? (string) $embed : '';
+}
+
+/**
+ * A video the collective has uploaded here, as {url, type}, or null.
+ */
+function pamoja_video_file_src( string $url ): ?array {
+	$types = array( 'mp4' => 'video/mp4', 'webm' => 'video/webm', 'ogv' => 'video/ogg', 'mov' => 'video/mp4' );
+	$ext   = strtolower( (string) pathinfo( (string) wp_parse_url( $url, PHP_URL_PATH ), PATHINFO_EXTENSION ) );
+	if ( ! isset( $types[ $ext ] ) ) {
+		return null;
+	}
+	return array( 'url' => $url, 'type' => $types[ $ext ] );
+}
+
+/**
+ * poster="…" for a self-hosted video, from the event's own cover photo.
+ */
+function pamoja_video_poster_attr( int $event_id ): string {
+	$id = pamoja_thumbnail_id( $event_id );
+	if ( ! $id ) {
+		$gallery = pamoja_gallery( $event_id );
+		$id      = $gallery ? $gallery[0] : 0;
+	}
+	$src = $id ? wp_get_attachment_image_url( $id, 'pamoja-wide' ) : '';
+	return $src ? ' poster="' . esc_url( $src ) . '"' : '';
+}
+
+/**
+ * Our own poster over a provider's player: nothing of theirs loads, and no
+ * link of theirs is offered, until the visitor presses play. Without
+ * JavaScript the player is simply there from the start.
+ */
+function pamoja_video_facade( string $src, string $title, int $event_id ): string {
+	$cover = pamoja_cover_image( $event_id, 'pamoja-wide', array( 'loading' => 'lazy' ) );
+	$frame = sprintf(
+		'<iframe src="%s" title="%s" loading="lazy" width="1200" height="675" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+		esc_url( $src ),
+		esc_attr( sprintf( __( 'Video: %s', 'pamoja' ), $title ) )
+	);
+	return sprintf(
+		'<div class="player" data-player><button class="player-go" type="button" data-src="%1$s" data-title="%2$s">%3$s<span class="player-play" aria-hidden="true"></span><span class="player-label">%4$s</span></button><noscript>%5$s</noscript></div>',
+		esc_attr( $src ),
+		esc_attr( sprintf( __( 'Video: %s', 'pamoja' ), $title ) ),
+		$cover, // Escaped by wp_get_attachment_image().
+		esc_html( sprintf( __( 'Play the video: %s', 'pamoja' ), $title ) ),
+		$frame // Escaped above.
+	);
+}
+
+/**
+ * The in-page player URL for a video link, or '' when we do not know the
+ * provider well enough to build one.
+ */
+function pamoja_video_player_src( string $url ): string {
+	$host = strtolower( (string) wp_parse_url( $url, PHP_URL_HOST ) );
+	$host = preg_replace( '/^www\./', '', $host );
+	$path = (string) wp_parse_url( $url, PHP_URL_PATH );
+	parse_str( (string) wp_parse_url( $url, PHP_URL_QUERY ), $query );
+
+	$youtube = '';
+	if ( 'youtu.be' === $host ) {
+		$youtube = trim( $path, '/' );
+	} elseif ( in_array( $host, array( 'youtube.com', 'm.youtube.com', 'youtube-nocookie.com' ), true ) ) {
+		$youtube = (string) ( $query['v'] ?? '' );
+		if ( ! $youtube && preg_match( '#^/(?:embed|shorts|live|v)/([^/?#]+)#', $path, $m ) ) {
+			$youtube = $m[1];
+		}
+	}
+	if ( $youtube && preg_match( '/^[A-Za-z0-9_-]{6,20}$/', $youtube ) ) {
+		// youtube-nocookie keeps the visitor untracked until they press play.
+		return add_query_arg(
+			array( 'rel' => 0, 'modestbranding' => 1, 'playsinline' => 1 ),
+			'https://www.youtube-nocookie.com/embed/' . $youtube
+		);
+	}
+
+	if ( in_array( $host, array( 'vimeo.com', 'player.vimeo.com' ), true ) && preg_match( '#(\d{6,})#', $path, $m ) ) {
+		return add_query_arg( array( 'dnt' => 1 ), 'https://player.vimeo.com/video/' . $m[1] );
+	}
+
+	return '';
 }
 
 /**
