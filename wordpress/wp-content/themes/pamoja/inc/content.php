@@ -29,8 +29,40 @@ function pamoja_meta( int $post_id, string $key, $default = '' ) {
 }
 
 /**
- * Events with one status. Upcoming soonest-first, everything else most
- * recent first. Cached per request: the tree, the menu and the lists all ask.
+ * Which shelf an event belongs on, whatever its status field still says.
+ *
+ * "Upcoming" is a promise about the future: the day after an event happens
+ * it moves to "past" on its own, so nothing is advertised that has already
+ * been and gone, and nothing silently disappears while an editor catches up.
+ * Anything else (past, handed-on, unset) is past.
+ */
+function pamoja_event_shelf( int $event_id ): string {
+	$status = (string) pamoja_meta( $event_id, 'status', 'past' );
+	if ( 'ongoing' === $status ) {
+		return 'ongoing';
+	}
+	if ( 'upcoming' === $status ) {
+		return pamoja_event_has_passed( $event_id ) ? 'past' : 'upcoming';
+	}
+	return 'past';
+}
+
+/**
+ * The date an event sorts by: the start when we are looking forward, the
+ * last day when we are looking back. '' when no date has been entered.
+ */
+function pamoja_event_sort_date( int $event_id, bool $forward ): string {
+	$date = $forward
+		? pamoja_event_date( $event_id, 'start_date' )
+		: ( pamoja_event_date( $event_id, 'end_date' ) ?: pamoja_event_date( $event_id, 'start_date' ) );
+	return $date ? $date->format( 'Y-m-d' ) : '';
+}
+
+/**
+ * Events on one shelf. Upcoming soonest-first, everything else most recent
+ * first; an event whose date has not been filled in yet still shows, at the
+ * end of its list, rather than vanishing from the site. Cached per request:
+ * the tree, the menu and the lists all ask.
  *
  * @return WP_Post[]
  */
@@ -42,26 +74,34 @@ function pamoja_events_by_status( string $status ): array {
 	if ( ! post_type_exists( 'event' ) ) {
 		return $cache[ $status ] = array();
 	}
-	$statuses = 'past' === $status ? array( 'past', 'handed-on', '' ) : array( $status );
-	$posts    = get_posts(
+	$posts = get_posts(
 		array(
 			'post_type'      => 'event',
 			'post_status'    => 'publish',
 			'posts_per_page' => -1,
-			'meta_key'       => '_pamoja_start_date',
-			'orderby'        => array( 'meta_value' => 'upcoming' === $status ? 'ASC' : 'DESC', 'date' => 'DESC' ),
+			'orderby'        => 'date',
+			'order'          => 'DESC',
 		)
 	);
 	$out = array();
 	foreach ( $posts as $post ) {
-		if ( ! in_array( (string) pamoja_meta( $post->ID, 'status', 'past' ), $statuses, true ) ) {
-			continue;
+		if ( pamoja_event_shelf( $post->ID ) === $status ) {
+			$out[] = $post;
 		}
-		if ( 'upcoming' === $status && pamoja_event_has_passed( $post->ID ) ) {
-			continue;
-		}
-		$out[] = $post;
 	}
+	$forward = 'upcoming' === $status;
+	usort(
+		$out,
+		static function ( WP_Post $a, WP_Post $b ) use ( $forward ) {
+			$da = pamoja_event_sort_date( $a->ID, $forward );
+			$db = pamoja_event_sort_date( $b->ID, $forward );
+			if ( '' === $da || '' === $db ) {
+				// Undated events go last, newest first among themselves.
+				return ( ( '' === $da ? 1 : 0 ) - ( '' === $db ? 1 : 0 ) ) ?: strcmp( $b->post_date, $a->post_date );
+			}
+			return $forward ? strcmp( $da, $db ) : strcmp( $db, $da );
+		}
+	);
 	return $cache[ $status ] = $out;
 }
 
