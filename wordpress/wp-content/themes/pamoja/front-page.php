@@ -14,7 +14,7 @@ $map      = pamoja_site_map();
 <section class="hero" aria-labelledby="hero-title">
 	<div class="hero-copy">
 		<p class="tag"><?php pamoja_home_text( 'hero', 'tag' ); ?></p>
-		<h1 id="hero-title"><?php pamoja_home_text( 'hero', 'title' ); ?><span class="dot" aria-hidden="true">.</span></h1>
+		<h1 id="hero-title"><?php pamoja_home_inline( 'hero', 'title' ); ?></h1>
 		<div class="lead"><?php pamoja_home_html( 'hero', 'lead' ); ?></div>
 		<div class="hero-btns">
 			<a class="btn" href="<?php echo esc_url( pamoja_conversation_url() ); ?>"><?php pamoja_home_text( 'hero', 'cta' ); ?></a>

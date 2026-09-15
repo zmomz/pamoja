@@ -45,11 +45,11 @@ function pamoja_home_schema(): array {
 	$schema = array(
 		'hero' => array(
 			'title'  => __( 'Home · Hero', 'pamoja' ),
-			'intro'  => __( 'The first screen: the word, the lead, and the tree as the map. The labels on the tree come from the page titles and headings below.', 'pamoja' ),
+			'intro'  => __( 'The first screen: the statement, the lead, and the tree as the map. The labels on the tree come from the page titles and headings below.', 'pamoja' ),
 			'fields' => array(
-				'tag'   => $t( __( 'Eyebrow', 'pamoja' ), 'Cultural Collective · Hamilton' ),
-				'title' => $t( __( 'The word', 'pamoja' ), 'Together', __( 'A hibiscus-red full stop is added after it.', 'pamoja' ) ),
-				'lead'  => $h( __( 'Lead', 'pamoja' ), '<p>Treaty-committed neighbours coming together to create the conditions for social cohesion and collective prosperity. <em>Pamoja</em> is a collective built through relationships.</p>' ),
+				'tag'   => $t( __( 'Eyebrow', 'pamoja' ), 'Pamoja Cultural Collective · Hamilton' ),
+				'title' => $h( __( 'The statement', 'pamoja' ), 'Treaty-committed neighbours coming together to create the conditions for <em>social cohesion</em> and <em>collective prosperity</em>.', __( 'Put a word in italics to pick it out in karkadeh red. Headings are one line, so paragraphs and lists are ignored here.', 'pamoja' ) ),
+				'lead'  => $h( __( 'Lead', 'pamoja' ), '<p><em>Pamoja</em> is a collective built through relationships.</p>' ),
 				'cta'   => $t( __( 'Button', 'pamoja' ), 'Start a conversation' ),
 				'cta2'  => $t( __( 'Second link', 'pamoja' ), 'What’s coming up ↓' ),
 				'hint'  => $t( __( 'Small line under the buttons', 'pamoja' ), 'The tree is the map. Pick a part.' ),
@@ -337,6 +337,23 @@ function pamoja_home_html( string $section, string $key ) {
 
 function pamoja_home_html_filter( string $html ): string {
 	return pamoja_strip_draft_notes( $html );
+}
+
+/**
+ * A rich-text field printed inside a heading: the same copy, minus the block
+ * tags the editor wraps around it, so <em> still marks the words to pick out
+ * but a stray paragraph cannot break the heading.
+ */
+function pamoja_home_inline( string $section, string $key ) {
+	$allowed = array(
+		'em'     => array(),
+		'i'      => array(),
+		'strong' => array(),
+		'b'      => array(),
+		'br'     => array(),
+	);
+	$html = wp_kses( pamoja_home( $section, $key ), $allowed );
+	echo trim( preg_replace( '/\s+/', ' ', $html ) ); // Sanitized above.
 }
 
 /**

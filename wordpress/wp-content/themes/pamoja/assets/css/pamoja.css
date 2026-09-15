@@ -204,12 +204,12 @@ body.menu-open .veil, body.menu-open .menu { opacity: 1; transform: none; }
    ========================================================================== */
 .hero { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr); align-items: end; min-height: min(92svh, 780px); margin-top: calc(-1 * var(--header-h)); padding-top: var(--header-h); overflow: hidden; background: linear-gradient(var(--cream), var(--ground) 60%, var(--cream)); }
 .hero::after { content: ""; position: absolute; bottom: -14%; left: -8%; width: 116%; height: 30%; background: linear-gradient(180deg, color-mix(in srgb, var(--karkadeh) 28%, var(--karkadeh-deep)), var(--karkadeh-deep) 42%); border-radius: 50% 50% 0 0 / 40% 40% 0 0; }
-.hero-copy { position: relative; z-index: 3; align-self: center; padding: 3rem 2rem 3rem max(var(--gutter), 6vw); }
-.hero h1 { font-size: clamp(3.4rem, 6vw, 5rem); }
-.hero h1 .dot { color: var(--hibiscus); }
-.hero .lead { font-size: clamp(1.05rem, 1.5vw, 1.25rem); max-width: 34ch; margin-top: 1.2rem; text-wrap: balance; }
+.hero-copy { position: relative; z-index: 3; align-self: center; padding: 3rem 2rem clamp(4rem, 12vh, 7rem) max(var(--gutter), 6vw); }
+.hero h1 { font-size: clamp(1.75rem, 2.9vw, 2.6rem); line-height: 1.1; max-width: 22ch; }
+/* The three phrases the collective leads with, marked rather than shouted. */
+.hero h1 em, .hero .lead em { font-style: normal; color: var(--karkadeh); text-decoration: underline; text-decoration-color: var(--ochre); text-decoration-thickness: 0.08em; text-underline-offset: 0.16em; }
+.hero .lead { font-size: clamp(1.05rem, 1.5vw, 1.25rem); max-width: 34ch; margin-top: 1.1rem; text-wrap: balance; }
 .hero .lead p { margin: 0; max-width: none; }
-.hero .lead em { font-family: var(--font-display); font-style: italic; font-weight: 600; }
 .hero-btns { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; margin-top: 1.4rem; }
 .hint { font-family: var(--font-ui); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); margin-top: 0.9rem; }
 .stage { position: relative; z-index: 2; width: min(560px, 46vw, 74vh); justify-self: end; margin-right: 4%; }
@@ -506,7 +506,7 @@ body.menu-open .veil, body.menu-open .menu { opacity: 1; transform: none; }
   .tl li::before { left: -1.4rem; top: 0.2rem; transform: translateX(-4px); }
   .spot { font-size: 0.68rem; } .spot span { padding: 0.25rem 0.55rem; } .spot span small { display: none; }
   .ph-slice { width: min(100%, 340px); }
-  .hero h1 { font-size: 2.8rem; }
+  .hero h1 { font-size: 1.85rem; max-width: none; }
   .ev { grid-template-columns: 1fr; }
   .date { justify-self: start; }
 }
