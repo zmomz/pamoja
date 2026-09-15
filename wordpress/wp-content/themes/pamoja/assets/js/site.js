@@ -161,18 +161,20 @@
       var button = form.querySelector('button');
       var email = form.querySelector('input[type="email"]');
       if (!email || !email.value) { email && email.focus(); return; }
-      button.disabled = true;
+      if (button) button.disabled = true;
       fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' }, credentials: 'same-origin' })
         .then(function (r) { return r.json().then(function (j) { return { ok: r.ok && j.ok, message: j.message }; }); })
+        // Only a failed request falls back to posting the form normally —
+        // never a problem drawing the answer, which would sign them up twice.
+        .catch(function () { return null; })
         .then(function (res) {
-          msg.textContent = res.message || (res.ok ? form.getAttribute('data-done') : 'That didn’t go through. Please try again.');
-          msg.classList.toggle('is-error', !res.ok);
+          if (button) button.disabled = false;
+          if (!res) { form.submit(); return; }
+          if (msg) {
+            msg.textContent = res.message || (res.ok ? form.getAttribute('data-done') : 'That didn’t go through. Please try again.');
+            msg.classList.toggle('is-error', !res.ok);
+          }
           form.classList.toggle('is-done', res.ok);
-          button.disabled = false;
-        })
-        .catch(function () {
-          button.disabled = false;
-          form.submit();
         });
     });
   });

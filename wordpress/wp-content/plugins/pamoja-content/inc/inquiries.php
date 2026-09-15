@@ -111,33 +111,67 @@ function pamoja_inquiry_back_url( string $fallback ): string {
 }
 
 /**
- * Shared bot and rate checks. Returns '' when the submission may proceed,
- * else the redirect to send the visitor to.
+ * The rate-limit key. Each form counts separately, and "keep me posted"
+ * counts per event, so signing up for one gathering never blocks writing a
+ * message, or signing up for the next gathering.
  */
-function pamoja_inquiry_gate( string $back ): string {
-	// Honeypot: real people leave it empty. Bots get a silent "thank you".
+function pamoja_inquiry_rate_key( string $kind, string $scope = '' ): string {
+	$ip = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
+	return $ip ? 'pamoja_rate_' . md5( $kind . '|' . $scope . '|' . $ip ) : '';
+}
+
+/**
+ * Shared bot and rate checks.
+ *
+ * @return string '' to proceed, 'silent' for a bot (answer as if it worked),
+ *                'retry' when it arrived too fast.
+ */
+function pamoja_inquiry_gate( string $kind, string $scope = '' ): string {
+	// Honeypot: real people leave it empty.
 	if ( ! empty( $_POST['bot-field'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		return pamoja_inquiry_thank_you_url();
+		return 'silent';
 	}
 	// Forms filled in under three seconds are not people either.
 	$started = isset( $_POST['pamoja_t'] ) ? (int) $_POST['pamoja_t'] : 0; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 	if ( ! $started || ( time() - $started ) < 3 ) {
-		return add_query_arg( 'inquiry', 'error', $back );
+		return 'retry';
 	}
-	// One submission per address per minute.
-	$ip  = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
-	$key = 'pamoja_inquiry_' . md5( $ip );
-	if ( $ip && get_transient( $key ) ) {
-		return add_query_arg( 'inquiry', 'error', $back );
-	}
-	return '';
+	$key = pamoja_inquiry_rate_key( $kind, $scope );
+	return $key && get_transient( $key ) ? 'retry' : '';
 }
 
-function pamoja_inquiry_mark_sent() {
-	$ip = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
-	if ( $ip ) {
-		set_transient( 'pamoja_inquiry_' . md5( $ip ), 1, MINUTE_IN_SECONDS );
+function pamoja_inquiry_mark_sent( string $kind, string $scope = '' ) {
+	$key = pamoja_inquiry_rate_key( $kind, $scope );
+	if ( $key ) {
+		set_transient( $key, 1, MINUTE_IN_SECONDS );
 	}
+}
+
+/**
+ * Keep what someone typed across the redirect that reports a mistake, so a
+ * long message is never lost to a mistyped address. Held server-side for
+ * fifteen minutes under a one-use token; nothing personal goes in the URL.
+ *
+ * @param array<string, string> $data
+ */
+function pamoja_inquiry_stash( array $data ): string {
+	$token = wp_generate_password( 20, false, false );
+	set_transient( 'pamoja_resume_' . $token, $data, 15 * MINUTE_IN_SECONDS );
+	return $token;
+}
+
+/**
+ * What the visitor typed last time, for the form to fill itself back in.
+ *
+ * @return array<string, string>
+ */
+function pamoja_inquiry_resume(): array {
+	$token = isset( $_GET['resume'] ) ? sanitize_key( wp_unslash( $_GET['resume'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	if ( ! $token ) {
+		return array();
+	}
+	$data = get_transient( 'pamoja_resume_' . $token );
+	return is_array( $data ) ? array_map( 'strval', $data ) : array();
 }
 
 /**
@@ -184,9 +218,13 @@ function pamoja_handle_inquiry() {
 	$fields = pamoja_inquiry_fields();
 	$back   = pamoja_inquiry_back_url( (string) apply_filters( 'pamoja_conversation_url', home_url( '/engage/#conversation' ) ) );
 
-	$gate = pamoja_inquiry_gate( $back );
-	if ( $gate ) {
-		wp_safe_redirect( $gate );
+	$gate = pamoja_inquiry_gate( 'inquiry' );
+	if ( 'silent' === $gate ) {
+		wp_safe_redirect( pamoja_inquiry_thank_you_url() );
+		exit;
+	}
+	if ( 'retry' === $gate ) {
+		wp_safe_redirect( add_query_arg( 'inquiry', 'error', $back ) );
 		exit;
 	}
 
@@ -215,7 +253,16 @@ function pamoja_handle_inquiry() {
 	}
 
 	if ( $errors ) {
-		wp_safe_redirect( add_query_arg( array( 'inquiry' => 'error', 'missing' => implode( ',', $errors ) ), $back ) );
+		wp_safe_redirect(
+			add_query_arg(
+				array(
+					'inquiry' => 'error',
+					'missing' => implode( ',', $errors ),
+					'resume'  => pamoja_inquiry_stash( $data ),
+				),
+				$back
+			)
+		);
 		exit;
 	}
 
@@ -232,7 +279,7 @@ function pamoja_handle_inquiry() {
 		sprintf( __( '[Pamoja] New inquiry from %s', 'pamoja' ), $title ),
 		$data['name'] . ' <' . $data['email'] . '>'
 	);
-	pamoja_inquiry_mark_sent();
+	pamoja_inquiry_mark_sent( 'inquiry' );
 
 	wp_safe_redirect( pamoja_inquiry_thank_you_url() );
 	exit;
@@ -250,16 +297,28 @@ function pamoja_handle_keep_posted() {
 	$back     = pamoja_inquiry_back_url( $event && 'event' === $event->post_type ? (string) get_permalink( $event ) : (string) ( get_post_type_archive_link( 'event' ) ?: home_url( '/events/' ) ) );
 	$wants    = isset( $_SERVER['HTTP_ACCEPT'] ) && str_contains( (string) $_SERVER['HTTP_ACCEPT'], 'application/json' );
 
-	$fail = function ( string $message ) use ( $back, $wants ) {
+	// The result carries the event, so the right form answers for itself on a
+	// page that shows several of them.
+	$fail = function ( string $message ) use ( $back, $wants, $event_id ) {
 		if ( $wants ) {
 			wp_send_json( array( 'ok' => false, 'message' => $message ), 400 );
 		}
-		wp_safe_redirect( add_query_arg( 'keep', 'error', $back ) );
+		wp_safe_redirect( add_query_arg( array( 'keep' => 'error', 'keep_event' => $event_id ), $back ) );
+		exit;
+	};
+	$done = function ( string $message ) use ( $back, $wants, $event_id ) {
+		if ( $wants ) {
+			wp_send_json( array( 'ok' => true, 'message' => $message ) );
+		}
+		wp_safe_redirect( add_query_arg( array( 'keep' => 'sent', 'keep_event' => $event_id ), $back ) );
 		exit;
 	};
 
-	$gate = pamoja_inquiry_gate( $back );
-	if ( $gate ) {
+	$gate = pamoja_inquiry_gate( 'keep', (string) $event_id );
+	if ( 'silent' === $gate ) {
+		$done( __( 'Noted. We’ll write when it’s announced.', 'pamoja' ) );
+	}
+	if ( 'retry' === $gate ) {
 		$fail( __( 'That didn’t go through. Please try again in a moment.', 'pamoja' ) );
 	}
 	$email = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -282,13 +341,9 @@ function pamoja_handle_keep_posted() {
 		sprintf( __( '[Pamoja] Keep me posted: %s', 'pamoja' ), $event_title ),
 		$email
 	);
-	pamoja_inquiry_mark_sent();
+	pamoja_inquiry_mark_sent( 'keep', (string) $event_id );
 
-	if ( $wants ) {
-		wp_send_json( array( 'ok' => true, 'message' => __( 'Noted. We’ll write when it’s announced.', 'pamoja' ) ) );
-	}
-	wp_safe_redirect( add_query_arg( 'keep', 'sent', $back ) );
-	exit;
+	$done( __( 'Noted. We’ll write when it’s announced.', 'pamoja' ) );
 }
 add_action( 'admin_post_nopriv_pamoja_keep_posted', 'pamoja_handle_keep_posted' );
 add_action( 'admin_post_pamoja_keep_posted', 'pamoja_handle_keep_posted' );

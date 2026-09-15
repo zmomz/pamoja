@@ -350,9 +350,8 @@ function pamoja_render_inquiry_box( WP_Post $post ) {
 		__( 'Organization', 'pamoja' )         => pamoja_get_meta( $post->ID, 'inquiry_organization' ),
 		__( 'Email', 'pamoja' )                => pamoja_get_meta( $post->ID, 'inquiry_email' ),
 		__( 'Hoping to build', 'pamoja' )      => pamoja_get_meta( $post->ID, 'inquiry_build' ),
-		__( 'Who else is involved', 'pamoja' ) => pamoja_get_meta( $post->ID, 'inquiry_involved' ),
+		__( 'What they bring', 'pamoja' )      => pamoja_get_meta( $post->ID, 'inquiry_bringing' ),
 		__( 'Timeline', 'pamoja' )             => pamoja_get_meta( $post->ID, 'inquiry_timeline' ),
-		__( 'Bringing besides money', 'pamoja' ) => pamoja_get_meta( $post->ID, 'inquiry_bringing' ),
 		__( 'Received', 'pamoja' )             => get_the_date( 'j F Y, H:i', $post ),
 	);
 	echo '<table class="widefat striped pamoja-inquiry-table"><tbody>';

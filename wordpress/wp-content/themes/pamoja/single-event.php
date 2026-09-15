@@ -17,7 +17,6 @@ while ( have_posts() ) :
 	$cover    = pamoja_thumbnail_id( $id );
 	$gallery  = pamoja_gallery( $id );
 	$video    = pamoja_event_video_embed( $id );
-	$keep     = isset( $_GET['keep'] ) ? sanitize_key( $_GET['keep'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	?>
 	<article <?php post_class( 'article single-event' ); ?>>
 		<header class="article-head">
@@ -46,12 +45,7 @@ while ( have_posts() ) :
 				<?php if ( 'upcoming' === $status ) : ?>
 					<div class="keep-box">
 						<p class="keep-lead"><?php esc_html_e( 'Want to know when this is announced?', 'pamoja' ); ?></p>
-						<?php if ( 'sent' === $keep ) : ?>
-							<p class="keep-done" role="status"><?php pamoja_home_text( 'coming', 'keep_done' ); ?></p>
-						<?php else : ?>
-							<?php if ( 'error' === $keep ) : ?><p class="keep-error" role="alert"><?php esc_html_e( 'That didn’t go through. Please check the address and try again.', 'pamoja' ); ?></p><?php endif; ?>
-							<?php get_template_part( 'template-parts/keep-posted', null, array( 'event' => get_post() ) ); ?>
-						<?php endif; ?>
+						<?php get_template_part( 'template-parts/keep-posted', null, array( 'event' => get_post() ) ); ?>
 					</div>
 				<?php endif; ?>
 			</div>

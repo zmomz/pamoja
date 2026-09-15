@@ -13,6 +13,29 @@ if ( ! $event instanceof WP_Post || ! function_exists( 'pamoja_inquiry_action_ur
 	return;
 }
 $uid = 'keep-' . $event->ID . '-' . wp_unique_id();
+
+// Without JavaScript the handler sends the visitor back here with the result
+// and the event it was about, so the right form answers for itself wherever
+// it renders — the home page and the events list, not only the event page.
+$pamoja_keep = '';
+// phpcs:disable WordPress.Security.NonceVerification.Recommended
+if ( isset( $_GET['keep'] ) && (int) ( $_GET['keep_event'] ?? 0 ) === (int) $event->ID ) {
+	$pamoja_keep = sanitize_key( wp_unslash( $_GET['keep'] ) );
+}
+// phpcs:enable WordPress.Security.NonceVerification.Recommended
+
+if ( 'sent' === $pamoja_keep ) :
+	?>
+	<p class="keep-done" role="status"><?php pamoja_home_text( 'coming', 'keep_done' ); ?></p>
+	<?php
+	return;
+endif;
+
+if ( 'error' === $pamoja_keep ) :
+	?>
+	<p class="keep-error" role="alert"><?php esc_html_e( 'That didn’t go through. Please check the address and try again.', 'pamoja' ); ?></p>
+	<?php
+endif;
 ?>
 <form class="keep" method="post" action="<?php echo esc_url( pamoja_inquiry_action_url() ); ?>" data-done="<?php echo esc_attr( pamoja_home( 'coming', 'keep_done' ) ); ?>">
 	<input type="hidden" name="action" value="pamoja_keep_posted">

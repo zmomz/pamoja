@@ -16,6 +16,9 @@ if ( ! function_exists( 'pamoja_inquiry_fields' ) ) {
 $fields  = pamoja_inquiry_fields();
 $error   = isset( $_GET['inquiry'] ) && 'error' === $_GET['inquiry']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 $missing = isset( $_GET['missing'] ) ? explode( ',', sanitize_text_field( wp_unslash( $_GET['missing'] ) ) ) : array(); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+// After a mistake the handler hands back everything that was typed, so a long
+// answer is never lost to a mistyped address.
+$resume = function_exists( 'pamoja_inquiry_resume' ) ? pamoja_inquiry_resume() : array();
 ?>
 <div class="inquiry">
 	<div class="inquiry-note"><?php pamoja_home_html( 'contact', 'form_note' ); ?></div>
@@ -38,14 +41,20 @@ $missing = isset( $_GET['missing'] ) ? explode( ',', sanitize_text_field( wp_uns
 			$id      = 'inquiry-' . $key;
 			$hint_id = $id . '-hint';
 			$invalid = in_array( $key, $missing, true );
+			$value   = $resume[ $key ] ?? '';
+			$aria    = $invalid ? ' aria-invalid="true"' : '';
 			?>
 			<?php if ( 'choice' === $field['type'] ) : ?>
 				<fieldset class="field field--choice">
 					<legend><?php echo esc_html( $field['label'] ); ?></legend>
 					<div class="pills">
-						<?php $first = true; foreach ( $field['options'] as $value => $label ) : ?>
-							<label class="pill"><input type="radio" name="<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( $value ); ?>"<?php checked( $first ); ?>><span><?php echo esc_html( $label ); ?></span></label>
-							<?php $first = false; ?>
+						<?php
+						// The handler stores the label it matched, so find the key again.
+						$chosen = array_search( $resume[ $key ] ?? '', $field['options'], true );
+						$chosen = false !== $chosen ? $chosen : array_key_first( $field['options'] );
+						?>
+						<?php foreach ( $field['options'] as $value => $label ) : ?>
+							<label class="pill"><input type="radio" name="<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( $value ); ?>"<?php checked( $value, $chosen ); ?>><span><?php echo esc_html( $label ); ?></span></label>
 						<?php endforeach; ?>
 					</div>
 				</fieldset>
@@ -53,9 +62,9 @@ $missing = isset( $_GET['missing'] ) ? explode( ',', sanitize_text_field( wp_uns
 				<div class="field<?php echo $invalid ? ' is-invalid' : ''; ?>">
 					<label for="<?php echo esc_attr( $id ); ?>"><?php echo esc_html( $field['label'] ); ?><?php if ( empty( $field['required'] ) ) : ?> <small><?php esc_html_e( '(optional)', 'pamoja' ); ?></small><?php endif; ?></label>
 					<?php if ( 'textarea' === $field['type'] ) : ?>
-						<textarea id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $key ); ?>" rows="<?php echo (int) ( $field['rows'] ?? 3 ); ?>"<?php echo $field['required'] ? ' required' : ''; ?><?php echo ! empty( $field['hint'] ) ? ' aria-describedby="' . esc_attr( $hint_id ) . '"' : ''; ?>></textarea>
+						<textarea id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $key ); ?>" rows="<?php echo (int) ( $field['rows'] ?? 3 ); ?>"<?php echo $field['required'] ? ' required' : ''; ?><?php echo $aria; // Static attribute. ?><?php echo ! empty( $field['hint'] ) ? ' aria-describedby="' . esc_attr( $hint_id ) . '"' : ''; ?>><?php echo esc_textarea( $value ); ?></textarea>
 					<?php else : ?>
-						<input id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $key ); ?>" type="<?php echo esc_attr( $field['type'] ); ?>"<?php echo $field['required'] ? ' required' : ''; ?><?php echo ! empty( $field['autocomplete'] ) ? ' autocomplete="' . esc_attr( $field['autocomplete'] ) . '"' : ''; ?><?php echo ! empty( $field['hint'] ) ? ' aria-describedby="' . esc_attr( $hint_id ) . '"' : ''; ?>>
+						<input id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $key ); ?>" type="<?php echo esc_attr( $field['type'] ); ?>" value="<?php echo esc_attr( $value ); ?>"<?php echo $field['required'] ? ' required' : ''; ?><?php echo $aria; // Static attribute. ?><?php echo ! empty( $field['autocomplete'] ) ? ' autocomplete="' . esc_attr( $field['autocomplete'] ) . '"' : ''; ?><?php echo ! empty( $field['hint'] ) ? ' aria-describedby="' . esc_attr( $hint_id ) . '"' : ''; ?>>
 					<?php endif; ?>
 					<?php if ( ! empty( $field['hint'] ) ) : ?>
 						<p class="hint" id="<?php echo esc_attr( $hint_id ); ?>"><?php echo esc_html( $field['hint'] ); ?></p>
