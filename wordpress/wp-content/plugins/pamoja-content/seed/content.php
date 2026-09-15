@@ -246,10 +246,10 @@ return array(
 		),
 		array(
 			'id'           => 'event-kandakas-feminism',
-			'title'        => 'Kandakas’ Feminism',
+			'title'        => 'Kandakas’ Feminism?',
 			'slug'         => 'kandakas-feminism',
-			'date_display' => 'October 2026',
-			'start_date'   => '2026-10-01',
+			'date_display' => 'January 2027',
+			'start_date'   => '2027-01-01',
 			'location'     => 'Hamilton',
 			'status'       => 'upcoming',
 			'branches'     => array( 'branch-creative-collaboration', 'branch-connection' ),
