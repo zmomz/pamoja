@@ -38,15 +38,37 @@
     var restPart = minitree ? (minitree.getAttribute('data-lit') || 'all') : 'all';
     var lastFocus = null;
     var hoverTimer;
+    // Everything the open map covers. Marked inert so keyboard and screen
+    // reader users cannot wander behind it while it is up.
+    var behind = Array.prototype.filter.call(document.body.children, function (el) {
+      return el !== menu && el !== veil;
+    });
+
+    function setBehindInert(on) {
+      behind.forEach(function (el) {
+        if (on) { el.setAttribute('inert', ''); } else { el.removeAttribute('inert'); }
+      });
+      // The header holds the button that closes the map, so it stays usable.
+      if (on && hd) hd.removeAttribute('inert');
+    }
+
+    function focusables() {
+      return Array.prototype.filter.call(
+        menu.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'),
+        function (el) { return el.offsetParent !== null || el === document.activeElement; }
+      );
+    }
 
     function setMenu(open) {
       if (open) {
         lastFocus = document.activeElement;
         menu.hidden = false; veil.hidden = false;
+        setBehindInert(true);
         // Let the display change land before the transition.
         requestAnimationFrame(function () { document.body.classList.add('menu-open'); hd.classList.add('menu-open'); });
       } else {
         document.body.classList.remove('menu-open'); hd.classList.remove('menu-open');
+        setBehindInert(false);
         setTimeout(function () { if (!document.body.classList.contains('menu-open')) { menu.hidden = true; veil.hidden = true; } }, 260);
         light(menutree, 'all');
         if (lastFocus && lastFocus.focus) lastFocus.focus();
@@ -60,11 +82,27 @@
       document.body.style.overflow = open && window.innerWidth <= 1000 ? 'hidden' : '';
     }
     function isOpen() { return document.body.classList.contains('menu-open'); }
+    window.addEventListener('resize', function () {
+      document.body.style.overflow = isOpen() && window.innerWidth <= 1000 ? 'hidden' : '';
+    }, { passive: true });
 
     if (mapbtn) mapbtn.addEventListener('click', function () { setMenu(!isOpen()); });
     if (burger) burger.addEventListener('click', function () { setMenu(!isOpen()); });
     veil.addEventListener('click', function () { setMenu(false); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && isOpen()) setMenu(false); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && isOpen()) { setMenu(false); return; }
+      if (e.key !== 'Tab' || !isOpen()) return;
+      // Keep Tab inside the map: the close button, then the places, and round.
+      var stops = [];
+      if (burger && burger.offsetParent !== null) stops.push(burger);
+      if (mapbtn && mapbtn.offsetParent !== null) stops.push(mapbtn);
+      stops = stops.concat(focusables());
+      if (!stops.length) return;
+      var first = stops[0], last = stops[stops.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      else if (stops.indexOf(document.activeElement) === -1) { e.preventDefault(); first.focus(); }
+    });
 
     // Hover intent on the header links opens the map with their part lit.
     hd.querySelectorAll('.nav-link[data-part]').forEach(function (a) {

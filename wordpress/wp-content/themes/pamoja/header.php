@@ -21,7 +21,12 @@ $pamoja_map  = pamoja_site_map();
 
 	<nav class="nav" aria-label="<?php esc_attr_e( 'Primary', 'pamoja' ); ?>">
 		<?php foreach ( $pamoja_map as $key => $door ) : ?>
-			<a class="nav-link<?php echo $key === $pamoja_door ? ' on' : ''; ?>" href="<?php echo esc_url( $door['url'] ); ?>" data-door="<?php echo esc_attr( $key ); ?>" data-part="<?php echo esc_attr( $door['part'] ); ?>"<?php echo $key === $pamoja_door ? ' aria-current="page"' : ''; ?>><?php echo esc_html( $door['label'] ); ?></a>
+			<?php
+			// The door is highlighted for everything under it (an event, an
+			// album), but only the page itself is aria-current="page".
+			$pamoja_is_here = untrailingslashit( $door['url'] ) === untrailingslashit( pamoja_current_url() );
+			?>
+			<a class="nav-link<?php echo $key === $pamoja_door ? ' on' : ''; ?>" href="<?php echo esc_url( $door['url'] ); ?>" data-door="<?php echo esc_attr( $key ); ?>" data-part="<?php echo esc_attr( $door['part'] ); ?>"<?php echo $pamoja_is_here ? ' aria-current="page"' : ''; ?>><?php echo esc_html( $door['label'] ); ?></a>
 		<?php endforeach; ?>
 		<button class="mapbtn" id="mapbtn" type="button" aria-expanded="false" aria-controls="menu">
 			<?php pamoja_tree( array( 'lit' => $pamoja_part, 'id' => 'minitree', 'class' => 'tree-mini', 'name' => 'minitree' ) ); ?>

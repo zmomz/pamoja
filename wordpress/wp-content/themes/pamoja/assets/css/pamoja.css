@@ -69,7 +69,8 @@ button { font: inherit; }
 .muted { color: var(--ink-soft); }
 .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.85rem 1.4rem; border: 0; border-radius: 999px; background: var(--karkadeh); color: var(--paper); font-family: var(--font-ui); font-weight: 700; font-size: 0.85rem; letter-spacing: 0.03em; cursor: pointer; transition: background 0.3s ease, transform 0.3s ease; }
 .btn:hover { background: var(--river); color: var(--paper); transform: translateY(-2px); }
-.lnk { font-family: var(--font-ui); font-weight: 700; font-size: 0.9rem; color: var(--river); }
+/* A standing link is a target, not a line of text: never under 24px tall. */
+.lnk { display: inline-flex; align-items: center; min-height: 24px; font-family: var(--font-ui); font-weight: 700; font-size: 0.9rem; color: var(--river); }
 .lnk:hover { color: var(--hibiscus); }
 dfn { font-style: normal; font-weight: 600; color: var(--karkadeh-deep); border-bottom: 2px dotted var(--ochre); }
 .term { margin: 0.6rem 0 1.2rem; padding: 0.8rem 1rem; background: var(--cream); border-left: 4px solid var(--ochre); border-radius: 10px; font-size: 0.95rem; max-width: 62ch; }
@@ -107,7 +108,7 @@ dfn { font-style: normal; font-weight: 600; color: var(--karkadeh-deep); border-
 /* Hotspots: plain labels in the site's own words. */
 .spot { --part: var(--river); position: absolute; z-index: 4; display: flex; align-items: center; gap: 0.5rem; transform: translate(-8px, -50%); font-family: var(--font-ui); font-size: 0.78rem; font-weight: 700; color: var(--night); }
 .spot i { flex: none; width: 14px; height: 14px; border-radius: 50%; background: var(--part); border: 3px solid var(--paper); box-shadow: 0 0 0 1px var(--part); transition: transform 0.25s ease; }
-.spot span { background: color-mix(in srgb, var(--paper) 94%, transparent); padding: 0.3rem 0.7rem; border-radius: 999px; border: 1px solid var(--line); white-space: nowrap; line-height: 1.15; transition: border-color 0.25s ease; }
+.spot span { display: flex; flex-direction: column; justify-content: center; min-height: 24px; background: color-mix(in srgb, var(--paper) 94%, transparent); padding: 0.3rem 0.7rem; border-radius: 999px; border: 1px solid var(--line); white-space: nowrap; line-height: 1.15; transition: border-color 0.25s ease; }
 .spot span small { display: block; font-weight: 400; font-size: 0.68rem; color: var(--ink-soft); }
 .spot--l { flex-direction: row-reverse; transform: translate(calc(-100% + 8px), -50%); }
 .spot--soil { --part: var(--ochre); } .spot--roots { --part: var(--karkadeh); } .spot--trunk { --part: var(--karkadeh-deep); } .spot--branches { --part: var(--river-deep); } .spot--canopy { --part: var(--river); } .spot--seeds, .spot--seed { --part: var(--hibiscus); } .spot--fruit { --part: var(--ochre); }
@@ -116,15 +117,18 @@ dfn { font-style: normal; font-weight: 600; color: var(--karkadeh-deep); border-
 .spot:hover span, .spot:focus-visible span { border-color: var(--part); }
 .spot:focus-visible { outline: 3px solid var(--hibiscus); outline-offset: 4px; border-radius: 999px; }
 
-/* The living part of the map: one fruit per upcoming event. */
-.fruit { position: absolute; z-index: 3; width: 16px; height: 16px; border-radius: 50%; background: var(--ochre); border: 2px solid var(--paper); box-shadow: 0 2px 6px rgba(33, 28, 23, 0.25); transform: translate(-50%, -50%); }
-.fruit-tip { position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%); white-space: nowrap; background: var(--night); color: var(--paper); font-family: var(--font-ui); font-size: 0.72rem; font-weight: 700; padding: 0.3rem 0.6rem; border-radius: 8px; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
+/* The living part of the map: one fruit per upcoming event. The fruit reads
+   as a 16px berry but the link itself is 28px, so it can be tapped. */
+.fruit { position: absolute; z-index: 3; width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; transform: translate(-50%, -50%); }
+.fruit::before { content: ""; width: 16px; height: 16px; border-radius: 50%; background: var(--ochre); border: 2px solid var(--paper); box-shadow: 0 2px 6px rgba(33, 28, 23, 0.25); }
+.fruit-tip { position: absolute; left: 50%; bottom: calc(100% - 2px); transform: translateX(-50%); white-space: nowrap; background: var(--night); color: var(--paper); font-family: var(--font-ui); font-size: 0.72rem; font-weight: 700; padding: 0.3rem 0.6rem; border-radius: 8px; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
 .fruit:hover .fruit-tip, .fruit:focus-visible .fruit-tip { opacity: 1; }
+.fruit:focus-visible { outline: 3px solid var(--hibiscus); outline-offset: 2px; }
 @media (prefers-reduced-motion: no-preference) {
-  .fruit { animation: ripen 4s ease-in-out infinite; }
-  .fruit.f2 { animation-delay: 1.3s; } .fruit.f3 { animation-delay: 2.6s; }
+  .fruit::before { animation: ripen 4s ease-in-out infinite; }
+  .fruit.f2::before { animation-delay: 1.3s; } .fruit.f3::before { animation-delay: 2.6s; }
 }
-@keyframes ripen { 0%, 100% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -50%) scale(1.18); } }
+@keyframes ripen { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.18); } }
 
 /* ==========================================================================
    Header: four doors, the map, one action
@@ -163,9 +167,9 @@ body.menu-open .veil, body.menu-open .menu { opacity: 1; transform: none; }
 .menu-map { align-self: center; }
 .menu-map .stage { position: relative; width: min(360px, 100%); margin: 0 auto; }
 .menu-cols { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; font-family: var(--font-ui); }
-.menu-part { display: block; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--karkadeh); margin-bottom: 0.35rem; }
-.menu-col h4 { font-size: 1.4rem; margin-bottom: 0.5rem; }
-.menu-col h4 a { color: var(--night); } .menu-col h4 a:hover { color: var(--karkadeh); }
+.menu-part { display: block; min-height: 1.6em; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--karkadeh); margin-bottom: 0.35rem; }
+.menu-col-title { font-family: var(--font-display); font-weight: 600; line-height: 1; letter-spacing: -0.03em; color: var(--night); font-size: 1.4rem; margin: 0 0 0.5rem; }
+.menu-col-title a { color: var(--night); } .menu-col-title a:hover { color: var(--karkadeh); }
 .menu-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
 .menu-col li a { display: block; padding: 0.5rem 0.65rem; border-radius: 10px; font-weight: 700; font-size: 0.9rem; color: var(--ink); }
 .menu-col li a:hover, .menu-col li a.hot { background: var(--cream); color: var(--ink); }
@@ -177,7 +181,7 @@ body.menu-open .veil, body.menu-open .menu { opacity: 1; transform: none; }
   .menu-lead { display: block; font-family: var(--font-ui); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); text-align: center; }
   .menu-cols { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
   .menu-col { background: var(--white); border: 1px solid var(--line); border-radius: 14px; padding: 0.85rem; }
-  .menu-col h4 { font-size: 1.2rem; }
+  .menu-col-title { font-size: 1.2rem; }
   .menu-map .spot { font-size: 0.7rem; }
 }
 @media (max-width: 480px) { .menu-cols { grid-template-columns: 1fr; } .menu-map .stage { width: min(300px, 100%); } }
@@ -272,7 +276,7 @@ body.menu-open .veil, body.menu-open .menu { opacity: 1; transform: none; }
 .ph-slice { position: relative; justify-self: end; width: min(100%, 520px); }
 .toc { position: sticky; top: var(--header-h); z-index: 30; display: flex; gap: 0.5rem; flex-wrap: wrap; padding: 0.6rem var(--gutter); background: color-mix(in srgb, var(--ground) 92%, transparent); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); font-family: var(--font-ui); font-weight: 700; font-size: 0.8rem; }
 .admin-bar .toc { top: calc(var(--header-h) + 32px); }
-.toc a { padding: 0.45rem 0.9rem; border-radius: 999px; border: 1px solid var(--line); background: var(--white); color: var(--ink); }
+.toc a { display: inline-flex; align-items: center; min-height: 24px; padding: 0.45rem 0.9rem; border-radius: 999px; border: 1px solid var(--line); background: var(--white); color: var(--ink); }
 .toc a:hover { border-color: var(--river); color: var(--ink); }
 .toc a.on { background: var(--karkadeh); border-color: var(--karkadeh); color: var(--paper); }
 .listing { padding-block: 1.4rem 3rem; }
@@ -469,9 +473,11 @@ body.menu-open .veil, body.menu-open .menu { opacity: 1; transform: none; }
 .ft-tagline { margin: 0.7rem 0 1rem; color: var(--ochre-light); font-size: 0.92rem; max-width: 30ch; }
 .ft-contact { font-size: 0.92rem; }
 .ft a { color: var(--river-pale); } .ft a:hover { color: var(--paper); text-decoration: underline; }
+/* Every link in the footer map is a comfortable target, not a line of text. */
+.ft-map a, .ft-contact a, .menu-foot a { display: inline-flex; align-items: center; min-height: 24px; }
 .ft-social { list-style: none; margin: 0.7rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.3rem 1rem; font-size: 0.88rem; }
 .ft-map { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; }
-.ft-col h4 { font-family: var(--font-ui); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; margin: 0 0 0.7rem; }
+.ft-col-title { font-family: var(--font-ui); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; margin: 0 0 0.7rem; }
 .ft-col h4 a { color: var(--paper); }
 .ft-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.4rem; font-size: 0.9rem; }
 .land-ack-heading { font-family: var(--font-ui); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--river-pale); margin: 0 0 0.6rem; }

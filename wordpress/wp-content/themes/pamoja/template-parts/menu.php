@@ -25,9 +25,10 @@ $door = pamoja_current_door();
 	<div class="menu-cols">
 		<?php foreach ( $map as $key => $group ) : ?>
 			<div class="menu-col">
+				<?php $pamoja_col_id = 'menu-col-' . sanitize_html_class( $group['label'] ); ?>
 				<span class="menu-part"><?php echo esc_html( $group['tree'] ); ?></span>
-				<h4><a href="<?php echo esc_url( $group['url'] ); ?>" data-part="<?php echo esc_attr( $group['part'] ); ?>"><?php echo esc_html( $group['label'] ); ?></a></h4>
-				<ul>
+				<p class="menu-col-title" id="<?php echo esc_attr( $pamoja_col_id ); ?>"><a href="<?php echo esc_url( $group['url'] ); ?>" data-part="<?php echo esc_attr( $group['part'] ); ?>"><?php echo esc_html( $group['label'] ); ?></a></p>
+				<ul aria-labelledby="<?php echo esc_attr( $pamoja_col_id ); ?>">
 					<?php foreach ( $group['items'] as $item ) : ?>
 						<li><a href="<?php echo esc_url( $item['url'] ); ?>" data-part="<?php echo esc_attr( $item['part'] ); ?>"><?php echo esc_html( $item['label'] ); ?><?php if ( ! empty( $item['desc'] ) ) : ?><small><?php echo esc_html( $item['desc'] ); ?></small><?php endif; ?></a></li>
 					<?php endforeach; ?>

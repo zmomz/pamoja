@@ -25,9 +25,10 @@ $pamoja_map    = pamoja_site_map();
 
 		<nav class="ft-map" aria-label="<?php esc_attr_e( 'Site map', 'pamoja' ); ?>">
 			<?php foreach ( $pamoja_map as $group ) : ?>
+				<?php $pamoja_col_id = 'ft-col-' . sanitize_html_class( $group['label'] ); ?>
 				<div class="ft-col">
-					<h4><a href="<?php echo esc_url( $group['url'] ); ?>"><?php echo esc_html( $group['label'] ); ?></a></h4>
-					<ul>
+					<p class="ft-col-title" id="<?php echo esc_attr( $pamoja_col_id ); ?>"><a href="<?php echo esc_url( $group['url'] ); ?>"><?php echo esc_html( $group['label'] ); ?></a></p>
+					<ul aria-labelledby="<?php echo esc_attr( $pamoja_col_id ); ?>">
 						<?php foreach ( $group['items'] as $item ) : ?>
 							<li><a href="<?php echo esc_url( $item['url'] ); ?>"><?php echo esc_html( $item['label'] ); ?></a></li>
 						<?php endforeach; ?>
