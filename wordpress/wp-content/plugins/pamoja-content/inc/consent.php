@@ -154,6 +154,16 @@ function pamoja_consent_admin_notice() {
 	if ( $thumb ) {
 		$ids[] = $thumb;
 	}
+	// Photographs placed in the body of the post are held to the same rule.
+	$post = get_post( $post_id );
+	foreach ( pamoja_content_image_tags( $post ? $post->post_content : '' ) as $tag ) {
+		$id = pamoja_content_image_id( $tag );
+		if ( $id ) {
+			$ids[] = $id;
+		} else {
+			$blocked[] = esc_html__( 'An image in the text that is not in the media library — it will not be shown. Upload it, tick "Consent confirmed" and give it alt text.', 'pamoja' );
+		}
+	}
 	foreach ( array_unique( $ids ) as $id ) {
 		$status = pamoja_image_status( (int) $id );
 		if ( ! $status['ok'] ) {
@@ -165,6 +175,7 @@ function pamoja_consent_admin_notice() {
 			);
 		}
 	}
+	$blocked = array_values( array_unique( $blocked ) );
 	if ( ! $blocked ) {
 		return;
 	}
@@ -176,3 +187,68 @@ function pamoja_consent_admin_notice() {
 	);
 }
 add_action( 'admin_notices', 'pamoja_consent_admin_notice' );
+
+/**
+ * The attachment id an <img> tag refers to, or 0 when it cannot be resolved.
+ */
+function pamoja_content_image_id( string $tag ): int {
+	if ( preg_match( '/wp-image-(\d+)/', $tag, $m ) ) {
+		return (int) $m[1];
+	}
+	if ( preg_match( '/\ssrc=["\']([^"\']+)["\']/i', $tag, $m ) ) {
+		return (int) attachment_url_to_postid( $m[1] );
+	}
+	return 0;
+}
+
+/**
+ * True when an <img> in post content may not be shown. An image whose
+ * attachment cannot be resolved counts as held back: the rule is "when in
+ * doubt, leave the photo out", and the edit screen lists every one of these.
+ */
+function pamoja_content_image_is_blocked( string $tag ): bool {
+	$id = pamoja_content_image_id( $tag );
+	return ! $id || ! pamoja_image_is_publishable( $id );
+}
+
+/**
+ * Every <img> in a chunk of HTML.
+ *
+ * @return string[]
+ */
+function pamoja_content_image_tags( string $html ): array {
+	return preg_match_all( '#<img\b[^>]*>#i', $html, $m ) ? $m[0] : array();
+}
+
+/**
+ * The consent rule applied to the body of a post, not only to the featured
+ * image and the gallery field. An editor who drops a photograph straight into
+ * the editor is held to the same rule as everywhere else: no consent or no
+ * alt text, and it does not reach the public site.
+ */
+function pamoja_filter_content_images( $html ) {
+	$html = (string) $html;
+	if ( is_admin() || ! str_contains( $html, '<img' ) ) {
+		return $html;
+	}
+	// Innermost figures first, so a gallery loses only the photos it must.
+	$html = preg_replace_callback(
+		'#<figure\b[^>]*>(?:(?!<figure\b).)*?</figure>#is',
+		static function ( array $m ): string {
+			foreach ( pamoja_content_image_tags( $m[0] ) as $tag ) {
+				if ( pamoja_content_image_is_blocked( $tag ) ) {
+					return '';
+				}
+			}
+			return $m[0];
+		},
+		$html
+	);
+	return preg_replace_callback(
+		'#<img\b[^>]*>#i',
+		static fn( array $m ): string => pamoja_content_image_is_blocked( $m[0] ) ? '' : $m[0],
+		$html
+	);
+}
+add_filter( 'the_content', 'pamoja_filter_content_images', 20 );
+add_filter( 'the_excerpt', 'pamoja_filter_content_images', 20 );
