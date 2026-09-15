@@ -3,7 +3,7 @@
  * Plugin Name: Pamoja Content
  * Plugin URI:  https://github.com/zmomz/pamoja
  * Description: Content types for the Pamoja Cultural Collective site — events, blog, media albums, services, partners — plus the photo-consent rule, the inquiry inbox, and the launch-content importer. The Pamoja theme needs this plugin.
- * Version:     1.1.1
+ * Version:     1.2.0
  * Requires at least: 6.4
  * Requires PHP: 8.1
  * Author:      Pamoja Cultural Collective
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'PAMOJA_CONTENT_VERSION', '1.1.1' );
+define( 'PAMOJA_CONTENT_VERSION', '1.2.0' );
 define( 'PAMOJA_CONTENT_DIR', plugin_dir_path( __FILE__ ) );
 define( 'PAMOJA_CONTENT_URL', plugin_dir_url( __FILE__ ) );
 
