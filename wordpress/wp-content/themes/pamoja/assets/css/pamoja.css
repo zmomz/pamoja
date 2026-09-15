@@ -79,14 +79,17 @@ dfn { font-style: normal; font-weight: 600; color: var(--karkadeh-deep); border-
 /* ==========================================================================
    The tree
    ========================================================================== */
-.tree-map { --op-soil: 1; --op-roots: 1; --op-trunk: 1; --op-branches: 1; --op-canopy: 1; --op-seeds: 1; --sway: running; }
+.tree-map { --op-soil: 1; --op-roots: 1; --op-trunk: 1; --op-branches: 1; --op-canopy: 1; --op-seeds: 1; --op-grove: 0.42; --sway: running; }
 .tree-map svg { display: block; width: 100%; height: auto; overflow: visible; }
-.tree-map.lit-soil     { --op-roots: 0.22; --op-trunk: 0.22; --op-branches: 0.22; --op-canopy: 0.22; --op-seeds: 0.22; }
-.tree-map.lit-roots    { --op-soil: 0.35; --op-trunk: 0.22; --op-branches: 0.22; --op-canopy: 0.22; --op-seeds: 0.22; }
-.tree-map.lit-trunk    { --op-soil: 0.35; --op-roots: 0.22; --op-branches: 0.22; --op-canopy: 0.22; --op-seeds: 0.22; }
-.tree-map.lit-branches { --op-soil: 0.35; --op-roots: 0.22; --op-trunk: 0.22; --op-canopy: 0.22; --op-seeds: 0.22; }
-.tree-map.lit-canopy   { --op-soil: 0.35; --op-roots: 0.22; --op-trunk: 0.22; --op-branches: 0.22; --op-seeds: 0.22; }
-.tree-map.lit-seeds    { --op-soil: 1; --op-roots: 0.4; --op-trunk: 0.3; --op-branches: 0.22; --op-canopy: 0.22; }
+.tree-map.lit-soil     { --op-roots: 0.22; --op-trunk: 0.22; --op-branches: 0.22; --op-canopy: 0.22; --op-seeds: 0.22; --op-grove: 0.2; }
+.tree-map.lit-roots    { --op-soil: 0.35; --op-trunk: 0.22; --op-branches: 0.22; --op-canopy: 0.22; --op-seeds: 0.22; --op-grove: 0.2; }
+.tree-map.lit-trunk    { --op-soil: 0.35; --op-roots: 0.22; --op-branches: 0.22; --op-canopy: 0.22; --op-seeds: 0.22; --op-grove: 0.2; }
+.tree-map.lit-branches { --op-soil: 0.35; --op-roots: 0.22; --op-trunk: 0.22; --op-canopy: 0.22; --op-seeds: 0.22; --op-grove: 0.2; }
+.tree-map.lit-canopy   { --op-soil: 0.35; --op-roots: 0.22; --op-trunk: 0.22; --op-branches: 0.22; --op-seeds: 0.22; --op-grove: 0.2; }
+.tree-map.lit-seeds    { --op-soil: 1; --op-roots: 0.4; --op-trunk: 0.3; --op-branches: 0.22; --op-canopy: 0.22; --op-grove: 0.2; }
+/* The grove behind: never lit, never a link — context, so Pamoja's tree reads
+   as the subject at every size. */
+.tree-map [id^="tree-grove"] { opacity: var(--op-grove, 0.42); transition: opacity 0.35s ease; }
 .tree-map [id^="tree-soil"] { opacity: var(--op-soil, 1); transition: opacity 0.35s ease; }
 .tree-map [id^="tree-roots"] { opacity: var(--op-roots, 1); transition: opacity 0.35s ease; }
 .tree-map [id^="tree-trunk"] { opacity: var(--op-trunk, 1); transition: opacity 0.35s ease; }
@@ -185,10 +188,17 @@ body.menu-open .veil, body.menu-open .menu { opacity: 1; transform: none; }
   .menu-map .spot { font-size: 0.7rem; }
 }
 @media (max-width: 480px) { .menu-cols { grid-template-columns: 1fr; } .menu-map .stage { width: min(300px, 100%); } }
-/* On a small tree the two lowest labels would touch: spread them. */
+/* The menu tree is half the hero's, so its three lowest labels need their own
+   spread whatever the window is doing. */
+.menu-map .spot.at-how-we-work-together { top: 78% !important; }
+.menu-map .spot.at-ethics-and-values { top: 88% !important; }
+.menu-map .spot--soil { top: 97% !important; }
+
+/* On a small tree the three lowest labels would touch: spread them. */
 @media (max-width: 640px) {
-  .stage .spot--roots { top: 85% !important; }
-  .stage .spot--soil { top: 97% !important; }
+  .stage .spot.at-how-we-work-together { top: 80% !important; }
+  .stage .spot.at-ethics-and-values { top: 90% !important; }
+  .stage .spot--soil { top: 98% !important; }
 }
 
 /* ==========================================================================
@@ -326,9 +336,9 @@ body.menu-open .veil, body.menu-open .menu { opacity: 1; transform: none; }
 .imagine p.small { font-family: var(--font-body); font-size: 1rem; color: var(--ink-soft); margin: 0.8rem 0 0; }
 .card { background: var(--white); border: 1px solid var(--line); border-top: 3px solid var(--river); border-radius: 18px; padding: 1.6rem; }
 .card .num { font-family: var(--font-ui); font-weight: 700; font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--karkadeh); margin-bottom: 0.4rem; display: block; }
-.how3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.2rem; margin: 0.6rem 0 1.4rem; }
-.how3 .card h3 { font-size: 1.25rem; margin: 0 0 0.5rem; }
-.how3 .card p { font-size: 0.98rem; }
+.how2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem; margin: 0.6rem 0 1.4rem; }
+.how2 .card h3 { font-size: 1.25rem; margin: 0 0 0.5rem; }
+.how2 .card p { font-size: 0.98rem; }
 .terms-intro { margin-bottom: 0.6rem; }
 .cards2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem; margin-top: 1.4rem; }
 .card.root h3 { font-size: 1.7rem; margin: 0 0 0.3rem; }
@@ -491,7 +501,7 @@ body.menu-open .veil, body.menu-open .menu { opacity: 1; transform: none; }
   .hero { grid-template-columns: 1fr; min-height: auto; padding-bottom: 1.5rem; }
   .hero-copy { padding: 2rem var(--gutter) 0.5rem; }
   .stage { justify-self: center; width: min(100%, 440px); margin: 0; }
-  .doors, .groups, .strip, .up, .seeds, .stats, .cards2, .how3, .contact-inner { grid-template-columns: 1fr 1fr; }
+  .doors, .groups, .strip, .up, .seeds, .stats, .cards2, .how2, .contact-inner { grid-template-columns: 1fr 1fr; }
   .ph { grid-template-columns: 1fr; } .ph-slice { justify-self: center; width: min(100%, 460px); }
   .climb { grid-template-columns: 1fr; } .climb-side { display: none; }
   .way { grid-template-columns: 1fr; gap: 0.8rem; }
@@ -499,7 +509,7 @@ body.menu-open .veil, body.menu-open .menu { opacity: 1; transform: none; }
   .tl { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 }
 @media (max-width: 640px) {
-  .doors, .groups, .strip, .up, .seeds, .stats, .cards2, .how3, .contact-inner, .ft-map { grid-template-columns: 1fr; }
+  .doors, .groups, .strip, .up, .seeds, .stats, .cards2, .how2, .contact-inner, .ft-map { grid-template-columns: 1fr; }
   .strip--events { grid-template-columns: 1fr; }
   .tl { grid-template-columns: 1fr; gap: 1.4rem; padding: 0 0 0 1.4rem; }
   .tl::before { top: 0; bottom: 0; left: 0; right: auto; width: 3px; height: auto; background: linear-gradient(180deg, var(--ochre), var(--river)); }

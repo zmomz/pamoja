@@ -4,6 +4,9 @@
  * Template Post Type: page
  *
  * Three ways in — volunteer, partner, support — and one conversation.
+ *
+ * Engage is not a part of the tree, so the header carries the whole tree
+ * undimmed rather than a slice that would claim this page is the seeds.
  */
 
 get_header();
@@ -20,8 +23,8 @@ pamoja_page_header(
 		'tag'   => pamoja_home( 'engage', 'tag' ),
 		'title' => pamoja_home( 'engage', 'title' ),
 		'lede'  => pamoja_home( 'engage', 'lede' ),
-		'crop'  => 'seeds',
-		'lit'   => 'seeds',
+		'crop'  => 'full',
+		'lit'   => 'all',
 	)
 );
 pamoja_toc( $stops );

@@ -1,11 +1,15 @@
 <?php
 /**
- * The site map: four doors, ten places, each with its part of the tree.
+ * The site map: four doors, ten places, and for three of them a part of the
+ * tree.
  *
- *   About   → soil · trunk · branches · roots   (one page, four stops)
- *   Events  → fruit (the canopy)                (upcoming, ongoing, past)
+ *   About   → soil · trunk · roots   (one page, four stops)
+ *   Events  → fruit (the canopy)     (upcoming, ongoing, past)
  *   Blog    → leaves (the canopy)
- *   Engage  → seeds                             (volunteer · partner · support)
+ *   Engage  → no part                (volunteer · partner · support)
+ *
+ * Engage is a door, not a part of the plant: it names what a visitor can do,
+ * so it carries no tree label and lights nothing.
  *
  * Pages are found by their template, so renaming a page in WordPress never
  * breaks the menu; only deleting the page does.
@@ -109,11 +113,11 @@ function pamoja_site_map(): array {
 			'label' => __( 'About', 'pamoja' ),
 			'url'   => pamoja_about_url(),
 			'part'  => 'trunk',
-			'tree'  => __( 'Soil · trunk · branches · roots', 'pamoja' ),
+			'tree'  => __( 'Soil · trunk · roots', 'pamoja' ),
 			'items' => array(
 				array( 'id' => 'why-we-exist', 'label' => pamoja_home( 'about_why', 'title' ), 'url' => pamoja_about_url( 'why-we-exist' ), 'part' => 'soil', 'desc' => __( 'The ground we start from', 'pamoja' ) ),
 				array( 'id' => 'our-story', 'label' => pamoja_home( 'about_story', 'title' ), 'url' => pamoja_about_url( 'our-story' ), 'part' => 'trunk', 'desc' => __( 'Our name, and how we grew', 'pamoja' ) ),
-				array( 'id' => 'how-we-work-together', 'label' => pamoja_home( 'about_how', 'title' ), 'url' => pamoja_about_url( 'how-we-work-together' ), 'part' => 'branches' ),
+				array( 'id' => 'how-we-work-together', 'label' => pamoja_home( 'about_how', 'title' ), 'url' => pamoja_about_url( 'how-we-work-together' ), 'part' => 'roots' ),
 				array( 'id' => 'ethics-and-values', 'label' => pamoja_home( 'about_values', 'title' ), 'url' => pamoja_about_url( 'ethics-and-values' ), 'part' => 'roots' ),
 			),
 		),
@@ -139,12 +143,12 @@ function pamoja_site_map(): array {
 		'engage' => array(
 			'label' => __( 'Engage', 'pamoja' ),
 			'url'   => pamoja_engage_url(),
-			'part'  => 'seeds',
-			'tree'  => __( 'Seeds', 'pamoja' ),
+			'part'  => 'all',
+			'tree'  => '',
 			'items' => array(
-				array( 'id' => 'volunteer', 'label' => pamoja_home( 'engage_volunteer', 'title' ), 'url' => pamoja_engage_url( 'volunteer' ), 'part' => 'seeds' ),
-				array( 'id' => 'partner', 'label' => pamoja_home( 'engage_partner', 'title' ), 'url' => pamoja_engage_url( 'partner' ), 'part' => 'seeds' ),
-				array( 'id' => 'support', 'label' => pamoja_home( 'engage_support', 'title' ), 'url' => pamoja_engage_url( 'support' ), 'part' => 'seeds' ),
+				array( 'id' => 'volunteer', 'label' => pamoja_home( 'engage_volunteer', 'title' ), 'url' => pamoja_engage_url( 'volunteer' ), 'part' => 'all' ),
+				array( 'id' => 'partner', 'label' => pamoja_home( 'engage_partner', 'title' ), 'url' => pamoja_engage_url( 'partner' ), 'part' => 'all' ),
+				array( 'id' => 'support', 'label' => pamoja_home( 'engage_support', 'title' ), 'url' => pamoja_engage_url( 'support' ), 'part' => 'all' ),
 			),
 		),
 	);

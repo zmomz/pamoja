@@ -4,7 +4,7 @@
  * slice. Each instance is the same SVG inlined with its ids suffixed (a
  * shared <symbol> + <use> made Chromium re-style every copy each animation
  * frame). Parts are dimmed by the .lit-* classes. Crops (the canopy for
- * Events and Blog, the seeds for Engage) are just a different viewBox.
+ * Events and Blog) are just a different viewBox.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -60,7 +60,7 @@ function pamoja_tree( array $args = array() ) {
 	$attrs = $label ? ' role="img" aria-label="' . esc_attr( $label ) . '"' : ' aria-hidden="true" focusable="false"';
 
 	$svg = pamoja_tree_markup();
-	foreach ( array( 'ht-sky', 'ht-soil-fade', 'ht-soil-mask', 'ht-soil', 'tree-soil', 'tree-roots', 'tree-trunk', 'tree-branches', 'tree-canopy', 'tree-seeds' ) as $tree_id ) {
+	foreach ( array( 'ht-sky', 'ht-soil-fade', 'ht-soil-mask', 'ht-soil', 'tree-grove', 'tree-soil', 'tree-roots', 'tree-trunk', 'tree-branches', 'tree-canopy', 'tree-seeds' ) as $tree_id ) {
 		$svg = str_replace( array( 'id="' . $tree_id . '"', 'url(#' . $tree_id . ')' ), array( 'id="' . $tree_id . '-' . $n . '"', 'url(#' . $tree_id . '-' . $n . ')' ), $svg );
 	}
 	$svg = str_replace( array( '__VIEWBOX__', '__ATTRS__' ), array( esc_attr( pamoja_tree_viewbox( $crop ) ), $attrs ), $svg );
@@ -79,9 +79,11 @@ function pamoja_tree( array $args = array() ) {
 
 /**
  * The hotspots: every place in the manager's words, positioned on the full
- * tree. Percentages are of the tree's box.
+ * tree. Percentages are of the tree's box. Engage is not on the tree — it is
+ * a door in the header and the footer, not a part of the plant — and how we
+ * work together sits in the roots beside the ethics it grows from.
  *
- * @return array<int, array{label:string, sub?:string, url:string, part:string, x:int, y:int, side:string, kind?:string}>
+ * @return array<int, array{id:string, label:string, sub?:string, url:string, part:string, x:int, y:int, side:string, kind?:string}>
  */
 function pamoja_tree_spots(): array {
 	$map  = pamoja_site_map();
@@ -91,6 +93,7 @@ function pamoja_tree_spots(): array {
 			return null;
 		}
 		return array(
+			'id'    => $id,
 			'label' => $item['label'],
 			'sub'   => $sub,
 			'url'   => $item['url'],
@@ -103,13 +106,12 @@ function pamoja_tree_spots(): array {
 	};
 	$upcoming = pamoja_upcoming_events();
 	$spots    = array(
-		array( 'label' => $map['blog']['label'], 'sub' => __( 'stories from the work', 'pamoja' ), 'url' => $map['blog']['url'], 'part' => 'canopy', 'x' => 44, 'y' => 14, 'side' => 'right', 'kind' => '' ),
-		array( 'label' => $map['events']['label'], 'sub' => pamoja_upcoming_count_label( count( $upcoming ) ), 'url' => $map['events']['url'], 'part' => 'canopy', 'x' => 58, 'y' => 26, 'side' => 'right', 'kind' => 'fruit' ),
-		$spot( 'about', 'how-we-work-together', 22, 42 ),
+		array( 'id' => 'blog', 'label' => $map['blog']['label'], 'sub' => __( 'stories from the work', 'pamoja' ), 'url' => $map['blog']['url'], 'part' => 'canopy', 'x' => 44, 'y' => 14, 'side' => 'right', 'kind' => '' ),
+		array( 'id' => 'events', 'label' => $map['events']['label'], 'sub' => pamoja_upcoming_count_label( count( $upcoming ) ), 'url' => $map['events']['url'], 'part' => 'canopy', 'x' => 58, 'y' => 26, 'side' => 'right', 'kind' => 'fruit' ),
 		$spot( 'about', 'our-story', 51, 58 ),
-		array( 'label' => $map['engage']['label'], 'sub' => __( 'volunteer · partner · support', 'pamoja' ), 'url' => $map['engage']['url'], 'part' => 'seeds', 'x' => 62, 'y' => 76, 'side' => 'left', 'kind' => 'seed' ),
-		$spot( 'about', 'ethics-and-values', 30, 89 ),
-		$spot( 'about', 'why-we-exist', 76, 93, 'left' ),
+		$spot( 'about', 'how-we-work-together', 20, 82 ),
+		$spot( 'about', 'ethics-and-values', 25, 91 ),
+		$spot( 'about', 'why-we-exist', 87, 88, 'left' ),
 	);
 	return array_values( array_filter( $spots ) );
 }
@@ -122,10 +124,11 @@ function pamoja_tree_spots(): array {
 function pamoja_tree_hotspots( bool $subs = true ) {
 	foreach ( pamoja_tree_spots() as $s ) {
 		printf(
-			'<a class="spot spot--%1$s%2$s%3$s" href="%4$s" data-part="%1$s" style="left:%5$d%%;top:%6$d%%"><i aria-hidden="true"></i><span>%7$s%8$s</span></a>',
+			'<a class="spot spot--%1$s%2$s%3$s%4$s" href="%5$s" data-part="%1$s" style="left:%6$d%%;top:%7$d%%"><i aria-hidden="true"></i><span>%8$s%9$s</span></a>',
 			esc_attr( $s['part'] ),
 			'left' === $s['side'] ? ' spot--l' : '',
 			$s['kind'] ? ' spot--' . esc_attr( $s['kind'] ) : '',
+			! empty( $s['id'] ) ? ' at-' . esc_attr( $s['id'] ) : '',
 			esc_url( $s['url'] ),
 			(int) $s['x'],
 			(int) $s['y'],

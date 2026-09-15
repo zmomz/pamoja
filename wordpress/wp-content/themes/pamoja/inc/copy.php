@@ -163,7 +163,7 @@ function pamoja_home_schema(): array {
 			),
 		),
 		'about_how' => array(
-			'title'  => __( 'About · How we work together (branches)', 'pamoja' ),
+			'title'  => __( 'About · How we work together (roots)', 'pamoja' ),
 			'fields' => array(
 				'title'       => $t( __( 'Stop title (also in the menu)', 'pamoja' ), 'How we work together' ),
 				'c1_tag'      => $t( __( 'Card 1 — eyebrow', 'pamoja' ), 'Within the collective' ),
@@ -172,9 +172,6 @@ function pamoja_home_schema(): array {
 				'c2_tag'      => $t( __( 'Card 2 — eyebrow', 'pamoja' ), 'In our partnerships' ),
 				'c2_title'    => $t( __( 'Card 2 — title', 'pamoja' ), 'Mutual consultation and dialogue' ),
 				'c2_body'     => $a( __( 'Card 2 — text', 'pamoja' ), 'In our partnerships, we practice mutual consultation and dialogue.' ),
-				'c3_tag'      => $t( __( 'Card 3 — eyebrow', 'pamoja' ), 'In Hamilton' ),
-				'c3_title'    => $t( __( 'Card 3 — title', 'pamoja' ), 'Respectful, mutual, open' ),
-				'c3_body'     => $a( __( 'Card 3 — text', 'pamoja' ), 'As we continue to navigate Hamilton’s power dynamics, we are committed to working in ways that are respectful and mutual, while remaining open to genuine collaboration with allies.' ),
 				'terms_intro' => $h( __( 'Terms — intro', 'pamoja' ), '<p>Our way of working grows from <dfn>Ta’aruf</dfn> and <dfn>Takaful</dfn>, two traditions of our own.</p>' ),
 				'taaruf'      => $a( __( 'Ta’aruf — plain-language explanation', 'pamoja' ), 'An Arabic concept of mutual and respectful acquaintance between different peoples. For us, a practice of hospitality that builds trust, protects dignity, and lets difference remain without erasure.' ),
 				'takaful'     => $a( __( 'Takaful — plain-language explanation', 'pamoja' ), 'Mutual empowerment and collective stewardship. Prosperity that creates capacity for others rather than extracting from them.' ),

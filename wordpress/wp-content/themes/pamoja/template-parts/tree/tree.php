@@ -6,6 +6,10 @@
  * build (HeroTree.astro); colours come from the f-… / st-… classes and the
  * CSS custom properties in pamoja.css.
  *
+ * Behind Pamoja's tree stands a grove of other trees, drawn before the soil
+ * so the hill hides where they are rooted and held faint by --op-grove:
+ * the same land, other people's trees, with ours the one in focus.
+ *
  * Placeholders: __VIEWBOX__, __ATTRS__ (accessibility attributes), and every
  * id gets "-__N__" appended.
  */
@@ -42,6 +46,71 @@ if ( ! defined( 'ABSPATH' ) ) {
     </defs>
 
     <circle cx="360" cy="210" r="310" fill="url(#ht-sky)" opacity="0.6" />
+
+    <g class="layer-grove">
+      <g id="tree-grove">
+        <g transform="translate(40 752) scale(0.42)" opacity="0.7">
+          <path d="M-7 0 C-5 -44 -4 -88 -3 -128 L3 -128 C4 -88 5 -44 7 0 Z" class="f-karkadeh-deep" />
+          <g fill="none" class="st-karkadeh-deep" stroke-width="6" stroke-linecap="round">
+            <path d="M0 -92 C-12 -104 -24 -116 -36 -126" />
+            <path d="M0 -112 C11 -124 22 -134 33 -142" />
+          </g>
+          <ellipse cx="-38" cy="-136" rx="38" ry="33" class="f-river-pale" />
+          <ellipse cx="40" cy="-142" rx="40" ry="35" class="f-river" />
+          <ellipse cx="0" cy="-168" rx="52" ry="45" class="f-river-light" />
+        </g>
+        <g transform="translate(112 718) scale(0.7)" opacity="0.95">
+          <path d="M-7 0 C-5 -44 -4 -88 -3 -128 L3 -128 C4 -88 5 -44 7 0 Z" class="f-karkadeh-deep" />
+          <g fill="none" class="st-karkadeh-deep" stroke-width="6" stroke-linecap="round">
+            <path d="M0 -92 C-12 -104 -24 -116 -36 -126" />
+            <path d="M0 -112 C11 -124 22 -134 33 -142" />
+          </g>
+          <ellipse cx="-38" cy="-136" rx="38" ry="33" class="f-river-pale" />
+          <ellipse cx="40" cy="-142" rx="40" ry="35" class="f-river" />
+          <ellipse cx="0" cy="-168" rx="52" ry="45" class="f-river-light" />
+        </g>
+        <g transform="translate(212 682) scale(0.5)" opacity="0.85">
+          <path d="M-7 0 C-5 -44 -4 -88 -3 -128 L3 -128 C4 -88 5 -44 7 0 Z" class="f-karkadeh-deep" />
+          <g fill="none" class="st-karkadeh-deep" stroke-width="6" stroke-linecap="round">
+            <path d="M0 -92 C-12 -104 -24 -116 -36 -126" />
+            <path d="M0 -112 C11 -124 22 -134 33 -142" />
+          </g>
+          <ellipse cx="-38" cy="-136" rx="38" ry="33" class="f-river-pale" />
+          <ellipse cx="40" cy="-142" rx="40" ry="35" class="f-river" />
+          <ellipse cx="0" cy="-168" rx="52" ry="45" class="f-river-light" />
+        </g>
+        <g transform="translate(512 682) scale(0.55)" opacity="0.85">
+          <path d="M-7 0 C-5 -44 -4 -88 -3 -128 L3 -128 C4 -88 5 -44 7 0 Z" class="f-karkadeh-deep" />
+          <g fill="none" class="st-karkadeh-deep" stroke-width="6" stroke-linecap="round">
+            <path d="M0 -92 C-12 -104 -24 -116 -36 -126" />
+            <path d="M0 -112 C11 -124 22 -134 33 -142" />
+          </g>
+          <ellipse cx="-38" cy="-136" rx="38" ry="33" class="f-river-pale" />
+          <ellipse cx="40" cy="-142" rx="40" ry="35" class="f-river" />
+          <ellipse cx="0" cy="-168" rx="52" ry="45" class="f-river-light" />
+        </g>
+        <g transform="translate(612 718) scale(0.74)" opacity="0.95">
+          <path d="M-7 0 C-5 -44 -4 -88 -3 -128 L3 -128 C4 -88 5 -44 7 0 Z" class="f-karkadeh-deep" />
+          <g fill="none" class="st-karkadeh-deep" stroke-width="6" stroke-linecap="round">
+            <path d="M0 -92 C-12 -104 -24 -116 -36 -126" />
+            <path d="M0 -112 C11 -124 22 -134 33 -142" />
+          </g>
+          <ellipse cx="-38" cy="-136" rx="38" ry="33" class="f-river-pale" />
+          <ellipse cx="40" cy="-142" rx="40" ry="35" class="f-river" />
+          <ellipse cx="0" cy="-168" rx="52" ry="45" class="f-river-light" />
+        </g>
+        <g transform="translate(684 752) scale(0.46)" opacity="0.7">
+          <path d="M-7 0 C-5 -44 -4 -88 -3 -128 L3 -128 C4 -88 5 -44 7 0 Z" class="f-karkadeh-deep" />
+          <g fill="none" class="st-karkadeh-deep" stroke-width="6" stroke-linecap="round">
+            <path d="M0 -92 C-12 -104 -24 -116 -36 -126" />
+            <path d="M0 -112 C11 -124 22 -134 33 -142" />
+          </g>
+          <ellipse cx="-38" cy="-136" rx="38" ry="33" class="f-river-pale" />
+          <ellipse cx="40" cy="-142" rx="40" ry="35" class="f-river" />
+          <ellipse cx="0" cy="-168" rx="52" ry="45" class="f-river-light" />
+        </g>
+      </g>
+    </g>
 
     <g class="layer-ground">
       <g>

@@ -26,6 +26,7 @@ $door = pamoja_current_door();
 		<?php foreach ( $map as $key => $group ) : ?>
 			<div class="menu-col">
 				<?php $pamoja_col_id = 'menu-col-' . sanitize_html_class( $group['label'] ); ?>
+				<?php // Engage has no part of the tree; the line is kept empty so the four column titles still line up. ?>
 				<span class="menu-part"><?php echo esc_html( $group['tree'] ); ?></span>
 				<p class="menu-col-title" id="<?php echo esc_attr( $pamoja_col_id ); ?>"><a href="<?php echo esc_url( $group['url'] ); ?>" data-part="<?php echo esc_attr( $group['part'] ); ?>"><?php echo esc_html( $group['label'] ); ?></a></p>
 				<ul aria-labelledby="<?php echo esc_attr( $pamoja_col_id ); ?>">

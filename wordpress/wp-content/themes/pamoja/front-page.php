@@ -23,7 +23,7 @@ $map      = pamoja_site_map();
 		<p class="hint"><?php pamoja_home_text( 'hero', 'hint' ); ?></p>
 	</div>
 	<div class="stage" id="hero-stage">
-		<?php pamoja_tree( array( 'lit' => 'all', 'name' => 'tree', 'class' => 'tree-hero', 'label' => __( 'The Pamoja tree: a map of this site. Its parts lead to About, Events, Blog and Engage.', 'pamoja' ) ) ); ?>
+		<?php pamoja_tree( array( 'lit' => 'all', 'name' => 'tree', 'class' => 'tree-hero', 'label' => __( 'The Pamoja tree: a map of this site. Its parts lead to the blog, the events, our story, how we work together, our ethics and values, and why we exist.', 'pamoja' ) ) ); ?>
 		<?php pamoja_tree_fruits(); ?>
 		<?php pamoja_tree_hotspots( true ); ?>
 	</div>

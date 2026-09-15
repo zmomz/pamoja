@@ -4,8 +4,9 @@
  * Template Post Type: page
  *
  * One page, one scroll, four stops in the manager's order: why we exist
- * (soil), our story (trunk), how we work together (branches), ethics and
- * values (roots). The tree beside the text lights the stop being read.
+ * (soil), our story (trunk), then the two that grow from the roots — how we
+ * work together, and the ethics and values under it. The tree beside the
+ * text lights the stop being read.
  */
 
 get_header();
@@ -13,7 +14,7 @@ get_header();
 $stops = array(
 	array( 'id' => 'why-we-exist', 'label' => pamoja_home( 'about_why', 'title' ), 'part' => 'soil', 'tag' => __( 'Soil', 'pamoja' ) ),
 	array( 'id' => 'our-story', 'label' => pamoja_home( 'about_story', 'title' ), 'part' => 'trunk', 'tag' => __( 'Trunk', 'pamoja' ) ),
-	array( 'id' => 'how-we-work-together', 'label' => pamoja_home( 'about_how', 'title' ), 'part' => 'branches', 'tag' => __( 'Branches', 'pamoja' ) ),
+	array( 'id' => 'how-we-work-together', 'label' => pamoja_home( 'about_how', 'title' ), 'part' => 'roots', 'tag' => __( 'Roots', 'pamoja' ) ),
 	array( 'id' => 'ethics-and-values', 'label' => pamoja_home( 'about_values', 'title' ), 'part' => 'roots', 'tag' => __( 'Roots', 'pamoja' ) ),
 );
 
@@ -92,11 +93,11 @@ $stat_source = function ( string $n ) {
 			</div>
 		</section>
 
-		<section class="stop" id="<?php echo esc_attr( $stops[2]['id'] ); ?>" data-part="branches" aria-labelledby="stop-how">
+		<section class="stop" id="<?php echo esc_attr( $stops[2]['id'] ); ?>" data-part="roots" aria-labelledby="stop-how">
 			<p class="tag"><?php echo esc_html( $stops[2]['tag'] ); ?></p>
 			<h2 id="stop-how"><?php echo esc_html( $stops[2]['label'] ); ?>.</h2>
-			<div class="how3">
-				<?php foreach ( array( 1, 2, 3 ) as $n ) : ?>
+			<div class="how2">
+				<?php foreach ( array( 1, 2 ) as $n ) : ?>
 					<div class="card">
 						<span class="num"><?php pamoja_home_text( 'about_how', "c{$n}_tag" ); ?></span>
 						<h3><?php pamoja_home_text( 'about_how', "c{$n}_title" ); ?></h3>
