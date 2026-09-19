@@ -239,4 +239,45 @@
         });
     });
   });
+
+  /* ---------- The story photograph that plays a song ---------- */
+  (function song() {
+    var figures = document.querySelectorAll('.story-fig--plays');
+    if (!figures.length) return;
+
+    // Only now are the plain <audio> controls redundant: until the script
+    // runs, they are the only way to hear it.
+    document.documentElement.classList.add('js-audio-hidden');
+
+    Array.prototype.forEach.call(figures, function (fig) {
+      var button = fig.querySelector('.story-play');
+      var audio = fig.querySelector('.story-audio');
+      if (!button || !audio) return;
+
+      function mark(playing) { button.setAttribute('aria-pressed', String(playing)); }
+
+      button.addEventListener('click', function () {
+        if (audio.paused) {
+          // One song at a time, however many end up on the page.
+          Array.prototype.forEach.call(document.querySelectorAll('.story-audio'), function (other) {
+            if (other !== audio) other.pause();
+          });
+          audio.play().then(function () { mark(true); }, function () {
+            // Blocked, or the file will not load: hand back the real controls
+            // rather than leaving a button that does nothing.
+            document.documentElement.classList.remove('js-audio-hidden');
+          });
+        } else {
+          audio.pause();
+        }
+      });
+
+      audio.addEventListener('play', function () { mark(true); });
+      audio.addEventListener('pause', function () { mark(false); });
+      audio.addEventListener('ended', function () { mark(false); });
+      audio.addEventListener('error', function () {
+        document.documentElement.classList.remove('js-audio-hidden');
+      });
+    });
+  })();
 })();

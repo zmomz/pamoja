@@ -8,7 +8,11 @@
  * before anyone touches a field.
  *
  * Types: text (one line, plain), textarea (plain, line breaks kept),
- * html (rich text: paragraphs, bold, italics, links, lists), url.
+ * html (rich text: paragraphs, bold, italics, links, lists), url,
+ * media (an id from the media library — a photo or an audio file).
+ *
+ * A media field cannot carry a launch default the way wording can: ids are
+ * made when the file is uploaded, so they live in the option from the start.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -41,6 +45,7 @@ function pamoja_home_schema(): array {
 	$a = $field( 'textarea' );
 	$h = $field( 'html' );
 	$u = $field( 'url' );
+	$m = $field( 'media' );
 
 	$schema = array(
 		'hero' => array(
@@ -140,7 +145,12 @@ function pamoja_home_schema(): array {
 				'title'        => $t( __( 'Stop title (also in the menu)', 'pamoja' ), 'Our story' ),
 				'name_heading' => $t( __( 'Our name — heading', 'pamoja' ), 'Our name: Pamoja' ),
 				'name_body'    => $h( __( 'Our name — text', 'pamoja' ), '<p>Pamoja means “Together” in Kiswahili. It is more than a word. It is our guiding principle. The name was given to us by our older brother Waleed Abdulhamid after one of his original songs named Pamoja.</p><p>Rooted in Sudan, Waleed is a professor and musician and he represents a Canadian voice singing for peace and justice not only across Canada but all over the world, with songs in English, Arabic, Swahili, Kinyarwanda, and more.</p>' ),
+				'name_image'   => $m( __( 'Our name — photo', 'pamoja' ), '', __( 'Waleed, beside the paragraph about the name. Pressing the photo plays the song below.', 'pamoja' ) ),
+				'song'         => $m( __( 'Our name — the song', 'pamoja' ), '', __( 'The audio file the photo plays. Pamoja, by Waleed Abdulhamid.', 'pamoja' ) ),
+				'song_caption' => $t( __( 'Our name — caption under the photo', 'pamoja' ), 'Pamoja, by Waleed Abdulhamid — click to play the song' ),
 				'grew_heading' => $t( __( 'How we grew — heading', 'pamoja' ), 'How we grew' ),
+				'grew_image'   => $m( __( 'How we grew — photo', 'pamoja' ), '', __( 'Abdo and Fatima, beside the paragraph about how Pamoja began.', 'pamoja' ) ),
+				'grew_caption' => $t( __( 'How we grew — caption under the photo', 'pamoja' ), 'Abdo Habbani and Fatima Shulli, who put the kettle on in 2023.' ),
 				'grew_body'    => $h( __( 'How we grew — text', 'pamoja' ), '<p>Pamoja Cultural Collective began in 2023 when newcomer husband and wife Abdo Habbani and Fatima Shulli decided to bring a Sudanese tradition of coming together around tea into their new home in Hamilton.</p><p>With generous support from the Community Permaculture Lab, and by sharing their space with us, Pamoja began as a simple biweekly tea gathering. For more than three years, that steady rhythm of coming together nurtured relationships across cultures, generations, and experiences. Over time, those relationships grew into what is now the Pamoja Cultural Collective.</p><p>But the idea of creating spaces where people can live with dignity began much earlier.</p>' ),
 				't1_when'      => $t( __( 'Timeline 1 — when', 'pamoja' ), '2018 · Sudan' ),
 				't1_title'     => $t( __( 'Timeline 1 — title', 'pamoja' ), 'A vocational centre' ),
@@ -426,6 +436,10 @@ function pamoja_home_sanitize( $input ): array {
 				case 'url':
 					$raw = esc_url_raw( $raw );
 					break;
+				case 'media':
+					$raw = (string) absint( $raw );
+					$raw = '0' === $raw ? '' : $raw;
+					break;
 				default:
 					$raw = sanitize_text_field( $raw );
 			}
@@ -437,6 +451,59 @@ function pamoja_home_sanitize( $input ): array {
 		$existing[ $section ] = $clean;
 	}
 	return $existing;
+}
+
+/**
+ * The control behind a media field: the id, what it points at, and — for a
+ * photograph — whether the consent rule will let it onto the site yet, said
+ * here rather than left for someone to discover on the page itself.
+ */
+function pamoja_home_media_field( string $id, string $name, string $value ) {
+	$attachment = absint( $value );
+	printf(
+		'<input type="number" min="0" step="1" id="%s" name="%s" value="%s" class="small-text" /> ',
+		esc_attr( $id ),
+		esc_attr( $name ),
+		esc_attr( $value )
+	);
+	printf(
+		'<a href="%s" target="_blank" rel="noopener">%s</a>',
+		esc_url( admin_url( 'upload.php' ) ),
+		esc_html__( 'Media library →', 'pamoja' )
+	);
+	if ( ! $attachment || ! get_post( $attachment ) ) {
+		if ( $value ) {
+			echo '<p class="description" style="color:#b32d2e">' . esc_html__( 'Nothing in the library has this id.', 'pamoja' ) . '</p>';
+		}
+		return;
+	}
+
+	echo '<div style="margin-top:8px">';
+	if ( wp_attachment_is_image( $attachment ) ) {
+		echo wp_get_attachment_image( $attachment, array( 120, 120 ), false, array( 'style' => 'border-radius:6px;vertical-align:middle' ) );
+		if ( function_exists( 'pamoja_image_status' ) ) {
+			$status = pamoja_image_status( $attachment );
+			printf(
+				' <strong style="color:%s">%s</strong>',
+				$status['ok'] ? '#1d6b3f' : '#b32d2e',
+				esc_html( $status['label'] )
+			);
+			if ( ! $status['ok'] ) {
+				printf(
+					'<p class="description">%s <a href="%s" target="_blank" rel="noopener">%s</a></p>',
+					esc_html__( 'The photo stays off the site until this is settled.', 'pamoja' ),
+					esc_url( get_edit_post_link( $attachment, 'raw' ) ),
+					esc_html__( 'Open the photo →', 'pamoja' )
+				);
+			}
+		}
+	} else {
+		printf(
+			'<audio controls preload="none" src="%s" style="max-width:320px"></audio>',
+			esc_url( (string) wp_get_attachment_url( $attachment ) )
+		);
+	}
+	echo '</div>';
 }
 
 function pamoja_home_admin_menu() {
@@ -508,6 +575,8 @@ function pamoja_home_render_page() {
 										)
 									);
 									?>
+								<?php elseif ( 'media' === $field['type'] ) : ?>
+									<?php pamoja_home_media_field( $id, $name, $value ); ?>
 								<?php elseif ( 'textarea' === $field['type'] ) : ?>
 									<textarea id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $name ); ?>" rows="3" class="large-text"><?php echo esc_textarea( $value ); ?></textarea>
 								<?php else : ?>

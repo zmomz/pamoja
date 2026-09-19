@@ -117,6 +117,38 @@ function pamoja_tree_spots(): array {
 }
 
 /**
+ * The hero's grove: the same tree Pamoja's is, at the same height, standing
+ * across the whole hero rather than tucked behind the hill.
+ *
+ * The collective is one organization among others on this land. Drawing the
+ * neighbours small would have said the opposite, so every tree here is the
+ * height of Pamoja's own (602 units, canopy at y=68 down to the soil line at
+ * y=672 — hence scale 2.82 on a glyph 213 tall) and only opacity, not size,
+ * tells you which one this site belongs to. Alternate trees are mirrored: a
+ * grove rather than one tree copied, with none of them made bigger for it.
+ */
+function pamoja_hero_grove( int $count = 7 ) {
+	$glyph = '<path d="M-7 0 C-5 -44 -4 -88 -3 -128 L3 -128 C4 -88 5 -44 7 0 Z" class="f-karkadeh-deep" />'
+		. '<g fill="none" class="st-karkadeh-deep" stroke-width="6" stroke-linecap="round">'
+		. '<path d="M0 -92 C-12 -104 -24 -116 -36 -126" />'
+		. '<path d="M0 -112 C11 -124 22 -134 33 -142" />'
+		. '</g>'
+		. '<ellipse cx="-38" cy="-136" rx="38" ry="33" class="f-river-pale" />'
+		. '<ellipse cx="40" cy="-142" rx="40" ry="35" class="f-river" />'
+		. '<ellipse cx="0" cy="-168" rx="52" ry="45" class="f-river-light" />';
+
+	echo '<div class="hero-grove" aria-hidden="true">';
+	for ( $i = 0; $i < $count; $i++ ) {
+		printf(
+			'<svg viewBox="0 0 720 800" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false"><g transform="translate(360 672) scale(%s2.82 2.82)">%s</g></svg>',
+			( $i % 2 ) ? '-' : '',
+			$glyph // Static theme markup.
+		);
+	}
+	echo '</div>';
+}
+
+/**
  * Print the hotspot links over a full tree.
  *
  * @param bool $subs Whether to show the small second line under a label.

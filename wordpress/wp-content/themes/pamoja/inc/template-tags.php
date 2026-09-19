@@ -214,3 +214,52 @@ function pamoja_tiles( array $posts, string $class = 'strip' ) {
 	}
 	echo '</div>';
 }
+
+/**
+ * A photograph beside a passage of the story, and — when a song is given —
+ * the photograph doubles as its play button.
+ *
+ * The consent rule (brief §9.3) decides whether the photograph appears at
+ * all: no confirmed consent or no alt text, and this prints nothing rather
+ * than something half-ready. Without JavaScript the audio element is still
+ * there with its own controls, so the song is never only a picture.
+ */
+function pamoja_story_figure( string $image_key, string $caption_key, string $song_key = '' ) {
+	$image = absint( pamoja_home( 'about_story', $image_key ) );
+	if ( ! $image || ! function_exists( 'pamoja_image_is_publishable' ) || ! pamoja_image_is_publishable( $image ) ) {
+		return;
+	}
+	$caption = pamoja_home( 'about_story', $caption_key );
+	$song    = $song_key ? absint( pamoja_home( 'about_story', $song_key ) ) : 0;
+	$src     = $song ? (string) wp_get_attachment_url( $song ) : '';
+	// 'large' rather than a cropped size: one of these photographs stands
+	// taller than it is wide, and a 3:2 crop takes the top of someone's head.
+	$img     = wp_get_attachment_image(
+		$image,
+		'large',
+		false,
+		array( 'loading' => 'lazy', 'decoding' => 'async', 'sizes' => '(max-width: 900px) 100vw, 34vw' )
+	);
+
+	echo '<figure class="story-fig' . ( $src ? ' story-fig--plays' : '' ) . '">';
+	if ( $src ) {
+		// The button is named from the recording, not from the caption: the
+		// caption is an instruction to whoever can see the photograph, and
+		// "Play … click to play the song" is no use read aloud.
+		$name = get_the_title( $song );
+		printf(
+			'<button type="button" class="story-play" aria-pressed="false" aria-label="%s">%s<span class="story-play-mark" aria-hidden="true"></span></button>',
+			esc_attr( $name ? sprintf( __( 'Play %s', 'pamoja' ), $name ) : __( 'Play the song', 'pamoja' ) ),
+			$img // Built by wp_get_attachment_image().
+		);
+	} else {
+		echo $img; // Built by wp_get_attachment_image().
+	}
+	if ( $caption ) {
+		echo '<figcaption>' . esc_html( $caption ) . '</figcaption>';
+	}
+	if ( $src ) {
+		printf( '<audio class="story-audio" controls preload="none" src="%s"></audio>', esc_url( $src ) );
+	}
+	echo '</figure>';
+}

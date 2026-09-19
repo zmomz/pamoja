@@ -213,7 +213,7 @@ body.menu-open .veil, body.menu-open .menu { opacity: 1; transform: none; }
 /* ==========================================================================
    Home
    ========================================================================== */
-.hero { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr); align-items: end; min-height: min(92svh, 780px); margin-top: calc(-1 * var(--header-h)); padding-top: var(--header-h); overflow: hidden; background: linear-gradient(var(--cream), var(--ground) 60%, var(--cream)); }
+.hero { --stage-w: min(560px, 46vw, 74vh); position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr); align-items: end; min-height: min(92svh, 780px); margin-top: calc(-1 * var(--header-h)); padding-top: var(--header-h); overflow: hidden; background: linear-gradient(var(--cream), var(--ground) 60%, var(--cream)); }
 .hero::after { content: ""; position: absolute; bottom: -14%; left: -8%; width: 116%; height: 30%; background: linear-gradient(180deg, color-mix(in srgb, var(--karkadeh) 28%, var(--karkadeh-deep)), var(--karkadeh-deep) 42%); border-radius: 50% 50% 0 0 / 40% 40% 0 0; }
 .hero-copy { position: relative; z-index: 3; align-self: center; padding: 3rem 2rem clamp(4rem, 12vh, 7rem) max(var(--gutter), 6vw); }
 .hero h1 { font-size: clamp(1.75rem, 2.9vw, 2.6rem); line-height: 1.1; max-width: 22ch; }
@@ -223,7 +223,16 @@ body.menu-open .veil, body.menu-open .menu { opacity: 1; transform: none; }
 .hero .lead p { margin: 0; max-width: none; }
 .hero-btns { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; margin-top: 1.4rem; }
 .hint { font-family: var(--font-ui); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); margin-top: 0.9rem; }
-.stage { position: relative; z-index: 2; width: min(560px, 46vw, 74vh); justify-self: end; margin-right: 4%; }
+.stage { position: relative; z-index: 2; width: var(--stage-w); justify-self: end; margin-right: 4%; }
+/* The grove: other organizations on the same ground, each tree the width —
+   and so the height — of Pamoja's own, because the hero must not say that
+   one of them is the big one. Behind the hill and behind the copy, so it
+   fills the cream without competing with either. */
+.hero-grove { position: absolute; inset: 0; z-index: 0; display: flex; align-items: flex-end; justify-content: center; pointer-events: none; opacity: 0.18; }
+.hero-grove svg { flex: 0 0 var(--stage-w); width: var(--stage-w); margin-inline: calc(var(--stage-w) * -0.13); }
+/* Pamoja's own tree drops the small grove drawn into it: the hero has a
+   full-size one standing behind it now. */
+.tree-hero [id^="tree-grove"] { display: none; }
 .doors { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; padding: 2.5rem var(--gutter) 3rem; width: min(1120px + 2 * var(--gutter), 100%); margin-inline: auto; }
 .door { display: block; background: var(--white); border: 1px solid var(--line); border-radius: 18px; padding: 1.3rem 1.4rem 1.1rem; color: var(--ink); transition: transform 0.3s ease, box-shadow 0.3s ease; }
 .door:hover { transform: translateY(-4px); box-shadow: 0 14px 28px rgba(33, 28, 23, 0.1); color: var(--ink); }
@@ -341,6 +350,29 @@ body.menu-open .veil, body.menu-open .menu { opacity: 1; transform: none; }
 .card { background: var(--white); border: 1px solid var(--line); border-top: 3px solid var(--river); border-radius: 18px; padding: 1.6rem; }
 .card .num { font-family: var(--font-ui); font-weight: 700; font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--karkadeh); margin-bottom: 0.4rem; display: block; }
 .how2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem; margin: 0.6rem 0 1.4rem; }
+/* A passage of the story with a photograph standing beside it. The figure
+   leads on the flipped one, so the two do not sit in a column together. */
+.beside { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 1.8rem; align-items: start; }
+.beside--flip { grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr); }
+.beside--flip .story-fig { order: -1; }
+.story-fig { margin: 0.3rem 0 1.4rem; }
+.story-fig img { display: block; width: 100%; height: auto; border-radius: 16px; }
+.story-fig figcaption { margin-top: 0.6rem; font-size: 0.88rem; color: var(--ink-soft); }
+/* The photograph is the play button. It keeps a real focus ring, and the
+   mark over it says so before anyone has to guess. */
+.story-play { position: relative; display: block; width: 100%; padding: 0; border: 0; background: none; cursor: pointer; border-radius: 16px; }
+.story-play:focus-visible { outline: 3px solid var(--river); outline-offset: 3px; }
+.story-play-mark { position: absolute; left: 50%; top: 50%; width: 68px; height: 68px; transform: translate(-50%, -50%); border-radius: 50%; background: color-mix(in srgb, var(--karkadeh) 88%, transparent); box-shadow: 0 6px 20px rgba(33, 28, 23, 0.3); transition: transform 0.25s ease, background 0.25s ease; }
+.story-play-mark::before { content: ""; position: absolute; left: 52%; top: 50%; transform: translate(-50%, -50%); border-style: solid; border-width: 13px 0 13px 21px; border-color: transparent transparent transparent var(--paper); }
+.story-play:hover .story-play-mark { transform: translate(-50%, -50%) scale(1.08); }
+.story-play[aria-pressed="true"] .story-play-mark::before { left: 50%; border: 0; width: 18px; height: 20px; background: linear-gradient(90deg, var(--paper) 0 6px, transparent 6px 12px, var(--paper) 12px 18px); }
+/* Playing: the picture speaks for itself, so the mark steps back. */
+.story-play[aria-pressed="true"] .story-play-mark { background: color-mix(in srgb, var(--night) 62%, transparent); }
+.story-fig--plays .story-audio { display: block; width: 100%; margin-top: 0.7rem; }
+/* With the script running the audio element is redundant — the photograph
+   drives it — so it is hidden only once the script says it is in charge. */
+.js-audio-hidden .story-fig--plays .story-audio { display: none; }
+@media (prefers-reduced-motion: reduce) { .story-play-mark, .story-play:hover .story-play-mark { transition: none; transform: translate(-50%, -50%); } }
 .how2 .card h3 { font-size: 1.25rem; margin: 0 0 0.5rem; }
 .how2 .card p { font-size: 0.98rem; }
 .terms-intro { margin-bottom: 0.6rem; }
@@ -513,11 +545,23 @@ body.menu-open .veil, body.menu-open .menu { opacity: 1; transform: none; }
 @media (max-width: 1000px) {
   .hero { grid-template-columns: 1fr; min-height: auto; padding-bottom: 1.5rem; }
   .hero-copy { padding: 2rem var(--gutter) 0.5rem; }
-  .stage { justify-self: center; width: min(100%, 440px); margin: 0; }
+  .hero { --stage-w: min(100%, 440px); }
+  /* The hero gains a padding-bottom here, which the grove is positioned
+     against — lift it back onto the same ground the stage stands on. A
+     phone is barely wider than one tree, so the grove stands closer here:
+     the neighbours keep their full height and lose only their elbow room. */
+  .hero-grove { bottom: 1.5rem; }
+  .hero-grove svg { margin-inline: calc(var(--stage-w) * -0.225); }
+  .stage { justify-self: center; margin: 0; }
   .doors, .groups, .strip, .up, .seeds, .stats, .cards2, .how2, .contact-inner { grid-template-columns: 1fr 1fr; }
   .ph { grid-template-columns: 1fr; } .ph-slice { justify-self: center; width: min(100%, 460px); }
   .climb { grid-template-columns: 1fr; } .climb-side { display: none; }
   .way { grid-template-columns: 1fr; gap: 0.8rem; }
+  /* Stacked, the photograph reads better under its paragraph than over it,
+     so the flipped one gives up its head start. */
+  .beside { grid-template-columns: 1fr; gap: 0.4rem; }
+  .beside--flip .story-fig { order: 0; }
+  .story-fig { max-width: 460px; }
   .ft-grid, .ft-grid.has-ack { grid-template-columns: 1fr; } .ft-map { grid-template-columns: 1fr 1fr; }
   .tl { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 }

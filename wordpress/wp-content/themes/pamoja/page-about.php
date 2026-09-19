@@ -74,9 +74,15 @@ $stat_source = function ( string $n ) {
 			<p class="tag"><?php echo esc_html( $stops[1]['tag'] ); ?></p>
 			<h2 id="stop-story"><?php echo esc_html( $stops[1]['label'] ); ?>.</h2>
 			<h3><?php pamoja_home_text( 'about_story', 'name_heading' ); ?></h3>
-			<div class="prose"><?php pamoja_home_html( 'about_story', 'name_body' ); ?></div>
+			<div class="beside">
+				<div class="prose"><?php pamoja_home_html( 'about_story', 'name_body' ); ?></div>
+				<?php pamoja_story_figure( 'name_image', 'song_caption', 'song' ); ?>
+			</div>
 			<h3><?php pamoja_home_text( 'about_story', 'grew_heading' ); ?></h3>
-			<div class="prose"><?php pamoja_home_html( 'about_story', 'grew_body' ); ?></div>
+			<div class="beside beside--flip">
+				<div class="prose"><?php pamoja_home_html( 'about_story', 'grew_body' ); ?></div>
+				<?php pamoja_story_figure( 'grew_image', 'grew_caption' ); ?>
+			</div>
 			<ol class="tl" aria-label="<?php esc_attr_e( 'How Pamoja came to be', 'pamoja' ); ?>">
 				<?php foreach ( array( 1, 2, 3, 4, 5 ) as $n ) : ?>
 					<li<?php echo 3 === $n ? ' class="now"' : ''; ?>>

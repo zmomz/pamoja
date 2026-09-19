@@ -12,6 +12,7 @@ $map      = pamoja_site_map();
 ?>
 
 <section class="hero" aria-labelledby="hero-title">
+	<?php pamoja_hero_grove(); ?>
 	<div class="hero-copy">
 		<p class="tag"><?php pamoja_home_text( 'hero', 'tag' ); ?></p>
 		<h1 id="hero-title"><?php pamoja_home_inline( 'hero', 'title' ); ?></h1>

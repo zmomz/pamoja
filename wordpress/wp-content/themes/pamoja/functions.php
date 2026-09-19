@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'PAMOJA_THEME_VERSION', '2.1.1' );
+define( 'PAMOJA_THEME_VERSION', '2.2.0' );
 define( 'PAMOJA_THEME_DIR', get_template_directory() );
 define( 'PAMOJA_THEME_URI', get_template_directory_uri() );
 
