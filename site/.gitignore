@@ -1,5 +1,0 @@
-node_modules/
-dist/
-.env
-.sanity/
-astro.config.mjs.timestamp-*

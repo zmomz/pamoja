@@ -1,5 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /studio
-
-Sitemap: https://pamoja-collective.netlify.app/sitemap-index.xml

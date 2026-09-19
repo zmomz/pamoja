@@ -89,8 +89,10 @@ box to withdraw any of them.
 
 ## Design notes
 
-`../site/DESIGN.md` describes the palette and type. The theme's `assets/css/pamoja.css`
-is that system. The tree is one SVG (`template-parts/tree/tree.php`) rendered per
+The theme's `assets/css/pamoja.css` is the design system — the palette, the type
+scale and the rules behind them. (It grew out of `site/DESIGN.md` in the earlier
+Astro build, which was removed on 19 September 2026; `git log -- site/DESIGN.md`
+has it if the reasoning is ever wanted.) The tree is one SVG (`template-parts/tree/tree.php`) rendered per
 instance by `pamoja_tree()` with its ids suffixed; parts are dimmed by `.lit-*` classes;
 crops (the canopy for Events and Blog, the seeds for Engage) are a different viewBox.
 Page transitions use the browser's cross-document view transitions, so the tree morphs
