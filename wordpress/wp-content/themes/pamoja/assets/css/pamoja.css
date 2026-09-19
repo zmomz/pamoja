@@ -218,7 +218,7 @@ body.menu-open .veil, body.menu-open .menu { opacity: 1; transform: none; }
 .hero-copy { position: relative; z-index: 3; align-self: center; padding: 3rem 2rem clamp(4rem, 12vh, 7rem) max(var(--gutter), 6vw); }
 .hero h1 { font-size: clamp(1.75rem, 2.9vw, 2.6rem); line-height: 1.1; max-width: 22ch; }
 /* The three phrases the collective leads with, marked rather than shouted. */
-.hero h1 em, .hero .lead em { font-style: normal; color: var(--karkadeh); text-decoration: underline; text-decoration-color: var(--ochre); text-decoration-thickness: 0.08em; text-underline-offset: 0.16em; }
+.hero h1 em, .hero .lead em { font-style: normal; color: var(--karkadeh); }
 .hero .lead { font-size: clamp(1.05rem, 1.5vw, 1.25rem); max-width: 34ch; margin-top: 1.1rem; text-wrap: balance; }
 .hero .lead p { margin: 0; max-width: none; }
 .hero-btns { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; margin-top: 1.4rem; }

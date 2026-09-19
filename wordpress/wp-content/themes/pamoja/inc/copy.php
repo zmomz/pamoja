@@ -48,8 +48,8 @@ function pamoja_home_schema(): array {
 			'intro'  => __( 'The first screen: the statement, the lead, and the tree as the map. The labels on the tree come from the page titles and headings below.', 'pamoja' ),
 			'fields' => array(
 				'tag'   => $t( __( 'Eyebrow', 'pamoja' ), 'Pamoja Cultural Collective · Hamilton' ),
-				'title' => $h( __( 'The statement', 'pamoja' ), 'Treaty-committed neighbours coming together to create the conditions for <em>social cohesion</em> and <em>collective prosperity</em>.', __( 'Put a word in italics to pick it out in karkadeh red. Headings are one line, so paragraphs and lists are ignored here.', 'pamoja' ) ),
-				'lead'  => $h( __( 'Lead', 'pamoja' ), '<p><em>Pamoja</em> is a collective built through relationships.</p>' ),
+				'title' => $h( __( 'The statement', 'pamoja' ), 'Treaty-committed neighbours coming <em>Pamoja</em> [together] to create the conditions for <em>social cohesion</em> and <em>collective prosperity</em>.', __( 'Put a word in italics to pick it out in karkadeh red. Headings are one line, so paragraphs and lists are ignored here.', 'pamoja' ) ),
+				'lead'  => $h( __( 'Lead', 'pamoja' ), '' ),
 				'cta'   => $t( __( 'Button', 'pamoja' ), 'Start a conversation' ),
 				'cta2'  => $t( __( 'Second link', 'pamoja' ), 'What’s coming up ↓' ),
 				'hint'  => $t( __( 'Small line under the buttons', 'pamoja' ), 'The tree is the map. Pick a part.' ),
