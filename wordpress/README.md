@@ -42,6 +42,23 @@ switched or redesigned.
 
 Or, with WP-CLI: `wp plugin activate pamoja-content && wp theme activate pamoja && wp pamoja seed`.
 
+### If the theme and plugin are symlinked
+
+Step 2 says copy, and on a plain host that is what you want. A review box may instead
+symlink `wp-content/themes/pamoja` and `wp-content/plugins/pamoja-content` at this
+repo so edits are live without a deploy. That works, with one trap: if the site's
+PHP-FPM pool sets `open_basedir`, it is checked against the **resolved** path, not the
+link. Name the repo directory there too —
+
+```ini
+php_admin_value[open_basedir] = /var/www/<site>/:/path/to/pamoja/wordpress/wp-content/:/tmp/:/var/lib/php/sessions/:/usr/share/php/
+```
+
+— or PHP is refused when it reads `style.css`, WordPress reads that as the theme being
+absent, and the whole site answers `200` with an empty body while the admin says
+*The theme directory "pamoja" does not exist.* The error log is the giveaway:
+`open_basedir restriction in effect` naming files that are plainly there.
+
 ## Run it locally (Docker)
 
 ```bash
