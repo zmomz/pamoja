@@ -26,6 +26,7 @@ require_once PAMOJA_CONTENT_DIR . 'inc/consent.php';
 require_once PAMOJA_CONTENT_DIR . 'inc/admin.php';
 require_once PAMOJA_CONTENT_DIR . 'inc/inquiries.php';
 require_once PAMOJA_CONTENT_DIR . 'inc/hardening.php';
+require_once PAMOJA_CONTENT_DIR . 'inc/sitemaps.php';
 require_once PAMOJA_CONTENT_DIR . 'inc/seed.php';
 
 /**
