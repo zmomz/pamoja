@@ -46,6 +46,7 @@ $pamoja_map    = pamoja_site_map();
 	</div>
 
 	<p class="ft-line"><?php echo esc_html( pamoja_setting( 'footer_line' ) ); ?></p>
+	<p class="ft-dev"><?php esc_html_e( 'Developed by', 'pamoja' ); ?> <a href="https://muhandis.online" rel="noopener" aria-label="Muhandis — مهندس"><img src="<?php echo esc_url( PAMOJA_THEME_URI . '/assets/brand/muhandis-white.svg' ); ?>" alt="Muhandis — مهندس" width="3464" height="799" class="ft-dev-logo" loading="lazy" decoding="async"></a></p>
 </footer>
 
 <?php wp_footer(); ?>
