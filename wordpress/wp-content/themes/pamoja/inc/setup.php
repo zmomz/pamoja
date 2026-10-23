@@ -237,6 +237,12 @@ function pamoja_meta_description(): string {
 	if ( is_home() ) {
 		return wp_strip_all_tags( pamoja_home( 'listing', 'blog_intro' ) );
 	}
+	if ( is_tax( 'branch' ) ) {
+		$text = trim( wp_strip_all_tags( term_description() ) );
+		if ( $text ) {
+			return wp_trim_words( $text, 30, '…' );
+		}
+	}
 	return pamoja_setting( 'site_description' );
 }
 
@@ -334,17 +340,69 @@ function pamoja_sitemap_sets_its_own_status( $preempt, $query ) {
 add_filter( 'pre_handle_404', 'pamoja_sitemap_sets_its_own_status', 10, 2 );
 
 /**
- * Keep an empty media archive out of search results until there is something
- * consented to show there.
+ * Pages that are not worth finding in a search: the thank-you page, which is
+ * only reached by sending a form, and the blog page while it has no stories.
+ */
+function pamoja_unlisted_page_ids(): array {
+	static $ids = null;
+	if ( null === $ids ) {
+		$ids  = get_posts(
+			array(
+				'post_type'      => 'page',
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
+				'fields'         => 'ids',
+				'meta_key'       => '_wp_page_template',
+				'meta_value'     => 'page-thank-you.php',
+			)
+		);
+		$blog = (int) get_option( 'page_for_posts' );
+		if ( $blog && ! get_posts( array( 'post_type' => 'post', 'post_status' => 'publish', 'posts_per_page' => 1, 'fields' => 'ids' ) ) ) {
+			$ids[] = $blog;
+		}
+		$ids = array_map( 'intval', $ids );
+	}
+	return $ids;
+}
+
+/**
+ * Keep an empty media archive and the unlisted pages out of search results
+ * until there is something worth showing there.
  */
 function pamoja_robots( array $robots ): array {
-	if ( is_post_type_archive( 'album' ) && ! have_posts() ) {
+	$unlisted = ( is_page() || is_home() ) && in_array( get_queried_object_id(), pamoja_unlisted_page_ids(), true );
+	if ( $unlisted || ( is_post_type_archive( 'album' ) && ! have_posts() ) ) {
 		$robots['noindex'] = true;
 		$robots['follow']  = true;
 	}
 	return $robots;
 }
 add_filter( 'wp_robots', 'pamoja_robots' );
+
+/**
+ * The page sitemap leaves out the unlisted pages, so it never offers search
+ * engines a page that tells them not to index it.
+ */
+function pamoja_sitemap_leaves_out_unlisted( array $args, string $post_type ): array {
+	if ( 'page' === $post_type ) {
+		$args['post__not_in'] = array_merge( $args['post__not_in'] ?? array(), pamoja_unlisted_page_ids() );
+	}
+	return $args;
+}
+add_filter( 'wp_sitemaps_posts_query_args', 'pamoja_sitemap_leaves_out_unlisted', 10, 2 );
+
+/**
+ * WordPress prints a canonical link on single posts and pages only; the blog,
+ * the events listing and the branch pages name themselves too, so a link with
+ * a query string or a tracking tag still counts for the clean URL.
+ */
+function pamoja_listing_canonical() {
+	if ( is_front_page() || is_singular() || is_search() || is_404() || ! ( is_home() || is_archive() ) ) {
+		return;
+	}
+	echo '<link rel="canonical" href="' . esc_url( pamoja_current_url() ) . '">' . "\n";
+}
+add_action( 'wp_head', 'pamoja_listing_canonical', 5 );
 
 /**
  * Excerpts end quietly.
