@@ -22,3 +22,4 @@ require_once PAMOJA_THEME_DIR . '/inc/content.php';
 require_once PAMOJA_THEME_DIR . '/inc/site-map.php';
 require_once PAMOJA_THEME_DIR . '/inc/tree.php';
 require_once PAMOJA_THEME_DIR . '/inc/template-tags.php';
+require_once PAMOJA_THEME_DIR . '/inc/llms.php';

@@ -88,6 +88,7 @@ function pamoja_head_meta() {
 	$url   = pamoja_current_url();
 	$image = pamoja_og_image_url();
 	echo '<meta property="og:site_name" content="' . esc_attr( get_bloginfo( 'name' ) ) . '">' . "\n";
+	echo '<meta property="og:locale" content="' . esc_attr( get_locale() ) . '">' . "\n";
 	echo '<meta property="og:title" content="' . esc_attr( $title ) . '">' . "\n";
 	echo '<meta property="og:description" content="' . esc_attr( $description ) . '">' . "\n";
 	echo '<meta property="og:type" content="' . ( is_singular( array( 'post', 'event', 'album' ) ) ? 'article' : 'website' ) . '">' . "\n";
@@ -106,20 +107,41 @@ function pamoja_head_meta() {
 	}
 
 	if ( is_front_page() ) {
-		$json = array(
-			'@context'    => 'https://schema.org',
+		// Who we are, for search engines and AI assistants: the collective, where it works, where else to find it.
+		$org = array(
 			'@type'       => 'NGO',
+			'@id'         => home_url( '/#organization' ),
 			'name'        => get_bloginfo( 'name' ),
 			'description' => $description,
 			'url'         => home_url( '/' ),
+			'logo'        => PAMOJA_THEME_URI . '/assets/brand/logo-karkadeh-860.png',
+			'address'     => pamoja_place_address(),
 			'areaServed'  => array(
 				'@type' => 'City',
 				'name'  => 'Hamilton, Ontario',
 			),
 		);
 		if ( pamoja_contact_email_safe() ) {
-			$json['email'] = pamoja_contact_email_safe();
+			$org['email'] = pamoja_contact_email_safe();
 		}
+		$profiles = wp_list_pluck( pamoja_social_links(), 'url' );
+		if ( $profiles ) {
+			$org['sameAs'] = array_values( $profiles );
+		}
+		$json = array(
+			'@context' => 'https://schema.org',
+			'@graph'   => array(
+				$org,
+				array(
+					'@type'      => 'WebSite',
+					'@id'        => home_url( '/#website' ),
+					'url'        => home_url( '/' ),
+					'name'       => get_bloginfo( 'name' ),
+					'inLanguage' => get_bloginfo( 'language' ),
+					'publisher'  => array( '@id' => home_url( '/#organization' ) ),
+				),
+			),
+		);
 		echo '<script type="application/ld+json">' . wp_json_encode( $json, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n";
 	}
 	if ( is_singular( 'event' ) ) {
@@ -131,13 +153,25 @@ function pamoja_head_meta() {
 			'name'        => get_the_title( $id ),
 			'description' => $description,
 			'url'         => $url,
-			'organizer'   => array( '@type' => 'Organization', 'name' => get_bloginfo( 'name' ) ),
+			'organizer'   => array(
+				'@type' => 'NGO',
+				'@id'   => home_url( '/#organization' ),
+				'name'  => get_bloginfo( 'name' ),
+				'url'   => home_url( '/' ),
+			),
+			// Google lists an event in its event results only with a status, a way to attend and an address.
+			'eventStatus'         => 'https://schema.org/EventScheduled',
+			'eventAttendanceMode' => 'https://schema.org/OfflineEventAttendanceMode',
 		);
 		if ( $start ) {
 			$json['startDate'] = $start;
 		}
 		$location = (string) pamoja_meta( $id, 'location' );
-		$json['location'] = array( '@type' => 'Place', 'name' => $location ?: 'Hamilton, Ontario' );
+		$json['location'] = array(
+			'@type'   => 'Place',
+			'name'    => $location ?: 'Hamilton, Ontario',
+			'address' => pamoja_place_address(),
+		);
 		if ( $image ) {
 			$json['image'] = $image;
 		}
@@ -145,6 +179,18 @@ function pamoja_head_meta() {
 	}
 }
 add_action( 'wp_head', 'pamoja_head_meta', 5 );
+
+/**
+ * Where the collective works, as structured data reads an address: the city, not a street (there is no public office).
+ */
+function pamoja_place_address(): array {
+	return array(
+		'@type'           => 'PostalAddress',
+		'addressLocality' => 'Hamilton',
+		'addressRegion'   => 'ON',
+		'addressCountry'  => 'CA',
+	);
+}
 
 /**
  * "Pamoja Cultural Collective — Treaty-committed neighbours coming together"
