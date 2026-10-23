@@ -80,6 +80,18 @@ docker compose up -d
 Other URLs: `/events/<slug>/`, `/blog/<slug>/`, `/media/` and `/media/<slug>/` (albums),
 `/branch/<slug>/`, `/thank-you/`.
 
+## Search engines
+
+- `/wp-sitemap.xml` lists the pages, events and branches. `/thank-you/` is `noindex`
+  and left out, and so is `/blog/` until the first story is published.
+- `/llms.txt` describes the collective and links every part of the site for AI assistants.
+- **IndexNow:** when a page, story, event or album is published, changed or taken down,
+  the server tells Bing (which Copilot and ChatGPT search draw on) and the other
+  IndexNow engines at once. The key is made on first use, kept in the
+  `pamoja_indexnow_key` option and served at `/<key>.txt`. Pings go out only when
+  WordPress's environment type is `production`, which is the default. To send every URL
+  in the sitemap at once (after a launch or a move), run `wp pamoja indexnow`.
+
 ## What editors control, and where
 
 | Where | What |
