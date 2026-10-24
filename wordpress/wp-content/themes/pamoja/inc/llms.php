@@ -9,11 +9,29 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * The file's text, in the llms.txt layout: a title, a one-line summary, then sections of links.
+ * The file's text, in the llms.txt layout: a title, a one-line summary, a paragraph of who, what and where, then
+ * sections of links.
  */
 function pamoja_llms_txt(): string {
-	$link  = static fn ( string $label, string $url, string $note = '' ): string => '- [' . wp_strip_all_tags( $label ) . '](' . esc_url_raw( $url ) . ')' . ( '' !== $note ? ': ' . wp_strip_all_tags( $note ) : '' );
-	$lines = array( '# ' . get_bloginfo( 'name' ), '', '> ' . wp_strip_all_tags( pamoja_setting( 'site_description' ) ), '' );
+	$link  = static fn ( string $label, string $url, string $note = '' ): string => '- [' . pamoja_plain_text( $label ) . '](' . esc_url_raw( $url ) . ')' . ( '' !== $note ? ': ' . pamoja_plain_text( $note ) : '' );
+	$facts = pamoja_collective_facts();
+	$lines = array(
+		'# ' . pamoja_plain_text( get_bloginfo( 'name' ) ),
+		'',
+		'> ' . pamoja_plain_text( pamoja_setting( 'site_description' ) ),
+		'',
+		sprintf(
+			/* translators: 1: the collective's name, 2: year founded, 3: the founders, 4: city, 5: the host venue, 6: what the name means. */
+			__( '%1$s works in %4$s. It began in %2$s, when %3$s brought a Sudanese tradition of coming together around tea into their new home in Hamilton; the tea gathering has been hosted every two weeks at the %5$s since. %6$s', 'pamoja' ),
+			pamoja_plain_text( get_bloginfo( 'name' ) ),
+			$facts['founded'],
+			implode( ' ' . __( 'and', 'pamoja' ) . ' ', $facts['founders'] ),
+			$facts['place'],
+			$facts['host'],
+			$facts['name_meaning']
+		),
+		'',
+	);
 
 	foreach ( pamoja_site_map() as $door ) {
 		$lines[] = '## ' . $door['label'];
@@ -28,8 +46,8 @@ function pamoja_llms_txt(): string {
 	if ( $events ) {
 		$lines[] = '## ' . __( 'Recent events', 'pamoja' );
 		foreach ( $events as $event ) {
-			$start   = function_exists( 'pamoja_meta' ) ? (string) pamoja_meta( $event->ID, 'start_date' ) : '';
-			$lines[] = $link( get_the_title( $event ), get_permalink( $event ), $start ? substr( $start, 0, 10 ) : '' );
+			// The date as the event's page gives it ("September 2025"), not the start date it sorts by.
+			$lines[] = $link( get_the_title( $event ), get_permalink( $event ), pamoja_event_when( $event->ID ) );
 		}
 		$lines[] = '';
 	}

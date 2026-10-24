@@ -60,7 +60,7 @@ function pamoja_meta_box_schema(): array {
 					'key'         => 'start_date',
 					'label'       => __( 'Start date', 'pamoja' ),
 					'type'        => 'date',
-					'description' => __( 'Sorts the archive (most recent first).', 'pamoja' ),
+					'description' => __( 'Sorts the archive (most recent first). If only the month or year is known, enter its first day and leave "Exact dates" unticked.', 'pamoja' ),
 				),
 				array(
 					'key'   => 'end_date',
@@ -68,11 +68,24 @@ function pamoja_meta_box_schema(): array {
 					'type'  => 'date',
 				),
 				array(
+					'key'            => 'date_exact',
+					'label'          => __( 'Exact dates', 'pamoja' ),
+					'type'           => 'checkbox',
+					'checkbox_label' => __( 'The start and end dates above are the real days, not placeholders for a month or a year', 'pamoja' ),
+					'description'    => __( 'Search engines are given the dates, and can list the event in their event results, only when this is ticked.', 'pamoja' ),
+				),
+				array(
 					'key'         => 'location',
 					'label'       => __( 'Location', 'pamoja' ),
 					'type'        => 'text',
 					'placeholder' => __( 'Park, venue or neighbourhood', 'pamoja' ),
 					'description' => __( 'Leave blank for just "Hamilton".', 'pamoja' ),
+				),
+				array(
+					'key'         => 'street_address',
+					'label'       => __( 'Street address (optional)', 'pamoja' ),
+					'type'        => 'text',
+					'description' => __( 'The venue\'s street and number, without the city. Not shown on the page; given to search engines with the location so they can place the event.', 'pamoja' ),
 				),
 				array(
 					'key'         => 'status',

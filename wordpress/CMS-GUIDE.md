@@ -60,8 +60,13 @@ is its story. Then, in **Event details**:
 - **Date or date range (as displayed)** — exactly as it should read: "October 2026",
   "Every two weeks since 2023".
 - **Start date** — a real date; it sorts the lists and places upcoming events. **End
-  date** is optional.
+  date** is optional. If only the month or year is known, enter its first day.
+- **Exact dates** — tick only when the start (and end) date is the real day. Search
+  engines are given the dates, and can show the event in their event results, only
+  then; an event dated "January 2027" is not told to them as 1 January.
 - **Location** — park, venue, neighbourhood; blank means just "Hamilton".
+- **Street address** — optional; the venue's street and number. Not shown on the page,
+  only given to search engines with the location.
 - **Status** — *Upcoming* shows the event as a fruit on the tree and under "Coming up"
   on the home page and Events, with a "tell me when it's announced" field. *Ongoing* is
   for a recurring gathering. *Past* is everything grown so far. *Handed on* means the
@@ -110,7 +115,9 @@ are credited on the event pages that name them.
 ## Branches
 
 **Pamoja → Events → Branches.** The four functions — name, description and **display
-order**. Don't add a fifth without changing the design.
+order**. Don't add a fifth without changing the design. A branch's page stays out of
+search results and the sitemap until its description runs to 150 words; write it out
+and the page is offered to search engines on its own.
 
 ## The site copy
 

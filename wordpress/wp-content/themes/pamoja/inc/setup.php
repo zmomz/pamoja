@@ -118,8 +118,20 @@ function pamoja_head_meta() {
 			'address'     => pamoja_place_address(),
 			'areaServed'  => array(
 				'@type' => 'City',
-				'name'  => 'Hamilton, Ontario',
+				'name'  => 'Hamilton, Ontario, Canada',
 			),
+		);
+		// What the About page says of how it began (Our story → How we grew).
+		$facts                   = pamoja_collective_facts();
+		$org['foundingDate']     = $facts['founded'];
+		$org['foundingLocation'] = array(
+			'@type'   => 'Place',
+			'name'    => $facts['place'],
+			'address' => pamoja_place_address(),
+		);
+		$org['founder'] = array_map(
+			static fn ( string $name ): array => array( '@type' => 'Person', 'name' => $name ),
+			$facts['founders']
 		);
 		if ( pamoja_contact_email_safe() ) {
 			$org['email'] = pamoja_contact_email_safe();
@@ -145,51 +157,153 @@ function pamoja_head_meta() {
 		echo '<script type="application/ld+json">' . wp_json_encode( $json, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n";
 	}
 	if ( is_singular( 'event' ) ) {
-		$id    = get_queried_object_id();
-		$start = (string) pamoja_meta( $id, 'start_date' );
-		$json  = array(
-			'@context'    => 'https://schema.org',
-			'@type'       => 'Event',
-			'name'        => get_the_title( $id ),
-			'description' => $description,
-			'url'         => $url,
-			'organizer'   => array(
-				'@type' => 'NGO',
-				'@id'   => home_url( '/#organization' ),
-				'name'  => get_bloginfo( 'name' ),
-				'url'   => home_url( '/' ),
-			),
-			// Google lists an event in its event results only with a status, a way to attend and an address.
-			'eventStatus'         => 'https://schema.org/EventScheduled',
-			'eventAttendanceMode' => 'https://schema.org/OfflineEventAttendanceMode',
-		);
-		if ( $start ) {
-			$json['startDate'] = $start;
+		$json = pamoja_event_schema( get_queried_object_id(), $description, $url, $image );
+		if ( $json ) {
+			echo '<script type="application/ld+json">' . wp_json_encode( $json, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n";
 		}
-		$location = (string) pamoja_meta( $id, 'location' );
-		$json['location'] = array(
-			'@type'   => 'Place',
-			'name'    => $location ?: 'Hamilton, Ontario',
-			'address' => pamoja_place_address(),
-		);
-		if ( $image ) {
-			$json['image'] = $image;
+	}
+	if ( is_post_type_archive( 'event' ) ) {
+		// The events on the page, in the order it shows them: coming up, ongoing, then past.
+		$items = array();
+		foreach ( array_merge( pamoja_upcoming_events(), pamoja_ongoing_events(), pamoja_past_events() ) as $event ) {
+			$items[] = array(
+				'@type'    => 'ListItem',
+				'position' => count( $items ) + 1,
+				'url'      => get_permalink( $event ),
+				'name'     => pamoja_plain_text( get_the_title( $event ) ),
+			);
 		}
-		echo '<script type="application/ld+json">' . wp_json_encode( $json, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n";
+		if ( $items ) {
+			$json = array(
+				'@context'        => 'https://schema.org',
+				'@type'           => 'ItemList',
+				'url'             => $url,
+				'numberOfItems'   => count( $items ),
+				'itemListElement' => $items,
+			);
+			echo '<script type="application/ld+json">' . wp_json_encode( $json, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n";
+		}
 	}
 }
 add_action( 'wp_head', 'pamoja_head_meta', 5 );
 
 /**
  * Where the collective works, as structured data reads an address: the city, not a street (there is no public office).
+ * An event's venue adds its street when the editor has entered one.
  */
-function pamoja_place_address(): array {
-	return array(
-		'@type'           => 'PostalAddress',
+function pamoja_place_address( string $street = '' ): array {
+	$address = array( '@type' => 'PostalAddress' );
+	if ( '' !== $street ) {
+		$address['streetAddress'] = $street;
+	}
+	return $address + array(
 		'addressLocality' => 'Hamilton',
 		'addressRegion'   => 'ON',
 		'addressCountry'  => 'CA',
 	);
+}
+
+/**
+ * The facts the About page states about the collective (Our story: "Our name" and "How we grew"), for the structured
+ * data and /llms.txt. If that story is ever rewritten under Site copy, change these with it.
+ *
+ * @return array{founded:string, founders:string[], place:string, host:string, name_meaning:string}
+ */
+function pamoja_collective_facts(): array {
+	return array(
+		'founded'      => '2023',
+		'founders'     => array( 'Abdo Habbani', 'Fatima Shulli' ),
+		'place'        => 'Hamilton, Ontario, Canada',
+		'host'         => 'Community Permaculture Lab',
+		'name_meaning' => 'Pamoja means “together” in Kiswahili.',
+	);
+}
+
+/**
+ * An event page as structured data: an Event when its day is known, an EventSeries for an ongoing gathering, and
+ * nothing at all when the page gives only a month or a year. The start date then exists only to sort the archive,
+ * and a search engine would read it as the day the event happens.
+ */
+function pamoja_event_schema( int $id, string $description, string $url, string $image ): array {
+	$series = 'ongoing' === (string) pamoja_meta( $id, 'status', 'past' );
+	$exact  = (bool) pamoja_meta( $id, 'date_exact' );
+	$start  = $exact ? pamoja_event_date( $id, 'start_date' ) : null;
+	$end    = $exact ? pamoja_event_date( $id, 'end_date' ) : null;
+	if ( ! $series && ! $start ) {
+		return array();
+	}
+	$location = (string) pamoja_meta( $id, 'location' );
+	$json     = array(
+		'@context'    => 'https://schema.org',
+		'@type'       => $series ? 'EventSeries' : 'Event',
+		'name'        => pamoja_plain_text( get_the_title( $id ) ),
+		'description' => $description,
+		'url'         => $url,
+		'organizer'   => array(
+			'@type' => 'NGO',
+			'@id'   => home_url( '/#organization' ),
+			'name'  => get_bloginfo( 'name' ),
+			'url'   => home_url( '/' ),
+		),
+		// Google lists an event in its event results only with a status, a way to attend and an address. A past event
+		// that took place keeps "scheduled": the other statuses mean cancelled, moved or postponed.
+		'eventStatus'         => 'https://schema.org/EventScheduled',
+		'eventAttendanceMode' => 'https://schema.org/OfflineEventAttendanceMode',
+		'location'            => array(
+			'@type'   => 'Place',
+			'name'    => $location ?: 'Hamilton, Ontario',
+			'address' => pamoja_place_address( (string) pamoja_meta( $id, 'street_address' ) ),
+		),
+	);
+	if ( $start ) {
+		$json['startDate'] = $start->format( 'Y-m-d' );
+	}
+	if ( $start && $end && $end > $start ) {
+		$json['endDate'] = $end->format( 'Y-m-d' );
+	}
+	if ( $image ) {
+		$json['image'] = $image;
+	}
+	return $json;
+}
+
+/**
+ * Text for structured data and plain-text files: no tags, and entities such as &#038; read as the characters they are.
+ */
+function pamoja_plain_text( string $text ): string {
+	return trim( html_entity_decode( wp_strip_all_tags( $text ), ENT_QUOTES | ENT_HTML5, 'UTF-8' ) );
+}
+
+/**
+ * A meta description of at most $max characters that ends where a sentence ends: as many whole sentences as fit, or,
+ * when even the first is too long, that sentence cut at the last whole word. Never a word cut in half or a "…".
+ * (160 rather than 155 so the site description's opening sentence, 156 characters, survives whole.)
+ */
+function pamoja_description_text( string $text, int $max = 160 ): string {
+	$text = (string) preg_replace( '/\s+/u', ' ', pamoja_plain_text( $text ) );
+	if ( mb_strlen( $text ) <= $max ) {
+		return $text;
+	}
+	$out = '';
+	foreach ( preg_split( '/(?<=[.!?])\s+/u', $text ) as $sentence ) {
+		$next = '' === $out ? $sentence : $out . ' ' . $sentence;
+		if ( mb_strlen( $next ) > $max ) {
+			break;
+		}
+		$out = $next;
+	}
+	if ( '' !== $out ) {
+		return $out;
+	}
+	// At the last comma, semicolon or dash if that keeps most of the room, so the cut ends with a clause; else a word.
+	// (Regular expressions rather than mb_strrpos, which WordPress does not supply where mbstring is missing.)
+	$cut = mb_substr( $text, 0, $max + 1 );
+	if ( preg_match( '/^(.*)(?:, |; | — )/u', $cut, $m ) && mb_strlen( $m[1] ) > $max * 0.6 ) {
+		$cut = $m[1];
+	} else {
+		$cut = (string) preg_replace( '/\s+\S*$/u', '', $cut );
+	}
+	return (string) preg_replace( '/[\s,;:–—-]+$/u', '', $cut );
 }
 
 /**
@@ -207,6 +321,13 @@ add_filter( 'document_title_parts', 'pamoja_document_title_parts' );
 add_filter( 'document_title_separator', fn() => '—' );
 
 function pamoja_meta_description(): string {
+	return pamoja_description_text( pamoja_meta_description_source() );
+}
+
+/**
+ * The text a page's description is drawn from, before it is trimmed to length.
+ */
+function pamoja_meta_description_source(): string {
 	if ( is_front_page() ) {
 		return pamoja_setting( 'site_description' );
 	}
@@ -214,33 +335,33 @@ function pamoja_meta_description(): string {
 		$post = get_queried_object();
 		if ( $post instanceof WP_Post ) {
 			if ( has_excerpt( $post ) ) {
-				return wp_strip_all_tags( get_the_excerpt( $post ) );
+				return get_the_excerpt( $post );
 			}
 			$text = wp_strip_all_tags( strip_shortcodes( $post->post_content ) );
-			if ( $text ) {
-				return wp_trim_words( $text, 30, '…' );
+			if ( trim( $text ) ) {
+				return $text;
 			}
 			if ( is_page_template( 'page-about.php' ) ) {
-				return wp_strip_all_tags( pamoja_home( 'about', 'lede' ) );
+				return pamoja_home( 'about', 'lede' );
 			}
 			if ( is_page_template( 'page-engage.php' ) ) {
-				return wp_strip_all_tags( pamoja_home( 'engage', 'lede' ) );
+				return pamoja_home( 'engage', 'lede' );
 			}
 		}
 	}
 	if ( is_post_type_archive( 'event' ) ) {
-		return wp_strip_all_tags( pamoja_home( 'listing', 'events_intro' ) );
+		return pamoja_home( 'listing', 'events_intro' );
 	}
 	if ( is_post_type_archive( 'album' ) ) {
-		return wp_strip_all_tags( pamoja_home( 'listing', 'media_intro' ) );
+		return pamoja_home( 'listing', 'media_intro' );
 	}
 	if ( is_home() ) {
-		return wp_strip_all_tags( pamoja_home( 'listing', 'blog_intro' ) );
+		return pamoja_home( 'listing', 'blog_intro' );
 	}
 	if ( is_tax( 'branch' ) ) {
 		$text = trim( wp_strip_all_tags( term_description() ) );
 		if ( $text ) {
-			return wp_trim_words( $text, 30, '…' );
+			return $text;
 		}
 	}
 	return pamoja_setting( 'site_description' );
@@ -292,6 +413,8 @@ remove_action( 'wp_print_styles', 'print_emoji_styles' );
 remove_action( 'wp_head', 'rsd_link' );
 remove_action( 'wp_head', 'wlwmanifest_link' );
 remove_action( 'wp_head', 'wp_generator' );
+// The feeds name the WordPress version in <generator> too; wp_generator only covers the page head.
+add_filter( 'the_generator', '__return_empty_string' );
 add_filter( 'comments_open', '__return_false', 20 );
 add_filter( 'pings_open', '__return_false', 20 );
 
@@ -326,6 +449,27 @@ function pamoja_events_archive_is_one_page() {
 	}
 }
 add_action( 'template_redirect', 'pamoja_events_archive_is_one_page', 1 );
+
+/**
+ * /contact/ and /get-involved/ are where people guess the Engage page lives.
+ * Only while nothing else answers there: a page given either slug wins.
+ */
+function pamoja_guessed_engage_urls() {
+	global $wp;
+	if ( ! is_404() ) {
+		return;
+	}
+	$request = trim( (string) ( $wp->request ?? '' ), '/' );
+	if ( 'contact' === $request ) {
+		wp_safe_redirect( pamoja_conversation_url(), 301 );
+		exit;
+	}
+	if ( 'get-involved' === $request ) {
+		wp_safe_redirect( pamoja_engage_url(), 301 );
+		exit;
+	}
+}
+add_action( 'template_redirect', 'pamoja_guessed_engage_urls', 1 );
 
 /**
  * WordPress 404s its own sitemap while the blog has no published posts:
@@ -366,12 +510,14 @@ function pamoja_unlisted_page_ids(): array {
 }
 
 /**
- * Keep an empty media archive and the unlisted pages out of search results
- * until there is something worth showing there.
+ * Keep an empty media archive, the unlisted pages and a branch page whose
+ * description is still a sentence or two out of search results until there
+ * is something worth showing there.
  */
 function pamoja_robots( array $robots ): array {
 	$unlisted = ( is_page() || is_home() ) && in_array( get_queried_object_id(), pamoja_unlisted_page_ids(), true );
-	if ( $unlisted || ( is_post_type_archive( 'album' ) && ! have_posts() ) ) {
+	$thin     = is_tax( 'branch' ) && function_exists( 'pamoja_branch_is_thin' ) && pamoja_branch_is_thin( get_queried_object() );
+	if ( $unlisted || $thin || ( is_post_type_archive( 'album' ) && ! have_posts() ) ) {
 		$robots['noindex'] = true;
 		$robots['follow']  = true;
 	}
@@ -403,6 +549,26 @@ function pamoja_listing_canonical() {
 	echo '<link rel="canonical" href="' . esc_url( pamoja_current_url() ) . '">' . "\n";
 }
 add_action( 'wp_head', 'pamoja_listing_canonical', 5 );
+
+/**
+ * Photos uploaded from now on get their resized copies as WebP, a fraction of
+ * the weight of a PNG or JPEG. Only where the server's image library can write
+ * WebP; elsewhere uploads stay as they are. (Checking support runs this filter
+ * again, which then answers with the formats unchanged.)
+ */
+function pamoja_uploads_as_webp( array $formats ): array {
+	static $webp = null;
+	if ( null === $webp ) {
+		$webp = false;
+		$webp = wp_image_editor_supports( array( 'mime_type' => 'image/webp' ) );
+	}
+	if ( $webp ) {
+		$formats['image/jpeg'] = 'image/webp';
+		$formats['image/png']  = 'image/webp';
+	}
+	return $formats;
+}
+add_filter( 'image_editor_output_format', 'pamoja_uploads_as_webp' );
 
 /**
  * Excerpts end quietly.

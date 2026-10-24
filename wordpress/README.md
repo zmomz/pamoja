@@ -83,7 +83,11 @@ Other URLs: `/events/<slug>/`, `/blog/<slug>/`, `/media/` and `/media/<slug>/` (
 ## Search engines
 
 - `/wp-sitemap.xml` lists the pages, events and branches. `/thank-you/` is `noindex`
-  and left out, and so is `/blog/` until the first story is published.
+  and left out, and so is `/blog/` until the first story is published, and a branch
+  page until its description runs to 150 words.
+- Event pages carry Event structured data only when **Exact dates** is ticked (an
+  ongoing gathering is an EventSeries without dates); `/events/` lists its events as an
+  ItemList. `/contact/` and `/get-involved/` answer with a 301 to Engage.
 - `/llms.txt` describes the collective and links every part of the site for AI assistants.
 - **IndexNow:** when a page, story, event or album is published, changed or taken down,
   the server tells Bing (which Copilot and ChatGPT search draw on) and the other
@@ -97,7 +101,7 @@ Other URLs: `/events/<slug>/`, `/blog/<slug>/`, `/media/` and `/media/<slug>/` (
 | Where | What |
 |---|---|
 | **Blog** (the built-in Posts, relabelled) | Stories from the work. |
-| **Pamoja → Events** | Date as displayed, start/end dates, location, status (upcoming / ongoing / past / handed on), video link, branches, partners credited, pull quote, **Featured** (the home page tiles, in their Order), photo gallery. |
+| **Pamoja → Events** | Date as displayed, start/end dates and whether they are exact, location and street address, status (upcoming / ongoing / past / handed on), video link, branches, partners credited, pull quote, **Featured** (the home page tiles, in their Order), photo gallery. |
 | **Pamoja → Media albums** | Photo sets and/or a video, optionally linked to an event. |
 | **Pamoja → Services** | The offerings shown under Engage → Partner. |
 | **Pamoja → Partners & funders** | Name, type, contribution text, website, optional logo. Shown under Engage → Partner and credited on event pages. |
