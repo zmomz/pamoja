@@ -70,3 +70,63 @@ add_filter(
 		return $taxonomies;
 	}
 );
+
+/**
+ * The events listing (/events/) is the page a search for "Pamoja events" should land on, but WordPress's sitemaps
+ * list posts, pages and terms only, never a post type's archive. This provider adds the archives of the event and
+ * album types, each dated by its last edited entry, and only while they have something published (an empty archive
+ * is noindex, see the theme's pamoja_robots()). The blog page joins the page sitemap by itself once a story is
+ * published; until then it is noindex, see the theme's pamoja_unlisted_page_ids().
+ */
+final class Pamoja_Archive_Sitemap_Provider extends WP_Sitemaps_Provider {
+	public function __construct() {
+		$this->name        = 'archives';
+		$this->object_type = 'archive';
+	}
+
+	/**
+	 * @param int    $page_num
+	 * @param string $object_subtype
+	 * @return array<int, array{loc:string, lastmod:string}>
+	 */
+	public function get_url_list( $page_num, $object_subtype = '' ) {
+		if ( 1 !== (int) $page_num ) {
+			return array();
+		}
+		$list = array();
+		foreach ( array( 'event', 'album' ) as $post_type ) {
+			$link   = get_post_type_archive_link( $post_type );
+			$latest = get_posts(
+				array(
+					'post_type'      => $post_type,
+					'post_status'    => 'publish',
+					'posts_per_page' => 1,
+					'orderby'        => 'modified',
+					'order'          => 'DESC',
+				)
+			);
+			if ( $link && $latest ) {
+				$list[] = array(
+					'loc'     => $link,
+					'lastmod' => wp_date( DATE_W3C, strtotime( $latest[0]->post_modified_gmt ) ),
+				);
+			}
+		}
+		return $list;
+	}
+
+	/**
+	 * @param string $object_subtype
+	 * @return int
+	 */
+	public function get_max_num_pages( $object_subtype = '' ) {
+		return $this->get_url_list( 1 ) ? 1 : 0;
+	}
+}
+
+add_action(
+	'wp_sitemaps_init',
+	static function ( WP_Sitemaps $sitemaps ): void {
+		$sitemaps->registry->add_provider( 'archives', new Pamoja_Archive_Sitemap_Provider() );
+	}
+);

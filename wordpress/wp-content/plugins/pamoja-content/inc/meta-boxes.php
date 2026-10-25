@@ -72,7 +72,7 @@ function pamoja_meta_box_schema(): array {
 					'label'          => __( 'Exact dates', 'pamoja' ),
 					'type'           => 'checkbox',
 					'checkbox_label' => __( 'The start and end dates above are the real days, not placeholders for a month or a year', 'pamoja' ),
-					'description'    => __( 'Search engines are given the dates, and can list the event in their event results, only when this is ticked.', 'pamoja' ),
+					'description'    => __( 'Search engines are given the real days, and can list the event in their event results, only when this is ticked. Otherwise they are told only the month or year the date line shows.', 'pamoja' ),
 				),
 				array(
 					'key'         => 'location',

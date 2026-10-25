@@ -220,15 +220,16 @@ function pamoja_collective_facts(): array {
 }
 
 /**
- * An event page as structured data: an Event when its day is known, an EventSeries for an ongoing gathering, and
- * nothing at all when the page gives only a month or a year. The start date then exists only to sort the archive,
- * and a search engine would read it as the day the event happens.
+ * An event page as structured data: an Event, or an EventSeries for an ongoing gathering. Its dates are as precise
+ * as the page's own: the real days once an admin has ticked "Exact dates", otherwise the month when the page's date
+ * line names it ("September 2025" → 2025-09) and the year alone when it does not ("2024 & 2025" → 2024). The stored
+ * day then only sorts the archive and is never given out as the day the event happens. (Google lists an event in its
+ * event results only with exact days; the month or year still tells an AI assistant when it was.)
  */
 function pamoja_event_schema( int $id, string $description, string $url, string $image ): array {
 	$series = 'ongoing' === (string) pamoja_meta( $id, 'status', 'past' );
-	$exact  = (bool) pamoja_meta( $id, 'date_exact' );
-	$start  = $exact ? pamoja_event_date( $id, 'start_date' ) : null;
-	$end    = $exact ? pamoja_event_date( $id, 'end_date' ) : null;
+	$start  = pamoja_event_date( $id, 'start_date' );
+	$end    = pamoja_event_date( $id, 'end_date' );
 	if ( ! $series && ! $start ) {
 		return array();
 	}
@@ -256,15 +257,33 @@ function pamoja_event_schema( int $id, string $description, string $url, string 
 		),
 	);
 	if ( $start ) {
-		$json['startDate'] = $start->format( 'Y-m-d' );
+		$json['startDate'] = pamoja_event_schema_date( $id, $start );
 	}
-	if ( $start && $end && $end > $start ) {
-		$json['endDate'] = $end->format( 'Y-m-d' );
+	if ( $start && $end && $end > $start && pamoja_event_schema_date( $id, $end ) !== $json['startDate'] ) {
+		$json['endDate'] = pamoja_event_schema_date( $id, $end );
 	}
 	if ( $image ) {
 		$json['image'] = $image;
 	}
 	return $json;
+}
+
+/**
+ * A stored event date as the structured data may state it (ISO 8601, in the precision the page has): the day when the
+ * dates are marked exact; else the month, when the date line names that month ("November / December 2026"); else the
+ * year.
+ */
+function pamoja_event_schema_date( int $id, DateTimeImmutable $date ): string {
+	if ( pamoja_meta( $id, 'date_exact' ) ) {
+		return $date->format( 'Y-m-d' );
+	}
+	$display = pamoja_event_when( $id );
+	foreach ( array( 'F', 'M' ) as $format ) {
+		if ( false !== stripos( $display, wp_date( $format, $date->getTimestamp(), wp_timezone() ) ) ) {
+			return $date->format( 'Y-m' );
+		}
+	}
+	return $date->format( 'Y' );
 }
 
 /**
