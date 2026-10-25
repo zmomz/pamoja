@@ -65,7 +65,12 @@ function pamoja_tree( array $args = array() ) {
 	}
 	$svg = str_replace( array( '__VIEWBOX__', '__ATTRS__' ), array( esc_attr( pamoja_tree_viewbox( $crop ) ), $attrs ), $svg );
 	if ( $label ) {
-		$svg = preg_replace( '/^(<svg[^>]*>)/', '$1<title>' . esc_html( $label ) . '</title>', $svg, 1 );
+		// A short <title> with the rest in <desc>, as SVG accessibility has it; the aria-label above carries the whole
+		// text. A page checker can take a long SVG <title> for the page's title (Bing SEO check, 2026-10-25).
+		$dot   = mb_strpos( $label, '. ' );
+		$title = false === $dot ? $label : mb_substr( $label, 0, $dot );
+		$desc  = false === $dot ? '' : trim( mb_substr( $label, $dot + 2 ) );
+		$svg   = preg_replace( '/^(<svg[^>]*>)/', '$1<title>' . esc_html( $title ) . '</title>' . ( $desc ? '<desc>' . esc_html( $desc ) . '</desc>' : '' ), $svg, 1 );
 	}
 	printf(
 		'<div class="%s"%s%s data-lit="%s">%s</div>',

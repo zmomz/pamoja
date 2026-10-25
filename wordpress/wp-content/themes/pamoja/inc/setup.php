@@ -156,6 +156,24 @@ function pamoja_head_meta() {
 		);
 		echo '<script type="application/ld+json">' . wp_json_encode( $json, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n";
 	}
+	if ( is_page() && ! is_front_page() ) {
+		// The page itself, tied to the site and the collective, so the About and Engage pages carry markup too.
+		$json = array(
+			'@context'    => 'https://schema.org',
+			'@type'       => is_page( 'about' ) ? 'AboutPage' : 'WebPage',
+			'@id'         => $url . '#webpage',
+			'url'         => $url,
+			'name'        => pamoja_plain_text( get_the_title() ),
+			'description' => $description,
+			'inLanguage'  => get_bloginfo( 'language' ),
+			'isPartOf'    => array( '@id' => home_url( '/#website' ) ),
+			'about'       => array( '@id' => home_url( '/#organization' ) ),
+		);
+		if ( $image ) {
+			$json['primaryImageOfPage'] = array( '@type' => 'ImageObject', 'url' => $image );
+		}
+		echo '<script type="application/ld+json">' . wp_json_encode( $json, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n";
+	}
 	if ( is_singular( 'event' ) ) {
 		$json = pamoja_event_schema( get_queried_object_id(), $description, $url, $image );
 		if ( $json ) {
@@ -326,12 +344,20 @@ function pamoja_description_text( string $text, int $max = 160 ): string {
 }
 
 /**
- * "Pamoja Cultural Collective — Treaty-committed neighbours coming together"
- * on the front page; "Title — Pamoja Cultural Collective" elsewhere.
+ * "Pamoja Cultural Collective — Treaty-committed neighbours coming together" on the front page while name and
+ * tagline fit in 60 characters; a longer tagline gives way to "Pamoja Cultural Collective — Together in Hamilton,
+ * Ontario" (Bing's URL Inspection marks a longer <title> as an error, 2026-10-25). "Title — Pamoja Cultural
+ * Collective" elsewhere.
  */
 function pamoja_document_title_parts( array $parts ): array {
 	if ( is_front_page() ) {
-		return array( 'title' => get_bloginfo( 'name' ) . ' — ' . ( get_bloginfo( 'description' ) ?: __( 'Together', 'pamoja' ) ) );
+		$name    = get_bloginfo( 'name' );
+		$tagline = rtrim( (string) get_bloginfo( 'description' ), ' .' );
+		$title   = $name . ' — ' . ( $tagline ?: __( 'Together', 'pamoja' ) );
+		if ( mb_strlen( $title ) > 60 ) {
+			$title = $name . ' — ' . __( 'Together in Hamilton, Ontario', 'pamoja' );
+		}
+		return array( 'title' => $title );
 	}
 	unset( $parts['tagline'] );
 	return $parts;
