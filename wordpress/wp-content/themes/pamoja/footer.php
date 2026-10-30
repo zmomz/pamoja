@@ -46,7 +46,7 @@ $pamoja_map    = pamoja_site_map();
 	</div>
 
 	<p class="ft-line"><?php echo esc_html( pamoja_setting( 'footer_line' ) ); ?></p>
-	<p class="ft-dev"><?php esc_html_e( 'Developed by', 'pamoja' ); ?> <a href="https://muhandis.online/en" rel="noopener"><img src="<?php echo esc_url( PAMOJA_THEME_URI . '/assets/brand/muhandis-white.svg' ); ?>" alt="Muhandis logo" width="3464" height="799" class="ft-dev-logo" loading="lazy" decoding="async"> <span>Muhandis (مهندس)</span></a></p>
+	<p class="ft-dev"><?php esc_html_e( 'Developed by', 'pamoja' ); ?> <a href="https://muhandis.online/en?utm_source=pamoja" rel="noopener"><img src="<?php echo esc_url( PAMOJA_THEME_URI . '/assets/brand/muhandis-white.svg' ); ?>" alt="Muhandis logo" width="3464" height="799" class="ft-dev-logo" loading="lazy" decoding="async"> <span>Muhandis (مهندس)</span></a></p>
 </footer>
 
 <?php wp_footer(); ?>
